@@ -5,46 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clash Planner & Workspace</title>
     <!-- Tailwind CSS -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts (Inter) -->
-    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap)" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
         [contenteditable]:empty:before {
             content: attr(data-placeholder);
-            color: #9ca3af;
+            color: #64748b;
             cursor: text;
         }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #1f2937; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 h-screen flex flex-col overflow-hidden">
+<body class="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-950 text-slate-100 h-screen flex flex-col overflow-hidden">
 
     <!-- Modal de Login -->
-    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
-            <div class="text-center mb-6">
-                <div class="bg-amber-500/10 text-amber-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 border border-amber-500/20">
+    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300">
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md border-t border-slate-700 relative overflow-hidden">
+            <!-- Efeito de brilho no fundo -->
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="text-center mb-6 relative z-10">
+                <div class="bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/30 transform rotate-3 hover:rotate-0 transition-transform">
                     <i class="fa-solid fa-shield-halved text-3xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-white">Clash Organizer</h2>
-                <p class="text-gray-400 text-xs sm:text-sm mt-1">Entre com suas credenciais do seu espaço de trabalho</p>
+                <h2 class="text-2xl font-bold text-white tracking-tight">Clash Organizer</h2>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1">Conecte-se ao seu espaço de planejamento</p>
             </div>
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Usuário / Chefe</label>
-                    <input type="text" id="username" required placeholder="Ex: VilãoDoClash" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 transition">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Usuário / Chefe</label>
+                    <input type="text" id="username" required placeholder="Ex: VilãoDoClash" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Senha</label>
-                    <input type="password" id="password" required placeholder="••••••••" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 transition">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Senha</label>
+                    <input type="password" id="password" required placeholder="••••••••" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
                 </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-3 rounded-lg shadow-lg transition flex items-center justify-center gap-2">
+                <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold py-3.5 rounded-lg shadow-lg shadow-amber-500/25 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2">
                     <i class="fa-solid fa-right-to-bracket"></i> Acessar Minha Vila
                 </button>
             </form>
@@ -55,161 +66,169 @@
     <div id="appContainer" class="hidden flex-1 flex flex-col md:flex-row overflow-hidden relative">
 
         <!-- Overlay Mobile -->
-        <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden"></div>
+        <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
 
         <!-- Sidebar / Gerenciador de Pastas (Retrátil em Mobile) -->
-        <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-gray-950 border-r border-gray-800 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0">
+        <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
             <!-- Topo Perfil -->
-            <div class="p-4 border-b border-gray-800 flex items-center justify-between">
+            <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
                 <div class="flex items-center gap-3 overflow-hidden">
-                    <div class="w-9 h-9 rounded-full bg-amber-500 text-gray-950 font-bold flex items-center justify-center text-lg flex-shrink-0" id="avatarLetter">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-lg flex-shrink-0 shadow-inner" id="avatarLetter">
                         C
                     </div>
                     <div class="truncate">
                         <h3 class="font-bold text-sm text-white truncate" id="displayUsername">Chefe</h3>
-                        <span class="text-xs text-emerald-400 flex items-center gap-1">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Online
+                        <span class="text-xs text-emerald-400 flex items-center gap-1.5 font-medium">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span> Online
                         </span>
                     </div>
                 </div>
-                <button onclick="handleLogout()" title="Sair" class="text-gray-400 hover:text-red-400 transition p-1">
+                <button onclick="handleLogout()" title="Sair" class="text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg p-2 transition-colors">
                     <i class="fa-solid fa-power-off text-sm"></i>
                 </button>
             </div>
 
             <!-- Botões de Ação Rápida -->
-            <div class="p-3 gap-2 flex">
-                <button onclick="createNewFolder()" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-semibold py-2 px-2 rounded border border-gray-700 transition flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-folder-plus text-amber-500"></i> Nova Pasta
+            <div class="p-4 gap-2 flex">
+                <button onclick="createNewFolder()" class="flex-1 bg-slate-800/50 hover:bg-slate-700 text-slate-300 text-xs font-semibold py-2.5 px-2 rounded-lg border border-slate-700/50 transition-colors flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-folder-plus text-amber-500"></i> Pasta
                 </button>
-                <button onclick="createNewPage()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-gray-950 text-xs font-bold py-2 px-2 rounded shadow transition flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-file-circle-plus"></i> Nova Nota
+                <button onclick="createNewPage()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2.5 px-2 rounded-lg shadow-md shadow-amber-500/10 transition-colors flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-file-circle-plus"></i> Nota
                 </button>
             </div>
 
             <!-- Árvore de Pastas -->
-            <div class="flex-1 overflow-y-auto p-3 space-y-2" id="folderTree"></div>
+            <div class="flex-1 overflow-y-auto px-3 pb-3 space-y-3" id="folderTree"></div>
 
             <!-- Rodapé da Sidebar -->
-            <div class="p-3 bg-gray-900 border-t border-gray-800 text-xs text-gray-400 flex justify-between items-center">
-                <span><i class="fa-solid fa-cloud-arrow-up text-amber-500 mr-1"></i> Salvo automaticamente</span>
-                <button onclick="exportData()" title="Backup" class="hover:text-amber-400"><i class="fa-solid fa-download"></i></button>
+            <div class="p-4 bg-slate-950/80 border-t border-slate-800/50 text-xs text-slate-400 flex justify-between items-center">
+                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-cloud-check text-emerald-500"></i> Sincronizado</span>
+                <button onclick="exportData()" title="Fazer Backup (JSON)" class="hover:text-amber-400 p-1 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-download"></i></button>
             </div>
         </aside>
 
         <!-- Área Principal -->
-        <main class="flex-1 flex flex-col bg-gray-900 overflow-hidden w-full">
-
+        <main class="flex-1 flex flex-col overflow-hidden w-full relative">
+            
             <!-- Navbar Superior -->
-            <header class="h-14 bg-gray-950 border-b border-gray-800 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2">
+            <header class="h-16 glass-panel border-b-0 border-slate-800/50 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2 z-10 shadow-sm">
                 <div class="flex items-center gap-3 overflow-hidden">
-                    <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded hover:bg-gray-800">
+                    <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
                         <i class="fa-solid fa-bars text-lg"></i>
                     </button>
-                    <span id="currentBreadcrumb" class="text-xs font-semibold text-gray-400 truncate">
-                        <i class="fa-solid fa-folder text-amber-500"></i> Raiz / <span class="text-white">Minha Lista</span>
+                    <span id="currentBreadcrumb" class="text-xs sm:text-sm font-medium text-slate-400 truncate flex items-center gap-2">
+                        <i class="fa-solid fa-folder text-amber-500"></i> Meu Espaço / <span class="text-white font-semibold">Início</span>
                     </span>
                 </div>
                 
                 <!-- Abas de Alternância -->
-                <div class="flex bg-gray-900 p-1 rounded-lg border border-gray-800 flex-shrink-0">
-                    <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow">
+                <div class="flex bg-slate-900/80 p-1 rounded-lg border border-slate-700/50 flex-shrink-0 shadow-inner">
+                    <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md">
                         <i class="fa-solid fa-list-check sm:mr-1.5"></i><span class="hidden sm:inline"> Rastreador</span>
                     </button>
-                    <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white">
-                        <i class="fa-solid fa-file-lines sm:mr-1.5"></i><span class="hidden sm:inline"> Editor Word</span>
+                    <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+                        <i class="fa-solid fa-file-pen sm:mr-1.5"></i><span class="hidden sm:inline"> Anotações</span>
                     </button>
                 </div>
             </header>
 
             <!-- CONTEÚDO 1: RASTREADOR CLASH -->
             <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-                <!-- Seletor de CV -->
-                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-amber-500/20 text-amber-400 p-3 rounded-lg border border-amber-500/30">
-                            <i class="fa-solid fa-chess-rook text-xl sm:text-2xl"></i>
+                
+                <!-- Header de Configuração -->
+                <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
+                    <!-- Detalhe visual de fundo -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+                    
+                    <div class="flex items-center gap-4">
+                        <div class="bg-gradient-to-br from-amber-500/20 to-orange-500/20 text-amber-400 p-3.5 rounded-xl border border-amber-500/30 shadow-inner">
+                            <i class="fa-solid fa-chess-rook text-2xl"></i>
                         </div>
                         <div>
-                            <h2 class="text-base sm:text-lg font-bold text-white">Configurações de Vila</h2>
-                            <p class="text-xs text-gray-400">Escolha a vila para gerenciar</p>
+                            <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">Painel da Vila</h2>
+                            <p class="text-xs text-slate-400 mt-0.5">Gerencie os upgrades e defina prioridades</p>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <select id="villageTypeSelect" onchange="changeVillageType()" class="flex-1 sm:flex-none bg-gray-900 border border-gray-700 text-white text-xs sm:text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
+                    <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                        <select id="villageTypeSelect" onchange="changeVillageType()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 appearance-none font-medium">
                             <option value="main">🏰 Vila Principal</option>
                             <option value="builder">🔨 Base Construtor</option>
                             <option value="capital">🏛️ Capital do Clã</option>
                         </select>
 
-                        <select id="townHallSelect" onchange="renderTracker()" class="flex-1 sm:flex-none bg-gray-900 border border-gray-700 text-white text-xs sm:text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
-                            <option value="18">CV 18</option>
-                            <option value="17">CV 17</option>
-                            <option value="16">CV 16</option>
-                            <option value="15">CV 15</option>
-                            <option value="14">CV 14</option>
-                            <option value="13">CV 13</option>
-                            <option value="12" selected>CV 12</option>
-                            <option value="11">CV 11</option>
+                        <select id="townHallSelect" onchange="renderTracker()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 appearance-none font-bold text-amber-400">
+                            <option value="18">Nível 18</option>
+                            <option value="17">Nível 17</option>
+                            <option value="16">Nível 16</option>
+                            <option value="15">Nível 15</option>
+                            <option value="14">Nível 14</option>
+                            <option value="13">Nível 13</option>
+                            <option value="12" selected>Nível 12</option>
+                            <option value="11">Nível 11</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Métricas -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700">
-                        <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Progresso Geral</span>
-                        <div class="text-xl sm:text-2xl font-bold text-amber-400 mt-1" id="totalProgressPercent">0%</div>
-                        <div class="w-full bg-gray-900 rounded-full h-1.5 mt-2 border border-gray-700 overflow-hidden">
-                            <div id="totalProgressBar" class="bg-amber-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                <!-- Cards de Métricas -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
+                        <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Progresso Global</span>
+                        <div class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mt-1" id="totalProgressPercent">0%</div>
+                        <div class="w-full bg-slate-900/80 rounded-full h-2 mt-3 border border-slate-800 overflow-hidden shadow-inner">
+                            <div id="totalProgressBar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                         </div>
                     </div>
-                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700">
-                        <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Pendentes</span>
-                        <div class="text-xl sm:text-2xl font-bold text-white mt-1" id="remainingUpgradesCount">0</div>
-                        <span class="text-[10px] text-gray-500">melhorias</span>
+                    <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
+                        <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Pendentes</span>
+                        <div class="text-2xl sm:text-3xl font-black text-white mt-1" id="remainingUpgradesCount">0</div>
+                        <span class="text-[10px] text-slate-500 font-medium">melhorias na fila</span>
                     </div>
-                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700">
-                        <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Mais Atrasada</span>
-                        <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
-                        <span class="text-[10px] text-gray-500">foco recomendado</span>
-                    </div>
-                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700 flex items-center justify-between">
+                    <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between">
                         <div>
-                            <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Criar Item</span>
-                            <p class="text-[10px] text-gray-500">Adicionar personalizado</p>
+                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Mais Atrasada</span>
+                            <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
                         </div>
-                        <button onclick="openAddItemModal()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 p-2 sm:p-2.5 rounded-lg transition">
-                            <i class="fa-solid fa-plus text-sm"></i>
-                        </button>
+                        <span class="text-[10px] text-slate-500 font-medium mt-2">foco recomendado</span>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl border-dashed border-2 border-slate-700/50 hover:border-amber-500/50 hover:bg-amber-500/5 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer group" onclick="openAddItemModal()">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-900 transition-colors mb-2 shadow-lg">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-300 group-hover:text-amber-400 transition-colors">Criar Novo Item</span>
                     </div>
                 </div>
 
                 <!-- Lista de Categorias -->
-                <div class="space-y-6" id="categoriesContainer"></div>
+                <div class="space-y-6 pb-10" id="categoriesContainer"></div>
             </div>
 
             <!-- CONTEÚDO 2: EDITOR WORD -->
-            <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-gray-900">
-                <!-- Toolbar -->
-                <div class="bg-gray-800 border-b border-gray-700 p-2 flex flex-wrap items-center gap-1 text-gray-300 overflow-x-auto">
-                    <button onclick="execCmd('bold')" class="p-1.5 hover:bg-gray-700 rounded text-xs font-bold w-7 h-7">B</button>
-                    <button onclick="execCmd('italic')" class="p-1.5 hover:bg-gray-700 rounded text-xs italic w-7 h-7">I</button>
-                    <button onclick="execCmd('underline')" class="p-1.5 hover:bg-gray-700 rounded text-xs underline w-7 h-7">U</button>
-                    <div class="h-4 w-px bg-gray-700 mx-1"></div>
-                    <button onclick="execCmd('insertUnorderedList')" class="p-1.5 hover:bg-gray-700 rounded text-xs"><i class="fa-solid fa-list-ul"></i></button>
-                    <button onclick="execCmd('insertOrderedList')" class="p-1.5 hover:bg-gray-700 rounded text-xs"><i class="fa-solid fa-list-ol"></i></button>
-                    <div class="h-4 w-px bg-gray-700 mx-1"></div>
-                    <button onclick="execCmd('foreColor', '#ef4444')" class="p-1.5 hover:bg-gray-700 rounded text-red-500 font-bold text-xs">A</button>
-                    <button onclick="execCmd('foreColor', '#10b981')" class="p-1.5 hover:bg-gray-700 rounded text-emerald-500 font-bold text-xs">A</button>
+            <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-slate-900/50">
+                <!-- Toolbar Moderna -->
+                <div class="glass-panel border-b-0 border-slate-800/50 p-2 flex flex-wrap items-center gap-1.5 text-slate-300 overflow-x-auto rounded-b-xl mx-4 sm:mx-8 mt-4 shadow-lg z-10">
+                    <button onclick="execCmd('bold')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm font-bold w-9 h-9 transition-colors">B</button>
+                    <button onclick="execCmd('italic')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm italic w-9 h-9 transition-colors">I</button>
+                    <button onclick="execCmd('underline')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm underline w-9 h-9 transition-colors">U</button>
+                    <div class="h-5 w-px bg-slate-700 mx-1"></div>
+                    <button onclick="execCmd('insertUnorderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ul"></i></button>
+                    <button onclick="execCmd('insertOrderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ol"></i></button>
+                    <div class="h-5 w-px bg-slate-700 mx-1"></div>
+                    <button onclick="execCmd('formatBlock', 'H1')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs font-bold transition-colors">Título</button>
+                    <button onclick="execCmd('formatBlock', 'P')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs transition-colors">Texto</button>
+                    <div class="h-5 w-px bg-slate-700 mx-1"></div>
+                    <button onclick="execCmd('foreColor', '#ef4444')" title="Vermelho" class="p-2 hover:bg-slate-700/50 rounded-lg text-red-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
+                    <button onclick="execCmd('foreColor', '#f59e0b')" title="Amarelo" class="p-2 hover:bg-slate-700/50 rounded-lg text-amber-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
+                    <button onclick="execCmd('foreColor', '#10b981')" title="Verde" class="p-2 hover:bg-slate-700/50 rounded-lg text-emerald-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
                 </div>
 
                 <!-- Folha -->
-                <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center bg-gray-950">
-                    <div class="w-full max-w-4xl bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-8 min-h-[500px] shadow-2xl flex flex-col">
-                        <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento..." class="bg-transparent text-xl sm:text-2xl font-bold text-white mb-4 focus:outline-none border-b border-gray-800 pb-2">
-                        <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Escreva livremente aqui..." class="flex-1 text-gray-200 text-sm sm:text-base leading-relaxed focus:outline-none"></div>
+                <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center pb-20">
+                    <div class="w-full max-w-4xl glass-panel rounded-2xl p-6 sm:p-10 min-h-[600px] shadow-2xl flex flex-col border border-slate-700/30">
+                        <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento..." class="bg-transparent text-2xl sm:text-3xl font-black text-white mb-6 focus:outline-none border-b border-slate-700 pb-3 placeholder-slate-600 transition-colors focus:border-amber-500">
+                        
+                        <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Comece a registrar suas estratégias e ideias aqui..." class="flex-1 text-slate-300 text-sm sm:text-base leading-relaxed focus:outline-none prose prose-invert prose-amber max-w-none"></div>
                     </div>
                 </div>
             </div>
@@ -218,13 +237,19 @@
     </div>
 
     <!-- Modal Adicionar Item -->
-    <div id="addItemModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 w-full max-w-md shadow-xl">
-            <h3 class="text-lg font-bold text-white mb-4">Adicionar Item</h3>
+    <div id="addItemModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center z-50 p-4 transition-opacity">
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-700 w-full max-w-md shadow-2xl">
+            <div class="flex items-center gap-3 mb-5">
+                <div class="bg-amber-500/20 text-amber-500 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-hammer"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white tracking-tight">Adicionar Item</h3>
+            </div>
+            
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1">Categoria</label>
-                    <select id="newItemCategory" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-white">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Categoria</label>
+                    <select id="newItemCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
                         <option value="Defesas">Defesas</option>
                         <option value="Muros">Muros</option>
                         <option value="Armadilhas">Armadilhas</option>
@@ -233,23 +258,23 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1">Nome do Item</label>
-                    <input type="text" id="newItemName" placeholder="Ex: Torre de Magos" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-white">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome do Item</label>
+                    <input type="text" id="newItemName" placeholder="Ex: Torre de Magos" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
                 </div>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs text-gray-400 mb-1">Nível Atual</label>
-                        <input type="number" id="newItemCurrent" value="1" min="0" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-white">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nível Atual</label>
+                        <input type="number" id="newItemCurrent" value="1" min="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white text-center focus:outline-none focus:border-amber-500">
                     </div>
                     <div>
-                        <label class="block text-xs text-gray-400 mb-1">Nível Máximo</label>
-                        <input type="number" id="newItemMax" value="10" min="1" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-white">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nível Máximo</label>
+                        <input type="number" id="newItemMax" value="10" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white text-center focus:outline-none focus:border-amber-500">
                     </div>
                 </div>
             </div>
-            <div class="flex justify-end gap-2 mt-6">
-                <button onclick="closeAddItemModal()" class="px-4 py-2 bg-gray-700 text-gray-300 text-xs font-semibold rounded hover:bg-gray-600">Cancelar</button>
-                <button onclick="confirmAddItem()" class="px-4 py-2 bg-amber-500 text-gray-950 text-xs font-bold rounded hover:bg-amber-600">Salvar</button>
+            <div class="flex justify-end gap-3 mt-8">
+                <button onclick="closeAddItemModal()" class="px-5 py-2.5 bg-slate-800 text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors">Cancelar</button>
+                <button onclick="confirmAddItem()" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-sm font-bold rounded-lg hover:from-amber-400 hover:to-orange-400 shadow-lg shadow-amber-500/20 transition-all">Salvar Item</button>
             </div>
         </div>
     </div>
@@ -267,7 +292,7 @@
                 { id: 'f_builder', name: 'Base do Construtor' }
             ],
             documents: [
-                { id: 'default_doc', folderId: 'f_cv12', title: 'Prioridades CV12', content: '<p><strong>Estratégia:</strong> Focar na Giga Torre!</p>' }
+                { id: 'default_doc', folderId: 'f_cv12', title: 'Prioridades CV12', content: '<h2><strong>Estratégia Inicial</strong></h2><p>Focar primariamente na <strong>Giga Torre</strong> antes de expandir defesas em área.</p>' }
             ],
             trackers: {
                 main_12: [
@@ -279,7 +304,6 @@
                     { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 50, max: 65 },
                     { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 55, max: 65 },
                     { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 20, max: 40 },
-                    { category: 'Heróis & Equipamentos', name: 'Príncipe dos Servos', current: 1, max: 15 },
                     { category: 'Laboratório', name: 'Eletrodragão', current: 2, max: 3 }
                 ]
             }
@@ -331,6 +355,7 @@
             saveAllData();
             document.getElementById('loginModal').classList.remove('hidden');
             document.getElementById('appContainer').classList.add('hidden');
+            document.getElementById('appContainer').classList.remove('flex');
         }
 
         function showApp() {
@@ -343,6 +368,9 @@
             renderFolderTree();
             renderTracker();
             loadDocumentIntoEditor();
+            
+            // Força a aba correta com base no estado salvo
+            switchTab(appData.activeTab || 'tracker');
         }
 
         function switchTab(tab) {
@@ -352,15 +380,18 @@
             const trackerSec = document.getElementById('trackerSection');
             const editorSec = document.getElementById('editorSection');
 
+            const activeClass = 'px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md';
+            const inactiveClass = 'px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50';
+
             if (tab === 'tracker') {
-                trackerBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow';
-                editorBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white';
+                trackerBtn.className = activeClass;
+                editorBtn.className = inactiveClass;
                 trackerSec.classList.remove('hidden');
                 editorSec.classList.add('hidden');
                 editorSec.classList.remove('flex');
             } else {
-                editorBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow';
-                trackerBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white';
+                editorBtn.className = activeClass;
+                trackerBtn.className = inactiveClass;
                 editorSec.classList.remove('hidden');
                 editorSec.classList.add('flex');
                 trackerSec.classList.add('hidden');
@@ -374,25 +405,25 @@
 
             appData.folders.forEach(folder => {
                 const folderDiv = document.createElement('div');
-                folderDiv.className = 'space-y-1';
+                folderDiv.className = 'space-y-1 mb-2';
                 const docsInFolder = appData.documents.filter(d => d.folderId === folder.id);
 
                 folderDiv.innerHTML = `
-                    <div class="flex items-center justify-between text-xs font-semibold text-gray-400 p-1.5 hover:bg-gray-900 rounded group cursor-pointer">
+                    <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-500 p-2 hover:bg-slate-800/50 rounded-lg group cursor-pointer transition-colors">
                         <span class="flex items-center gap-2 truncate">
-                            <i class="fa-solid fa-folder-open text-amber-500"></i> ${folder.name}
+                            <i class="fa-solid fa-folder-open text-amber-500/70"></i> ${folder.name}
                         </span>
-                        <button onclick="createNewPage('${folder.id}')" title="Nova Nota" class="text-gray-500 hover:text-amber-400 p-1">
+                        <button onclick="createNewPage('${folder.id}')" title="Nova Nota" class="text-slate-500 hover:text-amber-400 opacity-0 group-hover:opacity-100 transition-all p-1">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-                    <div class="pl-3 space-y-1">
+                    <div class="pl-2 space-y-1">
                         ${docsInFolder.map(doc => `
-                            <div onclick="selectDocument('${doc.id}')" class="flex items-center justify-between text-xs p-1.5 rounded cursor-pointer transition ${appData.activeDocId === doc.id ? 'bg-amber-500/10 text-amber-400 font-semibold border-l-2 border-amber-500' : 'text-gray-300 hover:bg-gray-800'}">
-                                <span class="truncate flex items-center gap-1.5">
-                                    <i class="fa-regular fa-file-lines text-gray-500"></i> ${doc.title || 'Sem título'}
+                            <div onclick="selectDocument('${doc.id}')" class="flex items-center justify-between text-xs p-2 rounded-lg cursor-pointer transition-all ${appData.activeDocId === doc.id ? 'bg-amber-500/10 text-amber-400 font-semibold border-l-2 border-amber-500 shadow-inner' : 'text-slate-300 hover:bg-slate-800/50'}">
+                                <span class="truncate flex items-center gap-2">
+                                    <i class="fa-regular fa-file-lines ${appData.activeDocId === doc.id ? 'text-amber-400' : 'text-slate-500'}"></i> ${doc.title || 'Sem título'}
                                 </span>
-                                <button onclick="deleteDocument(event, '${doc.id}')" class="text-gray-600 hover:text-red-400 text-[10px] p-1">
+                                <button onclick="deleteDocument(event, '${doc.id}')" class="text-slate-600 hover:text-red-400 text-[10px] p-1 rounded hover:bg-slate-700 transition-colors">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
@@ -455,13 +486,15 @@
 
         function loadDocumentIntoEditor() {
             const currentDoc = appData.documents.find(d => d.id === appData.activeDocId);
+            const breadcrumb = document.getElementById('currentBreadcrumb');
             if (currentDoc) {
                 document.getElementById('documentTitle').value = currentDoc.title;
                 document.getElementById('wordEditor').innerHTML = currentDoc.content;
-                document.getElementById('currentBreadcrumb').innerHTML = `<i class="fa-solid fa-folder text-amber-500"></i> <span class="text-white">${currentDoc.title}</span>`;
+                breadcrumb.innerHTML = `<i class="fa-solid fa-folder text-amber-500"></i> Anotações / <span class="text-white font-semibold">${currentDoc.title}</span>`;
             } else {
                 document.getElementById('documentTitle').value = '';
                 document.getElementById('wordEditor').innerHTML = '';
+                breadcrumb.innerHTML = `<i class="fa-solid fa-folder text-amber-500"></i> Anotações / <span class="text-white font-semibold">Nenhum</span>`;
             }
         }
 
@@ -524,47 +557,47 @@
                 categoryStats[cat] = catPercent;
 
                 const card = document.createElement('div');
-                card.className = "bg-gray-800 rounded-xl border border-gray-700 overflow-hidden shadow-lg";
+                card.className = "glass-panel rounded-2xl overflow-hidden shadow-lg border border-slate-700/50 mb-6";
                 card.innerHTML = `
-                    <div class="p-3 sm:p-4 bg-gray-800/80 border-b border-gray-700 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <h3 class="font-bold text-white text-sm sm:text-base">${cat}</h3>
-                            <span class="text-[10px] sm:text-xs bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20">${catPercent}%</span>
+                    <div class="p-4 sm:p-5 bg-slate-800/30 border-b border-slate-700/50 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <h3 class="font-bold text-white text-base sm:text-lg tracking-tight">${cat}</h3>
+                            <span class="text-[10px] sm:text-xs font-bold bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-md border border-amber-500/20 shadow-inner">${catPercent}%</span>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs sm:text-sm text-gray-300">
-                            <thead class="bg-gray-900/50 text-[10px] sm:text-xs uppercase text-gray-400 border-b border-gray-700">
+                        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                            <thead class="bg-slate-900/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-700/50">
                                 <tr>
-                                    <th class="p-2.5 sm:p-3">Item</th>
-                                    <th class="p-2.5 sm:p-3">Atual</th>
-                                    <th class="p-2.5 sm:p-3">Máx</th>
-                                    <th class="p-2.5 sm:p-3">Faltam</th>
-                                    <th class="p-2.5 sm:p-3 text-right">Ação</th>
+                                    <th class="p-3 sm:p-4">Item</th>
+                                    <th class="p-3 sm:p-4 text-center">Atual</th>
+                                    <th class="p-3 sm:p-4 text-center">Máx</th>
+                                    <th class="p-3 sm:p-4 text-center">Faltam</th>
+                                    <th class="p-3 sm:p-4 text-right">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-700/50">
+                            <tbody class="divide-y divide-slate-700/30">
                                 ${catItems.length === 0 ? `
-                                    <tr><td colspan="5" class="p-4 text-center text-xs text-gray-500">Sem itens nesta categoria.</td></tr>
+                                    <tr><td colspan="5" class="p-6 text-center text-sm text-slate-500 font-medium">Nenhum item nesta categoria.</td></tr>
                                 ` : catItems.map((item) => {
                                     const missing = item.max - item.current;
                                     const globalIndex = items.indexOf(item);
                                     return `
-                                        <tr class="hover:bg-gray-700/30 transition">
-                                            <td class="p-2.5 sm:p-3 font-semibold text-white whitespace-nowrap">${item.name}</td>
-                                            <td class="p-2.5 sm:p-3">
-                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-12 sm:w-16 bg-gray-900 border border-gray-700 rounded px-1.5 py-1 text-amber-400 font-bold focus:outline-none">
+                                        <tr class="hover:bg-slate-800/40 transition-colors group">
+                                            <td class="p-3 sm:p-4 font-semibold text-slate-200 whitespace-nowrap">${item.name}</td>
+                                            <td class="p-3 sm:p-4 text-center">
+                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-600 rounded-md px-2 py-1.5 text-amber-400 font-bold text-center focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
                                             </td>
-                                            <td class="p-2.5 sm:p-3">
-                                                <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-12 sm:w-16 bg-gray-900 border border-gray-700 rounded px-1.5 py-1 text-gray-400 focus:outline-none">
+                                            <td class="p-3 sm:p-4 text-center">
+                                                <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-700 rounded-md px-2 py-1.5 text-slate-400 text-center focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
                                             </td>
-                                            <td class="p-2.5 sm:p-3 whitespace-nowrap">
-                                                <span class="px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-bold ${missing === 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}">
-                                                    ${missing === 0 ? 'FULL ⭐' : missing}
+                                            <td class="p-3 sm:p-4 text-center whitespace-nowrap">
+                                                <span class="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold ${missing === 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-400'}">
+                                                    ${missing === 0 ? '<i class="fa-solid fa-check mr-1"></i> MAX' : missing}
                                                 </span>
                                             </td>
-                                            <td class="p-2.5 sm:p-3 text-right">
-                                                <button onclick="removeItem(${globalIndex})" class="text-gray-500 hover:text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>
+                                            <td class="p-3 sm:p-4 text-right">
+                                                <button onclick="removeItem(${globalIndex})" class="text-slate-500 hover:text-red-400 hover:bg-red-400/10 p-2 rounded-md transition-all opacity-50 group-hover:opacity-100"><i class="fa-solid fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     `;
@@ -641,16 +674,3 @@
     </script>
 </body>
 </html>
-```eof
-
----
-
-### 📝 Como Atualizar no GitHub:
-
-1. Abra o arquivo `index.html` no seu repositório do GitHub.
-2. Clique no ícone do **lápis ✏️ (Editar)** no canto direito.
-3. Apague **todo** o conteúdo antigo.
-4. Cole o código acima do começo ao fim (certifique-se de que a primeira linha seja `<!DOCTYPE html>`).
-5. Clique no botão verde **"Commit changes..."**.
-
-Aguarde 30 segundos, atualize o site no celular e o layout abrirá perfeito com o botão de menu!
