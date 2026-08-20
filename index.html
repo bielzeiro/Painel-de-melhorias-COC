@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,20 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clash Planner & Workspace</title>
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
     <!-- Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap)" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Estilização para o Editor Estilo Word */
         [contenteditable]:empty:before {
             content: attr(data-placeholder);
             color: #9ca3af;
             cursor: text;
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #1f2937; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
@@ -29,14 +26,14 @@
 <body class="bg-gray-900 text-gray-100 h-screen flex flex-col overflow-hidden">
 
     <!-- Modal de Login -->
-    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
-        <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
+    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
             <div class="text-center mb-6">
                 <div class="bg-amber-500/10 text-amber-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 border border-amber-500/20">
                     <i class="fa-solid fa-shield-halved text-3xl"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-white">Clash Organizer</h2>
-                <p class="text-gray-400 text-sm mt-1">Entre com suas credenciais do seu espaço de trabalho</p>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">Entre com suas credenciais do seu espaço de trabalho</p>
             </div>
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
@@ -47,27 +44,29 @@
                     <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Senha</label>
                     <input type="password" id="password" required placeholder="••••••••" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-amber-500 transition">
                 </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-3 rounded-lg shadow-lg hover:shadow-amber-500/20 transition flex items-center justify-center gap-2">
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-3 rounded-lg shadow-lg transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-right-to-bracket"></i> Acessar Minha Vila
                 </button>
             </form>
-            <p class="text-xs text-center text-gray-500 mt-4">Sistema simulado com salvamento local automático.</p>
         </div>
     </div>
 
-    <!-- Aplicação Principal (Oculta até login) -->
-    <div id="appContainer" class="hidden flex-1 flex overflow-hidden">
+    <!-- Aplicação Principal -->
+    <div id="appContainer" class="hidden flex-1 flex flex-col md:flex-row overflow-hidden relative">
 
-        <!-- Sidebar / Gerenciador de Pastas -->
-        <aside class="w-72 bg-gray-950 border-r border-gray-800 flex flex-col flex-shrink-0">
-            <!-- Topo do Perfil -->
+        <!-- Overlay Mobile -->
+        <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden"></div>
+
+        <!-- Sidebar / Gerenciador de Pastas (Retrátil em Mobile) -->
+        <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-gray-950 border-r border-gray-800 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0">
+            <!-- Topo Perfil -->
             <div class="p-4 border-b border-gray-800 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-amber-500 text-gray-950 font-bold flex items-center justify-center text-lg" id="avatarLetter">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="w-9 h-9 rounded-full bg-amber-500 text-gray-950 font-bold flex items-center justify-center text-lg flex-shrink-0" id="avatarLetter">
                         C
                     </div>
-                    <div>
-                        <h3 class="font-bold text-sm text-white" id="displayUsername">Chefe</h3>
+                    <div class="truncate">
+                        <h3 class="font-bold text-sm text-white truncate" id="displayUsername">Chefe</h3>
                         <span class="text-xs text-emerald-400 flex items-center gap-1">
                             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Online
                         </span>
@@ -80,170 +79,137 @@
 
             <!-- Botões de Ação Rápida -->
             <div class="p-3 gap-2 flex">
-                <button onclick="createNewFolder()" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-semibold py-2 px-3 rounded border border-gray-700 transition flex items-center justify-center gap-2">
+                <button onclick="createNewFolder()" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-semibold py-2 px-2 rounded border border-gray-700 transition flex items-center justify-center gap-1">
                     <i class="fa-solid fa-folder-plus text-amber-500"></i> Nova Pasta
                 </button>
-                <button onclick="createNewPage()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-gray-950 text-xs font-bold py-2 px-3 rounded shadow transition flex items-center justify-center gap-2">
+                <button onclick="createNewPage()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-gray-950 text-xs font-bold py-2 px-2 rounded shadow transition flex items-center justify-center gap-1">
                     <i class="fa-solid fa-file-circle-plus"></i> Nova Nota
                 </button>
             </div>
 
-            <!-- Árvore de Pastas e Documentos -->
-            <div class="flex-1 overflow-y-auto p-3 space-y-2" id="folderTree">
-                <!-- Conteúdo gerado via JS -->
-            </div>
+            <!-- Árvore de Pastas -->
+            <div class="flex-1 overflow-y-auto p-3 space-y-2" id="folderTree"></div>
 
-            <!-- Rodapé da Sidebar com Estatísticas -->
+            <!-- Rodapé da Sidebar -->
             <div class="p-3 bg-gray-900 border-t border-gray-800 text-xs text-gray-400 flex justify-between items-center">
                 <span><i class="fa-solid fa-cloud-arrow-up text-amber-500 mr-1"></i> Salvo automaticamente</span>
-                <button onclick="exportData()" title="Exportar dados para backup" class="hover:text-amber-400"><i class="fa-solid fa-download"></i></button>
+                <button onclick="exportData()" title="Backup" class="hover:text-amber-400"><i class="fa-solid fa-download"></i></button>
             </div>
         </aside>
 
-        <!-- Área Principal de Conteúdo -->
-        <main class="flex-1 flex flex-col bg-gray-900 overflow-hidden">
+        <!-- Área Principal -->
+        <main class="flex-1 flex flex-col bg-gray-900 overflow-hidden w-full">
 
-            <!-- Navbar Superior de Opções -->
-            <header class="h-14 bg-gray-950 border-b border-gray-800 px-6 flex items-center justify-between flex-shrink-0">
-                <div class="flex items-center gap-4">
-                    <span id="currentBreadcrumb" class="text-xs font-semibold text-gray-400 flex items-center gap-2">
-                        <i class="fa-solid fa-folder text-amber-500"></i> Raiz / <span class="text-white">Minha Lista de Upgrades</span>
+            <!-- Navbar Superior -->
+            <header class="h-14 bg-gray-950 border-b border-gray-800 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded hover:bg-gray-800">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <span id="currentBreadcrumb" class="text-xs font-semibold text-gray-400 truncate">
+                        <i class="fa-solid fa-folder text-amber-500"></i> Raiz / <span class="text-white">Minha Lista</span>
                     </span>
                 </div>
                 
-                <!-- Abas de Alternância de Visão -->
-                <div class="flex bg-gray-900 p-1 rounded-lg border border-gray-800">
-                    <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow">
-                        <i class="fa-solid fa-list-check mr-1.5"></i> Rastreador Clash
+                <!-- Abas de Alternância -->
+                <div class="flex bg-gray-900 p-1 rounded-lg border border-gray-800 flex-shrink-0">
+                    <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow">
+                        <i class="fa-solid fa-list-check sm:mr-1.5"></i><span class="hidden sm:inline"> Rastreador</span>
                     </button>
-                    <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white">
-                        <i class="fa-solid fa-file-lines mr-1.5"></i> Editor Word / Anotações
+                    <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white">
+                        <i class="fa-solid fa-file-lines sm:mr-1.5"></i><span class="hidden sm:inline"> Editor Word</span>
                     </button>
                 </div>
             </header>
 
-            <!-- CONTEÚDO 1: RASTREADOR DE CLASH OF CLANS -->
-            <div id="trackerSection" class="flex-1 overflow-y-auto p-6 space-y-6">
-                <!-- Filtros Principais (Vila Principal / Construtor / Capital) -->
-                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex flex-wrap items-center justify-between gap-4 shadow-lg">
+            <!-- CONTEÚDO 1: RASTREADOR CLASH -->
+            <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+                <!-- Seletor de CV -->
+                <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
                     <div class="flex items-center gap-3">
                         <div class="bg-amber-500/20 text-amber-400 p-3 rounded-lg border border-amber-500/30">
-                            <i class="fa-solid fa-chess-rook text-2xl"></i>
+                            <i class="fa-solid fa-chess-rook text-xl sm:text-2xl"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                                Configurações de Centro de Vila
-                            </h2>
-                            <p class="text-xs text-gray-400">Escolha o nível da vila para adaptar a lista de prioridades</p>
+                            <h2 class="text-base sm:text-lg font-bold text-white">Configurações de Vila</h2>
+                            <p class="text-xs text-gray-400">Escolha a vila para gerenciar</p>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <label class="text-xs font-semibold text-gray-300">Modo de Vila:</label>
-                        <select id="villageTypeSelect" onchange="changeVillageType()" class="bg-gray-900 border border-gray-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
-                            <option value="main">🏰 Vila Principal (CV)</option>
-                            <option value="builder">🔨 Base do Construtor</option>
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <select id="villageTypeSelect" onchange="changeVillageType()" class="flex-1 sm:flex-none bg-gray-900 border border-gray-700 text-white text-xs sm:text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
+                            <option value="main">🏰 Vila Principal</option>
+                            <option value="builder">🔨 Base Construtor</option>
                             <option value="capital">🏛️ Capital do Clã</option>
                         </select>
 
-                        <select id="townHallSelect" onchange="renderTracker()" class="bg-gray-900 border border-gray-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
-                            <option value="16">Centro de Vila 16</option>
-                            <option value="15">Centro de Vila 15</option>
-                            <option value="14">Centro de Vila 14</option>
-                            <option value="13">Centro de Vila 13</option>
-                            <option value="12" selected>Centro de Vila 12</option>
-                            <option value="11">Centro de Vila 11</option>
-                            <option value="10">Centro de Vila 10</option>
+                        <select id="townHallSelect" onchange="renderTracker()" class="flex-1 sm:flex-none bg-gray-900 border border-gray-700 text-white text-xs sm:text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-amber-500">
+                            <option value="18">CV 18</option>
+                            <option value="17">CV 17</option>
+                            <option value="16">CV 16</option>
+                            <option value="15">CV 15</option>
+                            <option value="14">CV 14</option>
+                            <option value="13">CV 13</option>
+                            <option value="12" selected>CV 12</option>
+                            <option value="11">CV 11</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Progresso Geral -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
-                        <span class="text-xs text-gray-400 font-semibold">Progresso Total do CV</span>
-                        <div class="text-2xl font-bold text-amber-400 mt-1" id="totalProgressPercent">0%</div>
-                        <div class="w-full bg-gray-900 rounded-full h-2 mt-2 border border-gray-700 overflow-hidden">
-                            <div id="totalProgressBar" class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                <!-- Métricas -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700">
+                        <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Progresso Geral</span>
+                        <div class="text-xl sm:text-2xl font-bold text-amber-400 mt-1" id="totalProgressPercent">0%</div>
+                        <div class="w-full bg-gray-900 rounded-full h-1.5 mt-2 border border-gray-700 overflow-hidden">
+                            <div id="totalProgressBar" class="bg-amber-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
-                    <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
-                        <span class="text-xs text-gray-400 font-semibold">Itens Restantes</span>
-                        <div class="text-2xl font-bold text-white mt-1" id="remainingUpgradesCount">0</div>
-                        <span class="text-[10px] text-gray-500">melhorias pendentes</span>
+                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700">
+                        <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Pendentes</span>
+                        <div class="text-xl sm:text-2xl font-bold text-white mt-1" id="remainingUpgradesCount">0</div>
+                        <span class="text-[10px] text-gray-500">melhorias</span>
                     </div>
-                    <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
-                        <span class="text-xs text-gray-400 font-semibold">Categoria Mais Atrasada</span>
-                        <div class="text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
-                        <span class="text-[10px] text-gray-500">prioridade recomendada</span>
+                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700">
+                        <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Mais Atrasada</span>
+                        <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
+                        <span class="text-[10px] text-gray-500">foco recomendado</span>
                     </div>
-                    <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 flex items-center justify-between">
+                    <div class="bg-gray-800 p-3 sm:p-4 rounded-xl border border-gray-700 flex items-center justify-between">
                         <div>
-                            <span class="text-xs text-gray-400 font-semibold">Adicionar Item</span>
-                            <p class="text-[11px] text-gray-500">Crie construções personalizadas</p>
+                            <span class="text-[11px] sm:text-xs text-gray-400 font-semibold">Criar Item</span>
+                            <p class="text-[10px] text-gray-500">Adicionar personalizado</p>
                         </div>
-                        <button onclick="openAddItemModal()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 p-2.5 rounded-lg transition">
-                            <i class="fa-solid fa-plus"></i>
+                        <button onclick="openAddItemModal()" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 p-2 sm:p-2.5 rounded-lg transition">
+                            <i class="fa-solid fa-plus text-sm"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Categorias de Unidades e Defesas -->
-                <div class="space-y-6" id="categoriesContainer">
-                    <!-- Categorias renderizadas dinamicamente via JS -->
-                </div>
+                <!-- Lista de Categorias -->
+                <div class="space-y-6" id="categoriesContainer"></div>
             </div>
 
-            <!-- CONTEÚDO 2: EDITOR ESTILO WORD / NOTAS LIVRES -->
+            <!-- CONTEÚDO 2: EDITOR WORD -->
             <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-gray-900">
-                <!-- Barra de Ferramentas Estilo Word -->
-                <div class="bg-gray-800 border-b border-gray-700 p-2 flex flex-wrap items-center gap-1.5 text-gray-300">
-                    <!-- Estilos de Texto -->
-                    <button onclick="execCmd('bold')" title="Negrito" class="p-2 hover:bg-gray-700 rounded text-sm font-bold w-8 h-8 flex items-center justify-center">B</button>
-                    <button onclick="execCmd('italic')" title="Itálico" class="p-2 hover:bg-gray-700 rounded text-sm italic w-8 h-8 flex items-center justify-center">I</button>
-                    <button onclick="execCmd('underline')" title="Sublinhado" class="p-2 hover:bg-gray-700 rounded text-sm underline w-8 h-8 flex items-center justify-center">U</button>
-                    <button onclick="execCmd('strikeThrough')" title="Tachado" class="p-2 hover:bg-gray-700 rounded text-sm line-through w-8 h-8 flex items-center justify-center">S</button>
-                    
-                    <div class="h-5 w-px bg-gray-700 mx-1"></div>
-
-                    <!-- Títulos -->
-                    <button onclick="execCmd('formatBlock', '<h1>')" title="Título 1" class="px-2 py-1 hover:bg-gray-700 rounded text-xs font-bold">H1</button>
-                    <button onclick="execCmd('formatBlock', '<h2>')" title="Título 2" class="px-2 py-1 hover:bg-gray-700 rounded text-xs font-bold">H2</button>
-                    <button onclick="execCmd('formatBlock', '<p>')" title="Parágrafo Normal" class="px-2 py-1 hover:bg-gray-700 rounded text-xs">P</button>
-
-                    <div class="h-5 w-px bg-gray-700 mx-1"></div>
-
-                    <!-- Listas -->
-                    <button onclick="execCmd('insertUnorderedList')" title="Lista com Marcadores" class="p-2 hover:bg-gray-700 rounded text-sm"><i class="fa-solid fa-list-ul"></i></button>
-                    <button onclick="execCmd('insertOrderedList')" title="Lista Numerada" class="p-2 hover:bg-gray-700 rounded text-sm"><i class="fa-solid fa-list-ol"></i></button>
-
-                    <div class="h-5 w-px bg-gray-700 mx-1"></div>
-
-                    <!-- Alinhamento -->
-                    <button onclick="execCmd('justifyLeft')" title="Alinhar à Esquerda" class="p-2 hover:bg-gray-700 rounded text-sm"><i class="fa-solid fa-align-left"></i></button>
-                    <button onclick="execCmd('justifyCenter')" title="Centralizar" class="p-2 hover:bg-gray-700 rounded text-sm"><i class="fa-solid fa-align-center"></i></button>
-                    <button onclick="execCmd('justifyRight')" title="Alinhar à Direita" class="p-2 hover:bg-gray-700 rounded text-sm"><i class="fa-solid fa-align-right"></i></button>
-
-                    <div class="h-5 w-px bg-gray-700 mx-1"></div>
-
-                    <!-- Destaque / Cores -->
-                    <button onclick="execCmd('hiliteColor', '#f59e0b')" title="Marcar com Amarelo" class="p-1.5 hover:bg-gray-700 rounded text-amber-500"><i class="fa-solid fa-highlighter"></i></button>
-                    <button onclick="execCmd('foreColor', '#ef4444')" title="Texto Vermelho" class="p-1.5 hover:bg-gray-700 rounded text-red-500 font-bold">A</button>
-                    <button onclick="execCmd('foreColor', '#10b981')" title="Texto Verde" class="p-1.5 hover:bg-gray-700 rounded text-emerald-500 font-bold">A</button>
-
-                    <div class="h-5 w-px bg-gray-700 mx-1"></div>
-
-                    <!-- Limpar Formatação -->
-                    <button onclick="execCmd('removeFormat')" title="Remover Formatação" class="p-2 hover:bg-gray-700 rounded text-sm text-gray-400"><i class="fa-solid fa-eraser"></i></button>
+                <!-- Toolbar -->
+                <div class="bg-gray-800 border-b border-gray-700 p-2 flex flex-wrap items-center gap-1 text-gray-300 overflow-x-auto">
+                    <button onclick="execCmd('bold')" class="p-1.5 hover:bg-gray-700 rounded text-xs font-bold w-7 h-7">B</button>
+                    <button onclick="execCmd('italic')" class="p-1.5 hover:bg-gray-700 rounded text-xs italic w-7 h-7">I</button>
+                    <button onclick="execCmd('underline')" class="p-1.5 hover:bg-gray-700 rounded text-xs underline w-7 h-7">U</button>
+                    <div class="h-4 w-px bg-gray-700 mx-1"></div>
+                    <button onclick="execCmd('insertUnorderedList')" class="p-1.5 hover:bg-gray-700 rounded text-xs"><i class="fa-solid fa-list-ul"></i></button>
+                    <button onclick="execCmd('insertOrderedList')" class="p-1.5 hover:bg-gray-700 rounded text-xs"><i class="fa-solid fa-list-ol"></i></button>
+                    <div class="h-4 w-px bg-gray-700 mx-1"></div>
+                    <button onclick="execCmd('foreColor', '#ef4444')" class="p-1.5 hover:bg-gray-700 rounded text-red-500 font-bold text-xs">A</button>
+                    <button onclick="execCmd('foreColor', '#10b981')" class="p-1.5 hover:bg-gray-700 rounded text-emerald-500 font-bold text-xs">A</button>
                 </div>
 
-                <!-- Folha de Papel / Área Editável -->
-                <div class="flex-1 overflow-y-auto p-8 flex justify-center bg-gray-950">
-                    <div class="w-full max-w-4xl bg-gray-900 border border-gray-800 rounded-xl p-8 min-h-[600px] shadow-2xl flex flex-col">
-                        <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento / Anotação..." class="bg-transparent text-2xl font-bold text-white mb-4 focus:outline-none border-b border-gray-800 pb-2">
-                        
-                        <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Escreva livremente sua estratégia, ordem de melhoria, regras do clã ou layouts de vila..." class="flex-1 text-gray-200 leading-relaxed focus:outline-none prose prose-invert max-w-none">
-                        </div>
+                <!-- Folha -->
+                <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center bg-gray-950">
+                    <div class="w-full max-w-4xl bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-8 min-h-[500px] shadow-2xl flex flex-col">
+                        <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento..." class="bg-transparent text-xl sm:text-2xl font-bold text-white mb-4 focus:outline-none border-b border-gray-800 pb-2">
+                        <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Escreva livremente aqui..." class="flex-1 text-gray-200 text-sm sm:text-base leading-relaxed focus:outline-none"></div>
                     </div>
                 </div>
             </div>
@@ -251,10 +217,10 @@
         </main>
     </div>
 
-    <!-- Modal para Adicionar Novo Item na Lista -->
-    <div id="addItemModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50">
+    <!-- Modal Adicionar Item -->
+    <div id="addItemModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
         <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 w-full max-w-md shadow-xl">
-            <h3 class="text-lg font-bold text-white mb-4">Adicionar Item de Melhoria</h3>
+            <h3 class="text-lg font-bold text-white mb-4">Adicionar Item</h3>
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs text-gray-400 mb-1">Categoria</label>
@@ -263,11 +229,11 @@
                         <option value="Muros">Muros</option>
                         <option value="Armadilhas">Armadilhas</option>
                         <option value="Heróis & Equipamentos">Heróis & Equipamentos</option>
-                        <option value="Laboratório (Tropa/Feitiço)">Laboratório (Tropa/Feitiço)</option>
+                        <option value="Laboratório">Laboratório</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-400 mb-1">Nome da Melhoria / Construção</label>
+                    <label class="block text-xs text-gray-400 mb-1">Nome do Item</label>
                     <input type="text" id="newItemName" placeholder="Ex: Torre de Magos" class="w-full bg-gray-900 border border-gray-700 rounded p-2 text-sm text-white">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
@@ -283,14 +249,13 @@
             </div>
             <div class="flex justify-end gap-2 mt-6">
                 <button onclick="closeAddItemModal()" class="px-4 py-2 bg-gray-700 text-gray-300 text-xs font-semibold rounded hover:bg-gray-600">Cancelar</button>
-                <button onclick="confirmAddItem()" class="px-4 py-2 bg-amber-500 text-gray-950 text-xs font-bold rounded hover:bg-amber-600">Salvar Item</button>
+                <button onclick="confirmAddItem()" class="px-4 py-2 bg-amber-500 text-gray-950 text-xs font-bold rounded hover:bg-amber-600">Salvar</button>
             </div>
         </div>
     </div>
 
     <!-- Script Principal -->
     <script>
-        // ESTADO GLOBAL DA APLICAÇÃO
         let appData = {
             currentUser: null,
             activeTab: 'tracker',
@@ -302,31 +267,36 @@
                 { id: 'f_builder', name: 'Base do Construtor' }
             ],
             documents: [
-                { id: 'default_doc', folderId: 'f_cv12', title: 'Prioridades de Upgrade CV12', content: '<p><strong>Estratégia Recomendada:</strong></p><ul><li>Focar primeiro na <strong>Giga Torre Spark</strong> para o nível 5.</li><li>Manter o <strong>Laboratório</strong> ocupado 100% do tempo.</li><li>Priorizar os muros usando o excesso de Elixir Rosa/Negro.</li></ul>' }
+                { id: 'default_doc', folderId: 'f_cv12', title: 'Prioridades CV12', content: '<p><strong>Estratégia:</strong> Focar na Giga Torre!</p>' }
             ],
-            // Dados default para os trackers de vila
             trackers: {
                 main_12: [
                     { category: 'Defesas', name: 'Artilharia Águia', current: 2, max: 3 },
                     { category: 'Defesas', name: 'Torre do Inferno', current: 5, max: 6 },
                     { category: 'Defesas', name: 'X-Besta', current: 5, max: 6 },
-                    { category: 'Muros', name: 'Muros Nível 13', current: 80, max: 300 },
+                    { category: 'Muros', name: 'Segmento de Muros', current: 80, max: 300 },
                     { category: 'Armadilhas', name: 'Mina Aérea Guiada', current: 3, max: 4 },
-                    { category: 'Heróis & Equipamentos', name: 'Rei Coroa', current: 50, max: 65 },
+                    { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 50, max: 65 },
                     { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 55, max: 65 },
                     { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 20, max: 40 },
-                    { category: 'Laboratório (Tropa/Feitiço)', name: 'Eletrodragão', current: 2, max: 3 }
+                    { category: 'Heróis & Equipamentos', name: 'Príncipe dos Servos', current: 1, max: 15 },
+                    { category: 'Laboratório', name: 'Eletrodragão', current: 2, max: 3 }
                 ]
             }
         };
 
-        // INICIALIZAÇÃO
         window.onload = function() {
             loadSavedData();
             checkSession();
         };
 
-        // PERSISTÊNCIA DE DADOS (LOCALSTORAGE)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
         function saveAllData() {
             localStorage.setItem('clash_organizer_data', JSON.stringify(appData));
         }
@@ -334,13 +304,10 @@
         function loadSavedData() {
             const saved = localStorage.getItem('clash_organizer_data');
             if (saved) {
-                try {
-                    appData = { ...appData, ...JSON.parse(saved) };
-                } catch(e) { console.error("Erro ao carregar dados", e); }
+                try { appData = { ...appData, ...JSON.parse(saved) }; } catch(e) {}
             }
         }
 
-        // SISTEMA DE LOGIN
         function handleLogin(e) {
             e.preventDefault();
             const user = document.getElementById('username').value.trim();
@@ -352,9 +319,8 @@
         }
 
         function checkSession() {
-            if (appData.currentUser) {
-                showApp();
-            } else {
+            if (appData.currentUser) { showApp(); }
+            else {
                 document.getElementById('loginModal').classList.remove('hidden');
                 document.getElementById('appContainer').classList.add('hidden');
             }
@@ -370,7 +336,7 @@
         function showApp() {
             document.getElementById('loginModal').classList.add('hidden');
             document.getElementById('appContainer').classList.remove('hidden');
-            
+            document.getElementById('appContainer').classList.add('flex');
             document.getElementById('displayUsername').innerText = appData.currentUser;
             document.getElementById('avatarLetter').innerText = appData.currentUser.charAt(0).toUpperCase();
 
@@ -379,7 +345,6 @@
             loadDocumentIntoEditor();
         }
 
-        // NAVEGAÇÃO DE ABAS
         function switchTab(tab) {
             appData.activeTab = tab;
             const trackerBtn = document.getElementById('tabTrackerBtn');
@@ -388,14 +353,14 @@
             const editorSec = document.getElementById('editorSection');
 
             if (tab === 'tracker') {
-                trackerBtn.className = 'px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow';
-                editorBtn.className = 'px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white';
+                trackerBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow';
+                editorBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white';
                 trackerSec.classList.remove('hidden');
                 editorSec.classList.add('hidden');
                 editorSec.classList.remove('flex');
             } else {
-                editorBtn.className = 'px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow';
-                trackerBtn.className = 'px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white';
+                editorBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition bg-amber-500 text-gray-950 shadow';
+                trackerBtn.className = 'px-2.5 sm:px-4 py-1.5 rounded-md text-xs font-bold transition text-gray-400 hover:text-white';
                 editorSec.classList.remove('hidden');
                 editorSec.classList.add('flex');
                 trackerSec.classList.add('hidden');
@@ -403,7 +368,6 @@
             saveAllData();
         }
 
-        // GERENCIADOR DE PASTAS E NOTAS
         function renderFolderTree() {
             const container = document.getElementById('folderTree');
             container.innerHTML = '';
@@ -411,25 +375,24 @@
             appData.folders.forEach(folder => {
                 const folderDiv = document.createElement('div');
                 folderDiv.className = 'space-y-1';
-
                 const docsInFolder = appData.documents.filter(d => d.folderId === folder.id);
 
                 folderDiv.innerHTML = `
                     <div class="flex items-center justify-between text-xs font-semibold text-gray-400 p-1.5 hover:bg-gray-900 rounded group cursor-pointer">
-                        <span class="flex items-center gap-2">
+                        <span class="flex items-center gap-2 truncate">
                             <i class="fa-solid fa-folder-open text-amber-500"></i> ${folder.name}
                         </span>
-                        <button onclick="createNewPage('${folder.id}')" title="Nova Anotação nesta pasta" class="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-amber-400">
+                        <button onclick="createNewPage('${folder.id}')" title="Nova Nota" class="text-gray-500 hover:text-amber-400 p-1">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
-                    <div class="pl-4 space-y-1">
+                    <div class="pl-3 space-y-1">
                         ${docsInFolder.map(doc => `
                             <div onclick="selectDocument('${doc.id}')" class="flex items-center justify-between text-xs p-1.5 rounded cursor-pointer transition ${appData.activeDocId === doc.id ? 'bg-amber-500/10 text-amber-400 font-semibold border-l-2 border-amber-500' : 'text-gray-300 hover:bg-gray-800'}">
                                 <span class="truncate flex items-center gap-1.5">
                                     <i class="fa-regular fa-file-lines text-gray-500"></i> ${doc.title || 'Sem título'}
                                 </span>
-                                <button onclick="deleteDocument(event, '${doc.id}')" title="Excluir Nota" class="text-gray-600 hover:text-red-400 text-[10px]">
+                                <button onclick="deleteDocument(event, '${doc.id}')" class="text-gray-600 hover:text-red-400 text-[10px] p-1">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
@@ -443,8 +406,7 @@
         function createNewFolder() {
             const name = prompt("Nome da Nova Pasta:");
             if (name) {
-                const newF = { id: 'f_' + Date.now(), name: name };
-                appData.folders.push(newF);
+                appData.folders.push({ id: 'f_' + Date.now(), name: name });
                 saveAllData();
                 renderFolderTree();
             }
@@ -452,15 +414,13 @@
 
         function createNewPage(folderId = null) {
             const targetFolder = folderId || (appData.folders[0] ? appData.folders[0].id : null);
-            if (!targetFolder) {
-                alert("Crie uma pasta primeiro!");
-                return;
-            }
+            if (!targetFolder) return alert("Crie uma pasta primeiro!");
+            
             const newDoc = {
                 id: 'doc_' + Date.now(),
                 folderId: targetFolder,
-                title: 'Nova Anotação Clash',
-                content: '<p>Comece a escrever seus planos aqui...</p>'
+                title: 'Nova Nota',
+                content: '<p>Escreva aqui...</p>'
             };
             appData.documents.push(newDoc);
             appData.activeDocId = newDoc.id;
@@ -468,6 +428,7 @@
             renderFolderTree();
             loadDocumentIntoEditor();
             switchTab('editor');
+            if (window.innerWidth < 768) toggleSidebar();
         }
 
         function selectDocument(docId) {
@@ -476,11 +437,12 @@
             renderFolderTree();
             loadDocumentIntoEditor();
             switchTab('editor');
+            if (window.innerWidth < 768) toggleSidebar();
         }
 
         function deleteDocument(e, docId) {
             e.stopPropagation();
-            if (confirm("Deseja realmente excluir esta anotação?")) {
+            if (confirm("Excluir nota?")) {
                 appData.documents = appData.documents.filter(d => d.id !== docId);
                 if (appData.activeDocId === docId) {
                     appData.activeDocId = appData.documents[0] ? appData.documents[0].id : null;
@@ -491,13 +453,12 @@
             }
         }
 
-        // EDITOR ESTILO WORD
         function loadDocumentIntoEditor() {
             const currentDoc = appData.documents.find(d => d.id === appData.activeDocId);
             if (currentDoc) {
                 document.getElementById('documentTitle').value = currentDoc.title;
                 document.getElementById('wordEditor').innerHTML = currentDoc.content;
-                document.getElementById('currentBreadcrumb').innerHTML = `<i class="fa-solid fa-folder text-amber-500"></i> Documento / <span class="text-white">${currentDoc.title}</span>`;
+                document.getElementById('currentBreadcrumb').innerHTML = `<i class="fa-solid fa-folder text-amber-500"></i> <span class="text-white">${currentDoc.title}</span>`;
             } else {
                 document.getElementById('documentTitle').value = '';
                 document.getElementById('wordEditor').innerHTML = '';
@@ -519,7 +480,6 @@
             saveCurrentDocument();
         }
 
-        // RASTREADOR CLASH OF CLANS
         function getTrackerKey() {
             return `${appData.activeVillage}_${appData.activeTownHall}`;
         }
@@ -533,12 +493,10 @@
             appData.activeTownHall = document.getElementById('townHallSelect').value;
             const key = getTrackerKey();
 
-            // Caso não existam dados para este CV, inicializar lista padrão
             if (!appData.trackers[key]) {
                 appData.trackers[key] = [
                     { category: 'Defesas', name: 'Canhão', current: 1, max: 10 },
-                    { category: 'Muros', name: 'Segmento de Muros', current: 1, max: 100 },
-                    { category: 'Heróis & Equipamentos', name: 'Rei Terrestre', current: 1, max: 20 }
+                    { category: 'Muros', name: 'Segmento de Muros', current: 1, max: 100 }
                 ];
             }
 
@@ -546,18 +504,13 @@
             const categoriesContainer = document.getElementById('categoriesContainer');
             categoriesContainer.innerHTML = '';
 
-            // Agrupar por categoria
-            const categories = ['Defesas', 'Muros', 'Armadilhas', 'Heróis & Equipamentos', 'Laboratório (Tropa/Feitiço)'];
-
-            let totalCurrent = 0;
-            let totalMax = 0;
-            let totalPendingCount = 0;
+            const categories = ['Defesas', 'Muros', 'Armadilhas', 'Heróis & Equipamentos', 'Laboratório'];
+            let totalCurrent = 0, totalMax = 0, totalPendingCount = 0;
             let categoryStats = {};
 
             categories.forEach(cat => {
                 const catItems = items.filter(i => i.category === cat);
-                let catCurrent = 0;
-                let catMax = 0;
+                let catCurrent = 0, catMax = 0;
 
                 catItems.forEach(i => {
                     catCurrent += i.current;
@@ -567,53 +520,51 @@
 
                 totalCurrent += catCurrent;
                 totalMax += catMax;
-
                 const catPercent = catMax > 0 ? Math.round((catCurrent / catMax) * 100) : 0;
                 categoryStats[cat] = catPercent;
 
-                // Construir Tabela para a Categoria
                 const card = document.createElement('div');
                 card.className = "bg-gray-800 rounded-xl border border-gray-700 overflow-hidden shadow-lg";
                 card.innerHTML = `
-                    <div class="p-4 bg-gray-800/80 border-b border-gray-700 flex items-center justify-between">
+                    <div class="p-3 sm:p-4 bg-gray-800/80 border-b border-gray-700 flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <h3 class="font-bold text-white text-md">${cat}</h3>
-                            <span class="text-xs bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20">${catPercent}% concluído</span>
+                            <h3 class="font-bold text-white text-sm sm:text-base">${cat}</h3>
+                            <span class="text-[10px] sm:text-xs bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20">${catPercent}%</span>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-300">
-                            <thead class="bg-gray-900/50 text-xs uppercase text-gray-400 border-b border-gray-700">
+                        <table class="w-full text-left text-xs sm:text-sm text-gray-300">
+                            <thead class="bg-gray-900/50 text-[10px] sm:text-xs uppercase text-gray-400 border-b border-gray-700">
                                 <tr>
-                                    <th class="p-3">Item / Construção</th>
-                                    <th class="p-3">Nível Atual</th>
-                                    <th class="p-3">Nível Máximo</th>
-                                    <th class="p-3">Faltam</th>
-                                    <th class="p-3 text-right">Ação</th>
+                                    <th class="p-2.5 sm:p-3">Item</th>
+                                    <th class="p-2.5 sm:p-3">Atual</th>
+                                    <th class="p-2.5 sm:p-3">Máx</th>
+                                    <th class="p-2.5 sm:p-3">Faltam</th>
+                                    <th class="p-2.5 sm:p-3 text-right">Ação</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-700/50">
                                 ${catItems.length === 0 ? `
-                                    <tr><td colspan="5" class="p-4 text-center text-xs text-gray-500">Nenhum item nesta categoria. Adicione no botão acima!</td></tr>
-                                ` : catItems.map((item, idx) => {
+                                    <tr><td colspan="5" class="p-4 text-center text-xs text-gray-500">Sem itens nesta categoria.</td></tr>
+                                ` : catItems.map((item) => {
                                     const missing = item.max - item.current;
                                     const globalIndex = items.indexOf(item);
                                     return `
                                         <tr class="hover:bg-gray-700/30 transition">
-                                            <td class="p-3 font-semibold text-white">${item.name}</td>
-                                            <td class="p-3">
-                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-16 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+                                            <td class="p-2.5 sm:p-3 font-semibold text-white whitespace-nowrap">${item.name}</td>
+                                            <td class="p-2.5 sm:p-3">
+                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-12 sm:w-16 bg-gray-900 border border-gray-700 rounded px-1.5 py-1 text-amber-400 font-bold focus:outline-none">
                                             </td>
-                                            <td class="p-3">
-                                                <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-16 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-gray-400 focus:outline-none focus:border-amber-500">
+                                            <td class="p-2.5 sm:p-3">
+                                                <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-12 sm:w-16 bg-gray-900 border border-gray-700 rounded px-1.5 py-1 text-gray-400 focus:outline-none">
                                             </td>
-                                            <td class="p-3">
-                                                <span class="px-2 py-1 rounded text-xs font-bold ${missing === 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}">
-                                                    ${missing === 0 ? 'FULL ⭐' : missing + ' nível(is)'}
+                                            <td class="p-2.5 sm:p-3 whitespace-nowrap">
+                                                <span class="px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-bold ${missing === 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}">
+                                                    ${missing === 0 ? 'FULL ⭐' : missing}
                                                 </span>
                                             </td>
-                                            <td class="p-3 text-right">
-                                                <button onclick="removeItem(${globalIndex})" class="text-gray-500 hover:text-red-400 transition p-1"><i class="fa-solid fa-trash"></i></button>
+                                            <td class="p-2.5 sm:p-3 text-right">
+                                                <button onclick="removeItem(${globalIndex})" class="text-gray-500 hover:text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     `;
@@ -625,20 +576,14 @@
                 categoriesContainer.appendChild(card);
             });
 
-            // Atualizar Métrica Geral
             const overallPercent = totalMax > 0 ? Math.round((totalCurrent / totalMax) * 100) : 0;
             document.getElementById('totalProgressPercent').innerText = `${overallPercent}%`;
             document.getElementById('totalProgressBar').style.width = `${overallPercent}%`;
             document.getElementById('remainingUpgradesCount').innerText = totalPendingCount;
 
-            // Encontrar categoria mais atrasada
-            let minCat = 'Nenhum';
-            let minVal = 101;
+            let minCat = 'Nenhum', minVal = 101;
             Object.keys(categoryStats).forEach(c => {
-                if (categoryStats[c] < minVal) {
-                    minVal = categoryStats[c];
-                    minCat = c;
-                }
+                if (categoryStats[c] < minVal) { minVal = categoryStats[c]; minCat = c; }
             });
             document.getElementById('laggingCategory').innerText = minCat;
 
@@ -647,8 +592,7 @@
 
         function updateItemLevel(index, field, value) {
             const key = getTrackerKey();
-            const val = parseInt(value) || 0;
-            appData.trackers[key][index][field] = val;
+            appData.trackers[key][index][field] = parseInt(value) || 0;
             renderTracker();
         }
 
@@ -658,7 +602,6 @@
             renderTracker();
         }
 
-        // MODAL ADICIONAR ITEM
         function openAddItemModal() {
             document.getElementById('addItemModal').classList.remove('hidden');
             document.getElementById('addItemModal').classList.add('flex');
@@ -675,10 +618,7 @@
             const current = parseInt(document.getElementById('newItemCurrent').value) || 0;
             const max = parseInt(document.getElementById('newItemMax').value) || 1;
 
-            if (!name) {
-                alert("Por favor, informe o nome do item!");
-                return;
-            }
+            if (!name) return alert("Informe o nome do item!");
 
             const key = getTrackerKey();
             if (!appData.trackers[key]) appData.trackers[key] = [];
@@ -689,7 +629,6 @@
             renderTracker();
         }
 
-        // EXPORTAR DADOS (BACKUP)
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
             const downloadAnchor = document.createElement('a');
@@ -702,4 +641,16 @@
     </script>
 </body>
 </html>
-```
+```eof
+
+---
+
+### 📝 Como Atualizar no GitHub:
+
+1. Abra o arquivo `index.html` no seu repositório do GitHub.
+2. Clique no ícone do **lápis ✏️ (Editar)** no canto direito.
+3. Apague **todo** o conteúdo antigo.
+4. Cole o código acima do começo ao fim (certifique-se de que a primeira linha seja `<!DOCTYPE html>`).
+5. Clique no botão verde **"Commit changes..."**.
+
+Aguarde 30 segundos, atualize o site no celular e o layout abrirá perfeito com o botão de menu!
