@@ -282,32 +282,114 @@
     <!-- Script Principal -->
     <script>
         let appData = {
-            currentUser: null,
-            activeTab: 'tracker',
-            activeVillage: 'main',
-            activeTownHall: '12',
-            activeDocId: 'default_doc',
-            folders: [
-                { id: 'f_cv12', name: 'Centro de Vila 12' },
-                { id: 'f_builder', name: 'Base do Construtor' }
-            ],
-            documents: [
-                { id: 'default_doc', folderId: 'f_cv12', title: 'Prioridades CV12', content: '<h2><strong>Estratégia Inicial</strong></h2><p>Focar primariamente na <strong>Giga Torre</strong> antes de expandir defesas em área.</p>' }
-            ],
-            trackers: {
-                main_12: [
-                    { category: 'Defesas', name: 'Artilharia Águia', current: 2, max: 3 },
-                    { category: 'Defesas', name: 'Torre do Inferno', current: 5, max: 6 },
-                    { category: 'Defesas', name: 'X-Besta', current: 5, max: 6 },
-                    { category: 'Muros', name: 'Segmento de Muros', current: 80, max: 300 },
-                    { category: 'Armadilhas', name: 'Mina Aérea Guiada', current: 3, max: 4 },
-                    { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 50, max: 65 },
-                    { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 55, max: 65 },
-                    { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 20, max: 40 },
-                    { category: 'Laboratório', name: 'Eletrodragão', current: 2, max: 3 }
+                        trackers: {
+                main_11: [
+                    // --- HERÓIS ---
+                    { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 0, max: 50 },
+                    { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 0, max: 50 },
+                    { category: 'Heróis & Equipamentos', name: 'Príncipe Servo', current: 0, max: 30 },
+                    { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 0, max: 20 },
+
+                    // --- EQUIPAMENTOS ---
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Boneco de Bárbaro', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Frasco de Fúria', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bota Terremoto', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bigode de Vampiro', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Manopla Agigantadora', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bola de Espinhos', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Amuleto Ofídico', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Cavalo de Pau', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Arqueira', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Frasco de Invisibilidade', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Gigante', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Congelante', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 0, max: 1 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco Gigante', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Monolítica', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Boneco de Capanga', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Orbe Sombrio', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Calça de Metal', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Coroa Sombria', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Bastão de Meteoros', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tomo Eterno', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema da Vida', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema de Fúria', current: 0, max: 12 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Bola de Fogo', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Boneco de Lavalão', current: 0, max: 15 },
+                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tocha Heroica', current: 0, max: 15 },
+
+                    // --- TROPAS & FEITIÇOS ---
+                    { category: 'Laboratório', name: 'Bárbaro', current: 0, max: 8 },
+                    { category: 'Laboratório', name: 'Arqueira', current: 0, max: 8 },
+                    { category: 'Laboratório', name: 'Gigante', current: 0, max: 8 },
+                    { category: 'Laboratório', name: 'Goblin', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Quebra-muros', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Balão', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Mago', current: 0, max: 8 },
+                    { category: 'Laboratório', name: 'Curadora', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Dragão', current: 0, max: 6 },
+                    { category: 'Laboratório', name: 'P.E.K.K.A', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Bebê Dragão', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Mineiro', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Dragão Elétrico', current: 0, max: 2 },
+                    { category: 'Laboratório', name: 'Servo', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Corredor', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Valquíria', current: 0, max: 6 },
+                    { category: 'Laboratório', name: 'Golem', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Bruxa', current: 0, max: 4 },
+                    { category: 'Laboratório', name: 'Lava Hound', current: 0, max: 4 },
+                    { category: 'Laboratório', name: 'Lançador', current: 0, max: 3 },
+                    { category: 'Laboratório', name: 'Golem de Gelo', current: 0, max: 3 },
+                    { category: 'Laboratório', name: 'Feitiço de Raio', current: 0, max: 8 },
+                    { category: 'Laboratório', name: 'Feitiço de Cura', current: 0, max: 7 },
+                    { category: 'Laboratório', name: 'Feitiço de Fúria', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Feitiço de Salto', current: 0, max: 3 },
+                    { category: 'Laboratório', name: 'Feitiço de Gelo', current: 0, max: 6 },
+                    { category: 'Laboratório', name: 'Feitiço de Clone', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Feitiço de Invisibilidade', current: 0, max: 2 },
+                    { category: 'Laboratório', name: 'Feitiço de Veneno', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Feitiço de Terremoto', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Feitiço de Aceleração', current: 0, max: 5 },
+                    { category: 'Laboratório', name: 'Feitiço de Esqueletos', current: 0, max: 4 },
+                    { category: 'Laboratório', name: 'Feitiço de Morcego', current: 0, max: 4 },
+
+                    // --- DEFESAS & ESTRUTURAS ---
+                    { category: 'Defesas', name: 'Cabana do Construtor (x5)', current: 0, max: 1 },
+                    { category: 'Defesas', name: 'Canhão (x7)', current: 0, max: 15 },
+                    { category: 'Defesas', name: 'Torre Arqueira (x8)', current: 0, max: 15 },
+                    { category: 'Defesas', name: 'Torre do Mago (x5)', current: 0, max: 10 },
+                    { category: 'Defesas', name: 'Defesa Aérea (x4)', current: 0, max: 9 },
+                    { category: 'Defesas', name: 'Morteiro (x4)', current: 0, max: 10 },
+                    { category: 'Defesas', name: 'Tesla Oculta (x4)', current: 0, max: 9 },
+                    { category: 'Defesas', name: 'X-Besta (x4)', current: 0, max: 5 },
+                    { category: 'Defesas', name: 'Torre Inferno (x2)', current: 0, max: 5 },
+                    { category: 'Defesas', name: 'Dispersor Aéreo (x2)', current: 0, max: 7 },
+                    { category: 'Defesas', name: 'Artilharia Águia (x1)', current: 0, max: 2 },
+                    { category: 'Defesas', name: 'Torre de Bombas (x2)', current: 0, max: 6 },
+
+                    // --- MUROS & ARMADILHAS ---
+                    { category: 'Muros', name: 'Segmento de Muros (x300)', current: 0, max: 12 },
+                    { category: 'Armadilhas', name: 'Bomba (x6)', current: 0, max: 8 },
+                    { category: 'Armadilhas', name: 'Armadilha de Mola (x6)', current: 0, max: 6 },
+                    { category: 'Armadilhas', name: 'Bomba Aérea (x5)', current: 0, max: 5 },
+                    { category: 'Armadilhas', name: 'Bomba Gigante (x5)', current: 0, max: 5 },
+                    { category: 'Armadilhas', name: 'Mina Aérea Guiada (x5)', current: 0, max: 3 },
+                    { category: 'Armadilhas', name: 'Armadilha de Esqueleto (x3)', current: 0, max: 4 },
+                    { category: 'Armadilhas', name: 'Tornado Arapuca (x1)', current: 0, max: 2 },
+
+                    // --- RECURSOS & AUXILIARES ---
+                    { category: 'Recursos & AuxILIARES', name: 'Castelo do Clã', current: 0, max: 7 },
+                    { category: 'Recursos & AuxILIARES', name: 'Coletor de Elixir (x7)', current: 0, max: 14 },
+                    { category: 'Recursos & AuxILIARES', name: 'Depósito de Elixir (x4)', current: 0, max: 12 },
+                    { category: 'Recursos & AuxILIARES', name: 'Mina de Ouro (x7)', current: 0, max: 14 },
+                    { category: 'Recursos & AuxILIARES', name: 'Depósito de Ouro (x4)', current: 0, max: 12 },
+                    { category: 'Recursos & AuxILIARES', name: 'Broca de Elixir Negro (x3)', current: 0, max: 8 },
+                    { category: 'Recursos & AuxILIARES', name: 'Depósito de Elixir Negro (x1)', current: 0, max: 6 },
+                    { category: 'Recursos & AuxILIARES', name: 'Assistente de Laboratório', current: 0, max: 4 },
+                    { category: 'Recursos & AuxILIARES', name: 'Aprendiz de Construtor', current: 0, max: 4 },
+                    { category: 'Recursos & AuxILIARES', name: 'Alquimista', current: 0, max: 1 }
                 ]
             }
-        };
 
         window.onload = function() {
             loadSavedData();
