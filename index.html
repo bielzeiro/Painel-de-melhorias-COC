@@ -68,7 +68,7 @@
         <!-- Overlay Mobile -->
         <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
 
-        <!-- Sidebar / Gerenciador de Pastas (Retrátil em Mobile) -->
+        <!-- Sidebar / Gerenciador de Pastas -->
         <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
             <!-- Topo Perfil -->
             <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
@@ -138,7 +138,6 @@
                 
                 <!-- Header de Configuração -->
                 <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
-                    <!-- Detalhe visual de fundo -->
                     <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
                     
                     <div class="flex items-center gap-4">
@@ -165,8 +164,8 @@
                             <option value="15">Nível 15</option>
                             <option value="14">Nível 14</option>
                             <option value="13">Nível 13</option>
-                            <option value="12" selected>Nível 12</option>
-                            <option value="11">Nível 11</option>
+                            <option value="12">Nível 12</option>
+                            <option value="11" selected>Nível 11</option>
                         </select>
                     </div>
                 </div>
@@ -282,7 +281,18 @@
     <!-- Script Principal -->
     <script>
         let appData = {
-                        trackers: {
+            currentUser: null,
+            activeVillage: 'main',
+            activeTownHall: '11',
+            activeTab: 'tracker',
+            activeDocId: null,
+            folders: [
+                { id: 'f_default', name: 'Geral' }
+            ],
+            documents: [
+                { id: 'doc_default', folderId: 'f_default', title: 'Estratégia de Guerra', content: '<p>Anotações do plano de ataque...</p>' }
+            ],
+            trackers: {
                 main_11: [
                     // --- HERÓIS ---
                     { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 0, max: 50 },
@@ -390,6 +400,7 @@
                     { category: 'Recursos & AuxILIARES', name: 'Alquimista', current: 0, max: 1 }
                 ]
             }
+        };
 
         window.onload = function() {
             loadSavedData();
@@ -451,7 +462,6 @@
             renderTracker();
             loadDocumentIntoEditor();
             
-            // Força a aba correta com base no estado salvo
             switchTab(appData.activeTab || 'tracker');
         }
 
@@ -619,12 +629,18 @@
             const categoriesContainer = document.getElementById('categoriesContainer');
             categoriesContainer.innerHTML = '';
 
-            const categories = ['Defesas', 'Muros', 'Armadilhas', 'Heróis & Equipamentos', 'Laboratório'];
+            // Lista estática para iterar + inclusão de categorias customizadas
+            const defaultCategories = ['Heróis & Equipamentos', 'Equipamentos (Ferreiro)', 'Laboratório', 'Defesas', 'Muros', 'Armadilhas', 'Recursos & AuxILIARES'];
+            const customCategories = [...new Set(items.map(i => i.category))];
+            const categories = [...new Set([...defaultCategories, ...customCategories])];
+
             let totalCurrent = 0, totalMax = 0, totalPendingCount = 0;
             let categoryStats = {};
 
             categories.forEach(cat => {
                 const catItems = items.filter(i => i.category === cat);
+                if (catItems.length === 0) return; // Oculta categorias vazias para limpar a UI
+
                 let catCurrent = 0, catMax = 0;
 
                 catItems.forEach(i => {
@@ -659,9 +675,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-700/30">
-                                ${catItems.length === 0 ? `
-                                    <tr><td colspan="5" class="p-6 text-center text-sm text-slate-500 font-medium">Nenhum item nesta categoria.</td></tr>
-                                ` : catItems.map((item) => {
+                                ${catItems.map((item) => {
                                     const missing = item.max - item.current;
                                     const globalIndex = items.indexOf(item);
                                     return `
@@ -674,8 +688,8 @@
                                                 <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-700 rounded-md px-2 py-1.5 text-slate-400 text-center focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
                                             </td>
                                             <td class="p-3 sm:p-4 text-center whitespace-nowrap">
-                                                <span class="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold ${missing === 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-400'}">
-                                                    ${missing === 0 ? '<i class="fa-solid fa-check mr-1"></i> MAX' : missing}
+                                                <span class="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold ${missing <= 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-400'}">
+                                                    ${missing <= 0 ? '<i class="fa-solid fa-check mr-1"></i> MAX' : missing}
                                                 </span>
                                             </td>
                                             <td class="p-3 sm:p-4 text-right">
