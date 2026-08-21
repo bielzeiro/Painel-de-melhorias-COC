@@ -36,7 +36,6 @@
     <!-- Modal de Identificação do Jogador -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300">
         <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md border-t border-slate-700 relative overflow-hidden">
-            <!-- Efeito de brilho de fundo -->
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
             
             <div class="text-center mb-6 relative z-10">
@@ -44,20 +43,33 @@
                     <i class="fa-solid fa-shield-halved text-3xl"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-white tracking-tight">Clash Organizer</h2>
-                <p class="text-slate-400 text-xs sm:text-sm mt-1">Insira suas credenciais de chefe para acessar</p>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1">Selecione suas credenciais e o Centro de Vila inicial</p>
             </div>
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome de Preferência</label>
-                    <input type="text" id="displayNameInput" required placeholder="Ex: Vilão do Clash" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome do Jogador</label>
+                    <input type="text" id="displayNameInput" required value="Gabriel Santos" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all">
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">@Username</label>
-                    <input type="text" id="usernameInput" required placeholder="Ex: @vilaoclash" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+                    <input type="text" id="usernameInput" required value="@bielzinho" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all">
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">TAG do Jogador</label>
-                    <input type="text" id="playerTagInput" required placeholder="Ex: #2PP88228" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all uppercase">
+                    <input type="text" id="playerTagInput" required value="#LUU9VYJLP" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all uppercase">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-1.5">Escolha o Centro de Vila Atual</label>
+                    <select id="initialTownHallSelect" class="w-full bg-slate-900 border border-amber-500/50 rounded-lg px-4 py-3 text-white font-bold focus:outline-none focus:border-amber-500">
+                        <option value="18">Centro de Vila 18</option>
+                        <option value="17">Centro de Vila 17</option>
+                        <option value="16">Centro de Vila 16</option>
+                        <option value="15">Centro de Vila 15</option>
+                        <option value="14">Centro de Vila 14</option>
+                        <option value="13">Centro de Vila 13</option>
+                        <option value="12">Centro de Vila 12</option>
+                        <option value="11" selected>Centro de Vila 11</option>
+                    </select>
                 </div>
                 <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold py-3.5 rounded-lg shadow-lg shadow-amber-500/25 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2">
                     <i class="fa-solid fa-right-to-bracket"></i> Acessar Minha Vila
@@ -67,178 +79,210 @@
     </div>
 
     <!-- Aplicação Principal -->
-    <div id="appContainer" class="hidden flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    <div id="appContainer" class="hidden flex-1 flex flex-col overflow-hidden relative">
 
-        <!-- Overlay Mobile -->
-        <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
+        <!-- Banner de Desenvolvedor (Gabriel Santos) -->
+        <div id="devBanner" class="hidden bg-purple-900/90 border-b border-purple-500/50 px-4 py-2 text-xs flex justify-between items-center z-50 text-purple-200 flex-shrink-0">
+            <span class="font-bold flex items-center gap-2">
+                <i class="fa-solid fa-code"></i> MODO DESENVOLVEDOR ATIVO (Gabriel Santos)
+            </span>
+            <div class="flex items-center gap-3">
+                <label class="flex items-center gap-1.5 cursor-pointer text-slate-200 hover:text-white">
+                    <input type="checkbox" id="viewAsPlayerToggle" onchange="toggleViewMode()" class="rounded border-purple-500">
+                    <span>Ver como Jogador</span>
+                </label>
+                <span id="devStatusBadge" class="bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Dev Access</span>
+            </div>
+        </div>
 
-        <!-- Sidebar -->
-        <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
-            <!-- Topo Perfil -->
-            <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-lg flex-shrink-0 shadow-inner" id="avatarLetter">
-                        C
-                    </div>
-                    <div class="truncate">
-                        <h3 class="font-bold text-sm text-white truncate" id="displayUsername">Chefe</h3>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] text-amber-400 font-bold tracking-wide" id="displayHandle">@usuario</span>
-                            <span class="text-[10px] text-slate-400 font-mono tracking-wider" id="displayTag">#TAG</span>
+        <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+            <!-- Overlay Mobile -->
+            <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
+
+            <!-- Sidebar -->
+            <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
+                <!-- Topo Perfil -->
+                <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-lg flex-shrink-0 shadow-inner" id="avatarLetter">
+                            G
+                        </div>
+                        <div class="truncate">
+                            <h3 class="font-bold text-sm text-white truncate" id="displayUsername">Gabriel Santos</h3>
+                            <div class="flex flex-col">
+                                <span class="text-[10px] text-amber-400 font-bold tracking-wide" id="displayHandle">@bielzinho</span>
+                                <span class="text-[10px] text-slate-400 font-mono tracking-wider" id="displayTag">#LUU9VYJLP</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <button onclick="handleLogout()" title="Sair" class="text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg p-2 transition-colors">
-                    <i class="fa-solid fa-power-off text-sm"></i>
-                </button>
-            </div>
-
-            <!-- Botões de Ação Rápida -->
-            <div class="p-4 gap-2 flex">
-                <button onclick="createNewFolder()" class="flex-1 bg-slate-800/50 hover:bg-slate-700 text-slate-300 text-xs font-semibold py-2.5 px-2 rounded-lg border border-slate-700/50 transition-colors flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-folder-plus text-amber-500"></i> Pasta
-                </button>
-                <button onclick="createNewPage()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2.5 px-2 rounded-lg shadow-md shadow-amber-500/10 transition-colors flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-file-circle-plus"></i> Nota
-                </button>
-            </div>
-
-            <!-- Árvore de Pastas -->
-            <div class="flex-1 overflow-y-auto px-3 pb-3 space-y-3" id="folderTree"></div>
-
-            <!-- Rodapé da Sidebar -->
-            <div class="p-4 bg-slate-950/80 border-t border-slate-800/50 text-xs text-slate-400 flex justify-between items-center">
-                <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-cloud-check text-emerald-500"></i> Sincronizado</span>
-                <div class="flex items-center gap-1">
-                    <button onclick="resetTrackerData()" title="Resetar Dados da Vila Ativa" class="hover:text-red-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-rotate"></i></button>
-                    <button onclick="exportData()" title="Fazer Backup (JSON)" class="hover:text-amber-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-download"></i></button>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Área Principal -->
-        <main class="flex-1 flex flex-col overflow-hidden w-full relative">
-            
-            <!-- Navbar Superior -->
-            <header class="h-16 glass-panel border-b-0 border-slate-800/50 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2 z-10 shadow-sm">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
-                        <i class="fa-solid fa-bars text-lg"></i>
+                    <button onclick="handleLogout()" title="Sair" class="text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg p-2 transition-colors">
+                        <i class="fa-solid fa-power-off text-sm"></i>
                     </button>
-                    <span id="currentBreadcrumb" class="text-xs sm:text-sm font-medium text-slate-400 truncate flex items-center gap-2">
-                        <i class="fa-solid fa-folder text-amber-500"></i> Meu Espaço / <span class="text-white font-semibold">Início</span>
-                    </span>
                 </div>
+
+                <!-- Alternador de Vila e Ações -->
+                <div class="p-4 border-b border-slate-800/50 space-y-3">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Alternar Nível / Progresso</label>
+                        <select id="sidebarAccountSelect" onchange="switchVillageFromSidebar()" class="w-full bg-slate-900 border border-slate-700 text-amber-400 font-bold text-xs rounded-lg p-2.5 focus:outline-none focus:border-amber-500">
+                            <option value="18">🏰 Centro de Vila 18</option>
+                            <option value="17">🏰 Centro de Vila 17</option>
+                            <option value="16">🏰 Centro de Vila 16</option>
+                            <option value="15">🏰 Centro de Vila 15</option>
+                            <option value="14">🏰 Centro de Vila 14</option>
+                            <option value="13">🏰 Centro de Vila 13</option>
+                            <option value="12">🏰 Centro de Vila 12</option>
+                            <option value="11" selected>🏰 Centro de Vila 11</option>
+                        </select>
+                    </div>
+
+                    <div class="gap-2 flex">
+                        <button onclick="createNewFolder()" class="flex-1 bg-slate-800/50 hover:bg-slate-700 text-slate-300 text-xs font-semibold py-2 px-2 rounded-lg border border-slate-700/50 transition-colors flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-folder-plus text-amber-500"></i> Pasta
+                        </button>
+                        <button onclick="createNewPage()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2 px-2 rounded-lg shadow-md shadow-amber-500/10 transition-colors flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-file-circle-plus"></i> Nota
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Árvore de Pastas -->
+                <div class="flex-1 overflow-y-auto px-3 py-3 space-y-3" id="folderTree"></div>
+
+                <!-- Rodapé da Sidebar -->
+                <div class="p-4 bg-slate-950/80 border-t border-slate-800/50 text-xs text-slate-400 flex justify-between items-center">
+                    <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-cloud-check text-emerald-500"></i> Sincronizado</span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="resetTrackerData()" title="Resetar Dados do CV Atual" class="hover:text-red-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-rotate"></i></button>
+                        <button onclick="exportData()" title="Fazer Backup (JSON)" class="hover:text-amber-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-download"></i></button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Área Principal -->
+            <main class="flex-1 flex flex-col overflow-hidden w-full relative">
                 
-                <!-- Abas de Alternância -->
-                <div class="flex bg-slate-900/80 p-1 rounded-lg border border-slate-700/50 flex-shrink-0 shadow-inner">
-                    <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md">
-                        <i class="fa-solid fa-list-check sm:mr-1.5"></i><span class="hidden sm:inline"> Rastreador</span>
-                    </button>
-                    <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
-                        <i class="fa-solid fa-file-pen sm:mr-1.5"></i><span class="hidden sm:inline"> Anotações</span>
-                    </button>
-                </div>
-            </header>
-
-            <!-- RASTREADOR CLASH -->
-            <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-                
-                <!-- Header de Configuração -->
-                <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+                <!-- Navbar Superior -->
+                <header class="h-16 glass-panel border-b-0 border-slate-800/50 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2 z-10 shadow-sm">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
+                            <i class="fa-solid fa-bars text-lg"></i>
+                        </button>
+                        <span id="currentBreadcrumb" class="text-xs sm:text-sm font-medium text-slate-400 truncate flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-amber-500"></i> Meu Espaço / <span class="text-white font-semibold">Rastreador</span>
+                        </span>
+                    </div>
                     
-                    <div class="flex items-center gap-4">
-                        <div class="bg-gradient-to-br from-amber-500/20 to-orange-500/20 text-amber-400 p-3.5 rounded-xl border border-amber-500/30 shadow-inner">
-                            <i class="fa-solid fa-chess-rook text-2xl"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">Painel da Vila</h2>
-                            <p class="text-xs text-slate-400 mt-0.5">Gerencie os upgrades e acompanhe seu progresso real</p>
-                        </div>
+                    <!-- Abas de Alternância -->
+                    <div class="flex bg-slate-900/80 p-1 rounded-lg border border-slate-700/50 flex-shrink-0 shadow-inner">
+                        <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md">
+                            <i class="fa-solid fa-list-check sm:mr-1.5"></i><span class="hidden sm:inline"> Rastreador</span>
+                        </button>
+                        <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
+                            <i class="fa-solid fa-file-pen sm:mr-1.5"></i><span class="hidden sm:inline"> Anotações</span>
+                        </button>
                     </div>
+                </header>
 
-                    <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-                        <select id="villageTypeSelect" onchange="changeVillageType()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 appearance-none font-medium">
-                            <option value="main">🏰 Vila Principal</option>
-                            <option value="builder">🔨 Base Construtor</option>
-                            <option value="capital">🏛️ Capital do Clã</option>
-                        </select>
-
-                        <select id="townHallSelect" onchange="renderTracker()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 appearance-none font-bold text-amber-400">
-                            <option value="18">Nível 18</option>
-                            <option value="17">Nível 17</option>
-                            <option value="16">Nível 16</option>
-                            <option value="15">Nível 15</option>
-                            <option value="14">Nível 14</option>
-                            <option value="13">Nível 13</option>
-                            <option value="12">Nível 12</option>
-                            <option value="11" selected>Nível 11</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Cards de Métricas -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                        <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Progresso Global</span>
-                        <div class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mt-1" id="totalProgressPercent">0%</div>
-                        <div class="w-full bg-slate-900/80 rounded-full h-2 mt-3 border border-slate-800 overflow-hidden shadow-inner">
-                            <div id="totalProgressBar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                        <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Pendentes</span>
-                        <div class="text-2xl sm:text-3xl font-black text-white mt-1" id="remainingUpgradesCount">0</div>
-                        <span class="text-[10px] text-slate-500 font-medium">melhorias na fila</span>
-                    </div>
-                    <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between">
-                        <div>
-                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Mais Atrasada</span>
-                            <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
-                        </div>
-                        <span class="text-[10px] text-slate-500 font-medium mt-2">foco recomendado</span>
-                    </div>
-                    <div class="glass-panel p-4 rounded-2xl border-dashed border-2 border-slate-700/50 hover:border-amber-500/50 hover:bg-amber-500/5 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer group" onclick="openAddItemModal()">
-                        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-900 transition-colors mb-2 shadow-lg">
-                            <i class="fa-solid fa-plus"></i>
-                        </div>
-                        <span class="text-xs font-bold text-slate-300 group-hover:text-amber-400 transition-colors">Criar Novo Item</span>
-                    </div>
-                </div>
-
-                <!-- Lista de Categorias -->
-                <div class="space-y-6 pb-10" id="categoriesContainer"></div>
-            </div>
-
-            <!-- EDITOR WORD -->
-            <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-slate-900/50">
-                <div class="glass-panel border-b-0 border-slate-800/50 p-2 flex flex-wrap items-center gap-1.5 text-slate-300 overflow-x-auto rounded-b-xl mx-4 sm:mx-8 mt-4 shadow-lg z-10">
-                    <button onclick="execCmd('bold')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm font-bold w-9 h-9 transition-colors">B</button>
-                    <button onclick="execCmd('italic')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm italic w-9 h-9 transition-colors">I</button>
-                    <button onclick="execCmd('underline')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm underline w-9 h-9 transition-colors">U</button>
-                    <div class="h-5 w-px bg-slate-700 mx-1"></div>
-                    <button onclick="execCmd('insertUnorderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ul"></i></button>
-                    <button onclick="execCmd('insertOrderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ol"></i></button>
-                    <div class="h-5 w-px bg-slate-700 mx-1"></div>
-                    <button onclick="execCmd('formatBlock', 'H1')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs font-bold transition-colors">Título</button>
-                    <button onclick="execCmd('formatBlock', 'P')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs transition-colors">Texto</button>
-                    <div class="h-5 w-px bg-slate-700 mx-1"></div>
-                    <button onclick="execCmd('foreColor', '#ef4444')" title="Vermelho" class="p-2 hover:bg-slate-700/50 rounded-lg text-red-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
-                    <button onclick="execCmd('foreColor', '#f59e0b')" title="Amarelo" class="p-2 hover:bg-slate-700/50 rounded-lg text-amber-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
-                    <button onclick="execCmd('foreColor', '#10b981')" title="Verde" class="p-2 hover:bg-slate-700/50 rounded-lg text-emerald-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
-                </div>
-
-                <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center pb-20">
-                    <div class="w-full max-w-4xl glass-panel rounded-2xl p-6 sm:p-10 min-h-[600px] shadow-2xl flex flex-col border border-slate-700/30">
-                        <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento..." class="bg-transparent text-2xl sm:text-3xl font-black text-white mb-6 focus:outline-none border-b border-slate-700 pb-3 placeholder-slate-600 transition-colors focus:border-amber-500">
+                <!-- RASTREADOR CLASH -->
+                <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+                    
+                    <!-- Header de Configuração -->
+                    <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
                         
-                        <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Comece a registrar suas estratégias e ideias aqui..." class="flex-1 text-slate-300 text-sm sm:text-base leading-relaxed focus:outline-none prose prose-invert prose-amber max-w-none"></div>
+                        <div class="flex items-center gap-4">
+                            <div class="bg-gradient-to-br from-amber-500/20 to-orange-500/20 text-amber-400 p-3.5 rounded-xl border border-amber-500/30 shadow-inner">
+                                <i class="fa-solid fa-chess-rook text-2xl"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">Painel da Vila</h2>
+                                <p class="text-xs text-slate-400 mt-0.5">Gerencie os upgrades e acompanhe seu progresso real</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                            <select id="villageTypeSelect" onchange="changeVillageType()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 appearance-none font-medium">
+                                <option value="main">🏰 Vila Principal</option>
+                                <option value="builder">🔨 Base Construtor</option>
+                                <option value="capital">🏛️ Capital do Clã</option>
+                            </select>
+
+                            <select id="townHallSelect" onchange="renderTracker()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 appearance-none font-bold text-amber-400">
+                                <option value="18">Nível 18</option>
+                                <option value="17">Nível 17</option>
+                                <option value="16">Nível 16</option>
+                                <option value="15">Nível 15</option>
+                                <option value="14">Nível 14</option>
+                                <option value="13">Nível 13</option>
+                                <option value="12">Nível 12</option>
+                                <option value="11" selected>Nível 11</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Cards de Métricas -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
+                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Progresso Global</span>
+                            <div class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mt-1" id="totalProgressPercent">0%</div>
+                            <div class="w-full bg-slate-900/80 rounded-full h-2 mt-3 border border-slate-800 overflow-hidden shadow-inner">
+                                <div id="totalProgressBar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
+                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Pendentes</span>
+                            <div class="text-2xl sm:text-3xl font-black text-white mt-1" id="remainingUpgradesCount">0</div>
+                            <span class="text-[10px] text-slate-500 font-medium">melhorias na fila</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between">
+                            <div>
+                                <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Mais Atrasada</span>
+                                <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-medium mt-2">foco recomendado</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl border-dashed border-2 border-slate-700/50 hover:border-amber-500/50 hover:bg-amber-500/5 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer group" onclick="openAddItemModal()">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-900 transition-colors mb-2 shadow-lg">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            <span class="text-xs font-bold text-slate-300 group-hover:text-amber-400 transition-colors">Criar Novo Item</span>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Categorias -->
+                    <div class="space-y-6 pb-10" id="categoriesContainer"></div>
+                </div>
+
+                <!-- EDITOR WORD DE ANOTAÇÕES -->
+                <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-slate-900/50">
+                    <div class="glass-panel border-b-0 border-slate-800/50 p-2 flex flex-wrap items-center gap-1.5 text-slate-300 overflow-x-auto rounded-b-xl mx-4 sm:mx-8 mt-4 shadow-lg z-10">
+                        <button onclick="execCmd('bold')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm font-bold w-9 h-9 transition-colors">B</button>
+                        <button onclick="execCmd('italic')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm italic w-9 h-9 transition-colors">I</button>
+                        <button onclick="execCmd('underline')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm underline w-9 h-9 transition-colors">U</button>
+                        <div class="h-5 w-px bg-slate-700 mx-1"></div>
+                        <button onclick="execCmd('insertUnorderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ul"></i></button>
+                        <button onclick="execCmd('insertOrderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ol"></i></button>
+                        <div class="h-5 w-px bg-slate-700 mx-1"></div>
+                        <button onclick="execCmd('formatBlock', 'H1')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs font-bold transition-colors">Título</button>
+                        <button onclick="execCmd('formatBlock', 'P')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs transition-colors">Texto</button>
+                        <div class="h-5 w-px bg-slate-700 mx-1"></div>
+                        <button onclick="execCmd('foreColor', '#ef4444')" title="Vermelho" class="p-2 hover:bg-slate-700/50 rounded-lg text-red-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
+                        <button onclick="execCmd('foreColor', '#f59e0b')" title="Amarelo" class="p-2 hover:bg-slate-700/50 rounded-lg text-amber-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
+                        <button onclick="execCmd('foreColor', '#10b981')" title="Verde" class="p-2 hover:bg-slate-700/50 rounded-lg text-emerald-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center pb-20">
+                        <div class="w-full max-w-4xl glass-panel rounded-2xl p-6 sm:p-10 min-h-[600px] shadow-2xl flex flex-col border border-slate-700/30">
+                            <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento..." class="bg-transparent text-2xl sm:text-3xl font-black text-white mb-6 focus:outline-none border-b border-slate-700 pb-3 placeholder-slate-600 transition-colors focus:border-amber-500">
+                            
+                            <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Comece a registrar suas estratégias e ideias aqui..." class="flex-1 text-slate-300 text-sm sm:text-base leading-relaxed focus:outline-none prose prose-invert prose-amber max-w-none"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </main>
+            </main>
+        </div>
     </div>
 
     <!-- Modal Adicionar Item -->
@@ -254,7 +298,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Categoria</label>
-                    <select id="newItemCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
+                    <select id="newItemCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
                         <option value="Heróis & Equipamentos">Heróis & Equipamentos</option>
                         <option value="Equipamentos (Ferreiro)">Equipamentos (Ferreiro)</option>
                         <option value="Laboratório">Laboratório</option>
@@ -266,7 +310,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome do Item</label>
-                    <input type="text" id="newItemName" placeholder="Ex: Torre de Magos" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500">
+                    <input type="text" id="newItemName" placeholder="Ex: Torre de Magos" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -288,15 +332,17 @@
 
     <!-- Script Principal -->
     <script>
+        const DEV_USER = "Gabriel Santos";
+
         function getCV11Data() {
             return [
                 // --- HERÓIS ---
                 { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 0, max: 50 },
                 { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 0, max: 50 },
                 { category: 'Heróis & Equipamentos', name: 'Príncipe Servo', current: 0, max: 30 },
-                { category: 'Heróis & Equipamentos', name: 'Grande Guardião (Novo)', current: 0, max: 20 },
+                { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 0, max: 20 },
 
-                // --- EQUIPAMENTOS (FERREIRO NÍVEL 4) ---
+                // --- EQUIPAMENTOS (FERREIRO) ---
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Boneco de Bárbaro', current: 0, max: 12 },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Frasco de Fúria', current: 0, max: 12 },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bota Terremoto', current: 0, max: 12 },
@@ -310,7 +356,7 @@
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Frasco de Invisibilidade', current: 0, max: 12 },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Gigante', current: 0, max: 12 },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Congelante', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 0, max: 1 },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 0, max: 15 },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco Gigante', current: 0, max: 15 },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Monolítica', current: 0, max: 15 },
                 
@@ -373,7 +419,7 @@
                 { category: 'Defesas', name: 'X-Besta (x4)', current: 0, max: 5 },
                 { category: 'Defesas', name: 'Torre Inferno (x2)', current: 0, max: 5 },
                 { category: 'Defesas', name: 'Dispersor Aéreo (x2)', current: 0, max: 7 },
-                { category: 'Defesas', name: 'Artilharia Águia (x1 - Novo)', current: 0, max: 2 },
+                { category: 'Defesas', name: 'Artilharia Águia (x1)', current: 0, max: 2 },
                 { category: 'Defesas', name: 'Torre de Bombas (x2)', current: 0, max: 6 },
 
                 // --- MUROS & ARMADILHAS ---
@@ -384,7 +430,7 @@
                 { category: 'Armadilhas', name: 'Bomba Gigante (x5)', current: 0, max: 5 },
                 { category: 'Armadilhas', name: 'Mina Aérea Guiada (x5)', current: 0, max: 3 },
                 { category: 'Armadilhas', name: 'Armadilha de Esqueleto (x3)', current: 0, max: 4 },
-                { category: 'Armadilhas', name: 'Tornado Arapuca (x1 - Novo)', current: 0, max: 2 },
+                { category: 'Armadilhas', name: 'Tornado Arapuca (x1)', current: 0, max: 2 },
 
                 // --- RECURSOS & AUXILIARES ---
                 { category: 'Recursos & Auxiliares', name: 'Castelo do Clã (Nível 7)', current: 0, max: 7 },
@@ -401,13 +447,15 @@
         }
 
         let appData = {
-            currentUser: null,
-            userHandle: null,
-            playerTag: null,
+            currentUser: "Gabriel Santos",
+            userHandle: "@bielzinho",
+            playerTag: "#LUU9VYJLP",
             activeTab: 'tracker',
             activeVillage: 'main',
             activeTownHall: '11',
             activeDocId: 'default_doc',
+            isDevMode: true,
+            viewAsPlayer: false,
             folders: [
                 { id: 'f_cv11', name: 'Centro de Vila 11' },
                 { id: 'f_builder', name: 'Base do Construtor' }
@@ -433,15 +481,13 @@
         }
 
         function saveAllData() {
-            localStorage.setItem('clash_organizer_data', JSON.stringify(appData));
+            localStorage.setItem('clash_organizer_unified_v1', JSON.stringify(appData));
         }
 
         function loadSavedData() {
-            const saved = localStorage.getItem('clash_organizer_data');
+            const saved = localStorage.getItem('clash_organizer_unified_v1');
             if (saved) {
-                try { 
-                    appData = { ...appData, ...JSON.parse(saved) }; 
-                } catch(e) {}
+                try { appData = { ...appData, ...JSON.parse(saved) }; } catch(e) {}
             }
         }
 
@@ -450,11 +496,13 @@
             const name = document.getElementById('displayNameInput').value.trim();
             const handle = document.getElementById('usernameInput').value.trim();
             const tag = document.getElementById('playerTagInput').value.trim();
+            const initialTH = document.getElementById('initialTownHallSelect').value;
 
             if (name && handle && tag) {
                 appData.currentUser = name;
                 appData.userHandle = handle.startsWith('@') ? handle : `@${handle}`;
                 appData.playerTag = tag.startsWith('#') ? tag.toUpperCase() : `#${tag.toUpperCase()}`;
+                appData.activeTownHall = initialTH;
                 
                 saveAllData();
                 showApp();
@@ -477,23 +525,51 @@
             saveAllData();
             document.getElementById('loginModal').classList.remove('hidden');
             document.getElementById('appContainer').classList.add('hidden');
-            document.getElementById('appContainer').classList.remove('flex');
         }
 
         function showApp() {
             document.getElementById('loginModal').classList.add('hidden');
             document.getElementById('appContainer').classList.remove('hidden');
-            document.getElementById('appContainer').classList.add('flex');
 
             document.getElementById('displayUsername').innerText = appData.currentUser;
             document.getElementById('displayHandle').innerText = appData.userHandle || '@chefe';
             document.getElementById('displayTag').innerText = appData.playerTag || '#TAG';
             document.getElementById('avatarLetter').innerText = appData.currentUser.charAt(0).toUpperCase();
 
+            document.getElementById('townHallSelect').value = appData.activeTownHall;
+            document.getElementById('sidebarAccountSelect').value = appData.activeTownHall;
+
+            if (appData.currentUser === DEV_USER) {
+                document.getElementById('devBanner').classList.remove('hidden');
+            } else {
+                document.getElementById('devBanner').classList.add('hidden');
+            }
+
             renderFolderTree();
             renderTracker();
             loadDocumentIntoEditor();
             switchTab(appData.activeTab || 'tracker');
+        }
+
+        function toggleViewMode() {
+            appData.viewAsPlayer = document.getElementById('viewAsPlayerToggle').checked;
+            const statusBadge = document.getElementById('devStatusBadge');
+            
+            if (appData.viewAsPlayer) {
+                statusBadge.innerText = "Modo Jogador";
+                statusBadge.className = "bg-amber-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase";
+            } else {
+                statusBadge.innerText = "Dev Access";
+                statusBadge.className = "bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase";
+            }
+            renderTracker();
+        }
+
+        function switchVillageFromSidebar() {
+            const selectedCV = document.getElementById('sidebarAccountSelect').value;
+            appData.activeTownHall = selectedCV;
+            document.getElementById('townHallSelect').value = selectedCV;
+            renderTracker();
         }
 
         function switchTab(tab) {
@@ -659,9 +735,9 @@
 
         function renderTracker() {
             appData.activeTownHall = document.getElementById('townHallSelect').value;
+            document.getElementById('sidebarAccountSelect').value = appData.activeTownHall;
             const key = getTrackerKey();
 
-            // Validação/Fallback para CV11 se não tiver carregado a lista completa
             if (!appData.trackers[key] || (key === 'main_11' && appData.trackers[key].length < 10)) {
                 if (key === 'main_11') {
                     appData.trackers[key] = getCV11Data();
@@ -719,8 +795,8 @@
                             <thead class="bg-slate-900/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-500 border-b border-slate-700/50">
                                 <tr>
                                     <th class="p-3 sm:p-4">Item</th>
-                                    <th class="p-3 sm:p-4 text-center">Atual</th>
-                                    <th class="p-3 sm:p-4 text-center">Máx</th>
+                                    <th class="p-3 sm:p-4 text-center">Nível Atual</th>
+                                    <th class="p-3 sm:p-4 text-center">Nível Máx.</th>
                                     <th class="p-3 sm:p-4 text-center">Faltam</th>
                                     <th class="p-3 sm:p-4 text-right">Ações</th>
                                 </tr>
@@ -735,10 +811,10 @@
                                         <tr class="hover:bg-slate-800/40 transition-colors group">
                                             <td class="p-3 sm:p-4 font-semibold text-slate-200 whitespace-nowrap">${item.name}</td>
                                             <td class="p-3 sm:p-4 text-center">
-                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-600 rounded-md px-2 py-1.5 text-amber-400 font-bold text-center focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-600 rounded-md px-2 py-1.5 text-amber-400 font-bold text-center focus:outline-none focus:border-amber-500 transition-all">
                                             </td>
                                             <td class="p-3 sm:p-4 text-center">
-                                                <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-700 rounded-md px-2 py-1.5 text-slate-400 text-center focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+                                                <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-700 rounded-md px-2 py-1.5 text-slate-400 text-center focus:outline-none focus:border-amber-500 transition-all">
                                             </td>
                                             <td class="p-3 sm:p-4 text-center whitespace-nowrap">
                                                 <span class="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold ${missing <= 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-400'}">
