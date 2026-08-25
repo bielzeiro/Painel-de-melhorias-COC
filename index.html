@@ -29,7 +29,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -175,6 +175,16 @@
             color: var(--text-muted);
             font-size: 0.9rem;
         }
+
+        .subsection {
+            margin-left: 15px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -207,12 +217,12 @@
     </div>
 
     <!-- 1. HERÓIS -->
-    <div class="section-title">1. Prioridade Máxima: Heróis & Equipamentos</div>
+    <div class="section-title">1. Heróis</div>
     <div class="tracker-card">
         <table>
             <thead>
                 <tr>
-                    <th>Herói / Equipamento</th>
+                    <th>Herói</th>
                     <th>Máximo</th>
                     <th>Atual</th>
                     <th>Falta</th>
@@ -222,29 +232,110 @@
         </table>
     </div>
 
-    <!-- 2. EXÉRCITO -->
-    <div class="section-title">2. Exército (Laboratório & Máquinas)</div>
+    <!-- 2. EQUIPAMENTOS -->
+    <div class="section-title">2. Equipamentos</div>
     <div class="tracker-card">
         <table>
             <thead>
                 <tr>
-                    <th>Tropa / Feitiço / Máquina</th>
+                    <th>Equipamento</th>
                     <th>Máximo</th>
                     <th>Atual</th>
                     <th>Falta</th>
                 </tr>
             </thead>
-            <tbody id="armyTable"></tbody>
+            <tbody id="equipamentosTable"></tbody>
         </table>
     </div>
 
-    <!-- 3. DEFESAS -->
-    <div class="section-title">3. Defesas</div>
+    <!-- 3. TROPAS ELIXIR -->
+    <div class="section-title">3. Tropas - Elixir</div>
     <div class="tracker-card">
         <table>
             <thead>
                 <tr>
-                    <th>Estrutura Defensiva</th>
+                    <th>Tropa</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="tropasElixirTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 4. TROPAS ELIXIR NEGRO -->
+    <div class="section-title">4. Tropas - Elixir Negro</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tropa</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="tropasNegroTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 5. FEITIÇOS ELIXIR -->
+    <div class="section-title">5. Feitiços - Elixir</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Feitiço</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="feiticosElixirTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 6. FEITIÇOS ELIXIR NEGRO -->
+    <div class="section-title">6. Feitiços - Elixir Negro</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Feitiço</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="feiticosNegroTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 7. MÁQUINAS DE CERCO -->
+    <div class="section-title">7. Máquinas de Cerco</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Máquina</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="maquinasCercoTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 8. DEFESAS -->
+    <div class="section-title">8. Defesas</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Defesa</th>
+                    <th>Limite</th>
                     <th>Máximo</th>
                     <th>Atual</th>
                     <th>Falta</th>
@@ -254,228 +345,545 @@
         </table>
     </div>
 
-    <!-- 4. RESTANTE -->
-    <div class="section-title">4. Recursos, Armadilhas & Auxiliares</div>
+    <!-- 9. ARMADILHAS -->
+    <div class="section-title">9. Armadilhas</div>
     <div class="tracker-card">
         <table>
             <thead>
                 <tr>
-                    <th>Item / Construção</th>
+                    <th>Armadilha</th>
+                    <th>Limite</th>
                     <th>Máximo</th>
                     <th>Atual</th>
                     <th>Falta</th>
                 </tr>
             </thead>
-            <tbody id="otherTable"></tbody>
+            <tbody id="armadilhasTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 10. MUROS -->
+    <div class="section-title">10. Muros</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Limite</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="murosTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 11. ARMAZENAMENTO E RECURSOS -->
+    <div class="section-title">11. Armazenamento e Recursos</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Recurso</th>
+                    <th>Limite</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="armazenamentoTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 12. CABANA DE AUXILIARES -->
+    <div class="section-title">12. Cabana de Auxiliares</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Auxiliar</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="auxiliaresTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 13. CASA DE ANIMAIS -->
+    <div class="section-title" id="casaAnimaisTitle" style="display:none;">13. Casa de Animais</div>
+    <div class="tracker-card" id="casaAnimaisCard" style="display:none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Animal</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
+                </tr>
+            </thead>
+            <tbody id="casaAnimaisTable"></tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // BASE DE DADOS EXTRAÍDA DO PDF
+    // BASE DE DADOS ESTRUTURADA
     const cvData = {
         11: {
             heroes: [
-                { name: "Rei Bárbaro", max: 50 }, { name: "Rainha Arqueira", max: 50 },
-                { name: "Príncipe Servo", max: 30 }, { name: "Grande Guardião", max: 20 },
-                { name: "[Rei] Boneco de Bárbaro", max: 12 }, { name: "[Rei] Frasco de Fúria", max: 12 },
-                { name: "[Rei] Bota Terremoto", max: 12 }, { name: "[Rei] Bigode de Vampiro", max: 12 },
-                { name: "[Rei] Manopla Agigantadora (Épico)", max: 15 }, { name: "[Rei] Bola de Espinhos (Épico)", max: 15 },
-                { name: "[Rei] Amuleto Ofídico (Épico)", max: 15 }, { name: "[Rei] Cavalo de Pau (Épico)", max: 15 },
-                { name: "[Rainha] Boneco de Arqueira", max: 12 }, { name: "[Rainha] Frasco de Invisibilidade", max: 12 },
-                { name: "[Rainha] Flecha Gigante", max: 12 }, { name: "[Rainha] Flecha Congelante (Épico)", max: 15 },
-                { name: "[Rainha] Espelho Mágico (Épico)", max: 15 }, { name: "[Rainha] Boneco Gigante (Épico)", max: 15 },
-                { name: "[Rainha] Flecha Monolítica (Épico)", max: 15 },
-                { name: "[Príncipe] Boneco de Capanga", max: 12 }, { name: "[Príncipe] Orbe Sombrio", max: 12 },
-                { name: "[Príncipe] Calça de Metal", max: 12 }, { name: "[Príncipe] Coroa Sombria (Épico)", max: 15 },
-                { name: "[Príncipe] Bastão de Meteoros (Épico)", max: 15 },
-                { name: "[Guardião] Tomo Eterno", max: 12 }, { name: "[Guardião] Gema da Vida", max: 12 },
-                { name: "[Guardião] Gema de Fúria", max: 12 }, { name: "[Guardião] Bola de Fogo (Épico)", max: 15 },
-                { name: "[Guardião] Boneco de Lavalão (Épico)", max: 15 }, { name: "[Guardião] Tocha Heroica (Épico)", max: 15 }
+                { name: "Rei Bárbaro", max: 50 },
+                { name: "Rainha Arqueira", max: 50 },
+                { name: "Príncipe Servo", max: 30 },
+                { name: "Grande Guardião", max: 20 }
             ],
-            army: [
-                { name: "Bárbaro", max: 8 }, { name: "Arqueira", max: 8 }, { name: "Gigante", max: 8 },
-                { name: "Goblin", max: 7 }, { name: "Quebra-muros", max: 7 }, { name: "Balão", max: 7 },
-                { name: "Mago", max: 8 }, { name: "Curadora", max: 5 }, { name: "Dragão", max: 6 },
-                { name: "Pekka", max: 7 }, { name: "Bebê Dragão", max: 5 }, { name: "Mineiro", max: 5 },
-                { name: "Dragão Elétrico", max: 2 }, { name: "Servo", max: 7 }, { name: "Corredor", max: 7 },
-                { name: "Valquíria", max: 6 }, { name: "Golem", max: 7 }, { name: "Bruxa", max: 4 },
-                { name: "Lava-hound", max: 4 }, { name: "Lançador", max: 3 }, { name: "Golem de Gelo", max: 3 },
-                { name: "Feitiço de Raio", max: 8 }, { name: "Feitiço de Cura", max: 7 }, { name: "Feitiço de Fúria", max: 5 },
-                { name: "Feitiço de Salto", max: 3 }, { name: "Feitiço de Gelo", max: 6 }, { name: "Feitiço de Clone", max: 5 },
-                { name: "Feitiço de Invisibilidade", max: 2 }, { name: "Feitiço de Veneno", max: 5 }, { name: "Feitiço Terremoto", max: 5 },
-                { name: "Feitiço de Aceleração", max: 5 }, { name: "Feitiço de Esqueletos", max: 4 }, { name: "Feitiço de Morcego", max: 4 }
+            equipamentos: [
+                // Rei Bárbaro - Comum
+                { name: "[Rei] Boneco de Bárbaro", max: 12 },
+                { name: "[Rei] Frasco de Fúria", max: 12 },
+                { name: "[Rei] Bota Terremoto", max: 12 },
+                { name: "[Rei] Bigode de Vampiro", max: 12 },
+                // Rei Bárbaro - Épico
+                { name: "[Rei] Manopla Agigantadora", max: 15 },
+                { name: "[Rei] Bola de Espinhos", max: 15 },
+                { name: "[Rei] Amuleto Ofídico", max: 15 },
+                { name: "[Rei] Cavalo de Pau", max: 15 },
+                // Rainha Arqueira - Comum
+                { name: "[Rainha] Boneco de Arqueira", max: 12 },
+                { name: "[Rainha] Frasco de Invisibilidade", max: 12 },
+                { name: "[Rainha] Flecha Gigante", max: 12 },
+                // Rainha Arqueira - Épico
+                { name: "[Rainha] Flecha Congelante", max: 15 },
+                { name: "[Rainha] Espelho Mágico", max: 15 },
+                { name: "[Rainha] Boneco Gigante", max: 15 },
+                { name: "[Rainha] Flecha Monolítica", max: 15 },
+                // Príncipe Servo - Comum
+                { name: "[Príncipe] Boneco de Capanga", max: 12 },
+                { name: "[Príncipe] Orbe Sombrio", max: 12 },
+                { name: "[Príncipe] Calça de Metal", max: 12 },
+                // Príncipe Servo - Épico
+                { name: "[Príncipe] Coroa Sombria", max: 15 },
+                { name: "[Príncipe] Bastão de Meteoros", max: 15 },
+                // Grande Guardião - Comum
+                { name: "[Guardião] Tomo Eterno", max: 12 },
+                { name: "[Guardião] Gema da Vida", max: 12 },
+                { name: "[Guardião] Gema de Fúria", max: 12 },
+                // Grande Guardião - Épico
+                { name: "[Guardião] Bola de Fogo", max: 15 },
+                { name: "[Guardião] Boneco de Lavalão", max: 15 },
+                { name: "[Guardião] Tocha Heroica", max: 15 }
             ],
+            tropasElixir: [
+                { name: "Bárbaro", max: 8 },
+                { name: "Arqueira", max: 8 },
+                { name: "Gigante", max: 8 },
+                { name: "Goblin", max: 7 },
+                { name: "Quebra Muros", max: 7 },
+                { name: "Balão", max: 7 },
+                { name: "Mago", max: 8 },
+                { name: "Curadora", max: 5 },
+                { name: "Dragão", max: 6 },
+                { name: "Pekka", max: 7 },
+                { name: "Bebê Dragão", max: 5 },
+                { name: "Mineiro", max: 5 },
+                { name: "Dragão Elétrico", max: 2 }
+            ],
+            tropasNegro: [
+                { name: "Servo", max: 7 },
+                { name: "Corredor", max: 7 },
+                { name: "Valquíria", max: 6 },
+                { name: "Golem", max: 7 },
+                { name: "Bruxa", max: 4 },
+                { name: "Lava-hound", max: 4 },
+                { name: "Lançador", max: 3 },
+                { name: "Golem de Gelo", max: 3 }
+            ],
+            feiticosElixir: [
+                { name: "Raio", max: 8 },
+                { name: "Cura", max: 7 },
+                { name: "Fúria", max: 5 },
+                { name: "Salto", max: 3 },
+                { name: "Gelo", max: 6 },
+                { name: "Clone", max: 5 },
+                { name: "Invisibilidade", max: 2 }
+            ],
+            feiticosNegro: [
+                { name: "Veneno", max: 5 },
+                { name: "Terremoto", max: 5 },
+                { name: "Aceleração", max: 5 },
+                { name: "Esqueletos", max: 4 },
+                { name: "Morcego", max: 4 }
+            ],
+            maquinasCerco: [],
             defenses: [
-                { name: "Artilharia Águia (x1)", max: 2 }, { name: "Torre Inferno (x2)", max: 5 },
-                { name: "X-Besta (x4)", max: 5 }, { name: "Tesla Oculta (x4)", max: 9 },
-                { name: "Defesa Aérea (x4)", max: 9 }, { name: "Torre do Mago (x5)", max: 10 },
-                { name: "Canhão (x7)", max: 15 }, { name: "Torre Arqueira (x8)", max: 15 },
-                { name: "Morteiro (x4)", max: 10 }, { name: "Dispersor Aéreo (x2)", max: 7 },
-                { name: "Torre de Bombas (x2)", max: 6 }, { name: "Cabana do Construtor (x5)", max: 1 }
+                { name: "Cabana do Construtor", limit: 5, max: 1 },
+                { name: "Canhão", limit: 7, max: 15 },
+                { name: "Torre Arqueira", limit: 8, max: 15 },
+                { name: "Torre do Mago", limit: 5, max: 10 },
+                { name: "Defesa Aérea", limit: 4, max: 9 },
+                { name: "Morteiro", limit: 4, max: 10 },
+                { name: "Tesla Oculta", limit: 4, max: 9 },
+                { name: "X-Besta", limit: 4, max: 5 },
+                { name: "Torre Inferno", limit: 2, max: 5 },
+                { name: "Dispersor Aéreo", limit: 2, max: 7 },
+                { name: "Artilharia Águia", limit: 1, max: 2 },
+                { name: "Torre de Bombas", limit: 2, max: 6 }
             ],
-            other: [
-                { name: "Muros (x300)", max: 12 }, { name: "Bomba (x6)", max: 8 }, { name: "Armadilha de Mola (x6)", max: 6 },
-                { name: "Bomba Aérea (x5)", max: 5 }, { name: "Bomba Gigante (x5)", max: 5 }, { name: "Mina Aérea Guiada (x5)", max: 3 },
-                { name: "Armadilha de Esqueleto (x3)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 2 },
-                { name: "Coletor de Elixir (x7)", max: 14 }, { name: "Depósito de Elixir (x4)", max: 12 },
-                { name: "Mina de Ouro (x7)", max: 14 }, { name: "Depósito de Ouro (x4)", max: 12 },
-                { name: "Broca de Elixir Negro (x3)", max: 8 }, { name: "Depósito de Elixir Negro (x1)", max: 6 },
-                { name: "Castelo do Clã", max: 7 }, { name: "Assistente de Laboratório", max: 4 },
-                { name: "Aprendiz de Construtor", max: 4 }, { name: "Alquimista", max: 1 }
-            ]
+            armadilhas: [
+                { name: "Bomba", limit: 6, max: 8 },
+                { name: "Armadilha de Mola", limit: 6, max: 6 },
+                { name: "Bomba Aérea", limit: 5, max: 5 },
+                { name: "Bomba Gigante", limit: 5, max: 5 },
+                { name: "Mina Aérea Guiada", limit: 5, max: 3 },
+                { name: "Armadilha de Esqueleto", limit: 3, max: 4 },
+                { name: "Tornado Arapuca", limit: 1, max: 2 }
+            ],
+            muros: [
+                { name: "Muros", limit: 300, max: 12 }
+            ],
+            armazenamento: [
+                { name: "Coletor de Elixir", limit: 7, max: 14 },
+                { name: "Depósito de Elixir", limit: 4, max: 12 },
+                { name: "Mina de Ouro", limit: 7, max: 14 },
+                { name: "Depósito de Ouro", limit: 4, max: 12 },
+                { name: "Broca de Elixir Negro", limit: 3, max: 8 },
+                { name: "Depósito de Elixir Negro", limit: 1, max: 6 },
+                { name: "Castelo do Clã", limit: 1, max: 7 }
+            ],
+            auxiliares: [
+                { name: "Assistente de Laboratório", max: 4 },
+                { name: "Aprendiz de Construtor", max: 4 },
+                { name: "Alquimista", max: 1 }
+            ],
+            casaAnimais: []
         },
         12: {
             heroes: [
-                { name: "Rei Bárbaro", max: 65 }, { name: "Rainha Arqueira", max: 65 },
-                { name: "Príncipe Servo", max: 40 }, { name: "Grande Guardião", max: 40 },
-                { name: "[Rei] Equipamentos Comuns", max: 15 }, { name: "[Rei] Equipamentos Épicos", max: 18 },
-                { name: "[Rainha] Equipamentos Comuns", max: 15 }, { name: "[Rainha] Equipamentos Épicos", max: 18 },
-                { name: "[Príncipe] Equipamentos Comuns", max: 15 }, { name: "[Príncipe] Equipamentos Épicos", max: 18 },
-                { name: "[Guardião] Equipamentos Comuns", max: 15 }, { name: "[Guardião] Equipamentos Épicos", max: 18 }
+                { name: "Rei Bárbaro", max: 65 },
+                { name: "Rainha Arqueira", max: 65 },
+                { name: "Príncipe Servo", max: 40 },
+                { name: "Grande Guardião", max: 40 }
             ],
-            army: [
-                { name: "Bárbaro", max: 9 }, { name: "Arqueira", max: 9 }, { name: "Gigante", max: 9 }, { name: "Goblin", max: 8 },
-                { name: "Quebra-muros", max: 8 }, { name: "Balão", max: 8 }, { name: "Mago", max: 9 }, { name: "Curadora", max: 5 },
-                { name: "Dragão", max: 7 }, { name: "Pekka", max: 8 }, { name: "Bebê Dragão", max: 6 }, { name: "Mineiro", max: 6 },
-                { name: "Dragão Elétrico", max: 3 }, { name: "Yeti", max: 2 }, { name: "Servo", max: 8 }, { name: "Corredor", max: 9 },
-                { name: "Valquíria", max: 7 }, { name: "Golem", max: 9 }, { name: "Bruxa", max: 5 }, { name: "Lava-hound", max: 5 },
-                { name: "Lançador", max: 4 }, { name: "Golem de Gelo", max: 5 }, { name: "Caçadora de Heróis", max: 2 },
-                { name: "Feitiço de Raio", max: 9 }, { name: "Feitiço de Cura", max: 7 }, { name: "Feitiço de Fúria", max: 6 },
-                { name: "Feitiço de Salto", max: 3 }, { name: "Feitiço de Gelo", max: 7 }, { name: "Feitiço de Clone", max: 5 },
-                { name: "Feitiço de Invisibilidade", max: 3 }, { name: "Feitiço de Veneno", max: 6 }, { name: "Feitiço Terremoto", max: 5 },
-                { name: "Feitiço de Aceleração", max: 5 }, { name: "Feitiço de Esqueletos", max: 6 }, { name: "Feitiço de Morcego", max: 5 },
-                { name: "Feitiço de Raízes", max: 2 }, { name: "Quebra-muros (Máquina)", max: 4 }, { name: "Dirigível Bélico", max: 4 }, { name: "Quebradora de Pedras", max: 4 }
+            equipamentos: [
+                // Rei Bárbaro - Comum
+                { name: "[Rei] Boneco de Bárbaro", max: 15 },
+                { name: "[Rei] Frasco de Fúria", max: 15 },
+                { name: "[Rei] Bota Terremoto", max: 15 },
+                { name: "[Rei] Bigode de Vampiro", max: 15 },
+                // Rei Bárbaro - Épico
+                { name: "[Rei] Manopla Agigantadora", max: 18 },
+                { name: "[Rei] Bola de Espinhos", max: 18 },
+                { name: "[Rei] Amuleto Ofídico", max: 18 },
+                { name: "[Rei] Cavalo de Pau", max: 18 },
+                // Rainha Arqueira - Comum
+                { name: "[Rainha] Boneco de Arqueira", max: 15 },
+                { name: "[Rainha] Frasco de Invisibilidade", max: 15 },
+                { name: "[Rainha] Flecha Gigante", max: 15 },
+                { name: "[Rainha] Boneco de Curadora", max: 15 },
+                // Rainha Arqueira - Épico
+                { name: "[Rainha] Flecha Congelante", max: 18 },
+                { name: "[Rainha] Espelho Mágico", max: 18 },
+                { name: "[Rainha] Boneco Gigante", max: 18 },
+                { name: "[Rainha] Flecha Monolítica", max: 18 },
+                // Príncipe Servo - Comum
+                { name: "[Príncipe] Boneco de Capanga", max: 15 },
+                { name: "[Príncipe] Orbe Sombrio", max: 15 },
+                { name: "[Príncipe] Calça de Metal", max: 15 },
+                { name: "[Príncipe] Ferro Nobre", max: 15 },
+                // Príncipe Servo - Épico
+                { name: "[Príncipe] Coroa Sombria", max: 18 },
+                { name: "[Príncipe] Bastão de Meteoros", max: 18 },
+                // Grande Guardião - Comum
+                { name: "[Guardião] Tomo Eterno", max: 15 },
+                { name: "[Guardião] Gema da Vida", max: 15 },
+                { name: "[Guardião] Gema de Fúria", max: 15 },
+                // Grande Guardião - Épico
+                { name: "[Guardião] Bola de Fogo", max: 18 },
+                { name: "[Guardião] Boneco de Lavalão", max: 18 },
+                { name: "[Guardião] Tocha Heroica", max: 18 }
+            ],
+            tropasElixir: [
+                { name: "Bárbaro", max: 9 },
+                { name: "Arqueira", max: 9 },
+                { name: "Gigante", max: 9 },
+                { name: "Goblin", max: 8 },
+                { name: "Quebra Muros", max: 8 },
+                { name: "Balão", max: 8 },
+                { name: "Mago", max: 9 },
+                { name: "Curadora", max: 5 },
+                { name: "Dragão", max: 7 },
+                { name: "Pekka", max: 8 },
+                { name: "Bebê Dragão", max: 6 },
+                { name: "Mineiro", max: 6 },
+                { name: "Dragão Elétrico", max: 3 },
+                { name: "Yeti", max: 2 }
+            ],
+            tropasNegro: [
+                { name: "Servo", max: 8 },
+                { name: "Corredor", max: 9 },
+                { name: "Valquíria", max: 7 },
+                { name: "Golem", max: 9 },
+                { name: "Bruxa", max: 5 },
+                { name: "Lava-hound", max: 5 },
+                { name: "Lançador", max: 4 },
+                { name: "Golem de Gelo", max: 5 },
+                { name: "Caçadora de Heróis", max: 2 }
+            ],
+            feiticosElixir: [
+                { name: "Raio", max: 9 },
+                { name: "Cura", max: 7 },
+                { name: "Fúria", max: 6 },
+                { name: "Salto", max: 3 },
+                { name: "Gelo", max: 7 },
+                { name: "Clone", max: 5 },
+                { name: "Invisibilidade", max: 3 }
+            ],
+            feiticosNegro: [
+                { name: "Veneno", max: 6 },
+                { name: "Terremoto", max: 5 },
+                { name: "Aceleração", max: 5 },
+                { name: "Esqueletos", max: 6 },
+                { name: "Morcego", max: 5 },
+                { name: "Raízes", max: 2 }
+            ],
+            maquinasCerco: [
+                { name: "Quebra-muros", max: 4 },
+                { name: "Dirigível Bélico", max: 4 },
+                { name: "Quebradora de Pedras", max: 4 }
             ],
             defenses: [
-                { name: "Artilharia Águia (x1)", max: 3 }, { name: "Torre Inferno (x3)", max: 6 }, { name: "X-Besta (x4)", max: 6 },
-                { name: "Tesla Oculta (x5)", max: 10 }, { name: "Defesa Aérea (x4)", max: 10 }, { name: "Torre do Mago (x5)", max: 11 },
-                { name: "Canhão (x7)", max: 17 }, { name: "Torre Arqueira (x8)", max: 17 }, { name: "Morteiro (x4)", max: 12 },
-                { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 7 }, { name: "Cabana do Construtor (x5)", max: 1 }
+                { name: "Cabana do Construtor", limit: 5, max: 1 },
+                { name: "Canhão", limit: 7, max: 17 },
+                { name: "Torre Arqueira", limit: 8, max: 17 },
+                { name: "Torre do Mago", limit: 5, max: 11 },
+                { name: "Defesa Aérea", limit: 4, max: 10 },
+                { name: "Morteiro", limit: 4, max: 12 },
+                { name: "Tesla Oculta", limit: 5, max: 10 },
+                { name: "X-Besta", limit: 4, max: 6 },
+                { name: "Torre Inferno", limit: 3, max: 6 },
+                { name: "Dispersor Aéreo", limit: 2, max: 7 },
+                { name: "Artilharia Águia", limit: 1, max: 3 },
+                { name: "Torre de Bombas", limit: 2, max: 7 }
             ],
-            other: [
-                { name: "Muros (x300)", max: 13 }, { name: "Bomba (x6)", max: 8 }, { name: "Armadilha de Mola (x8)", max: 7 },
-                { name: "Bomba Aérea (x6)", max: 6 }, { name: "Bomba Gigante (x6)", max: 5 }, { name: "Mina Aérea Guiada (x6)", max: 3 },
-                { name: "Armadilha de Esqueleto (x3)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
-                { name: "Coletor de Elixir (x7)", max: 15 }, { name: "Depósito de Elixir (x4)", max: 13 },
-                { name: "Mina de Ouro (x7)", max: 15 }, { name: "Depósito de Ouro (x4)", max: 13 },
-                { name: "Broca de Elixir Negro (x3)", max: 9 }, { name: "Depósito de Elixir Negro (x1)", max: 7 },
-                { name: "Castelo do Clã", max: 8 }, { name: "Assistente de Laboratório", max: 6 },
-                { name: "Aprendiz de Construtor", max: 6 }, { name: "Alquimista", max: 2 }
-            ]
+            armadilhas: [
+                { name: "Bomba", limit: 6, max: 8 },
+                { name: "Armadilha de Mola", limit: 8, max: 7 },
+                { name: "Bomba Aérea", limit: 6, max: 6 },
+                { name: "Bomba Gigante", limit: 6, max: 5 },
+                { name: "Mina Aérea Guiada", limit: 6, max: 3 },
+                { name: "Armadilha de Esqueleto", limit: 3, max: 4 },
+                { name: "Tornado Arapuca", limit: 1, max: 3 }
+            ],
+            muros: [
+                { name: "Muros", limit: 300, max: 13 }
+            ],
+            armazenamento: [
+                { name: "Coletor de Elixir", limit: 7, max: 15 },
+                { name: "Depósito de Elixir", limit: 4, max: 13 },
+                { name: "Mina de Ouro", limit: 7, max: 15 },
+                { name: "Depósito de Ouro", limit: 4, max: 13 },
+                { name: "Broca de Elixir Negro", limit: 3, max: 9 },
+                { name: "Depósito de Elixir Negro", limit: 1, max: 7 },
+                { name: "Castelo do Clã", limit: 1, max: 8 }
+            ],
+            auxiliares: [
+                { name: "Assistente de Laboratório", max: 6 },
+                { name: "Aprendiz de Construtor", max: 6 },
+                { name: "Alquimista", max: 2 }
+            ],
+            casaAnimais: []
         },
         13: {
             heroes: [
-                { name: "Rei Bárbaro", max: 75 }, { name: "Rainha Arqueira", max: 75 },
-                { name: "Príncipe Servo", max: 50 }, { name: "Grande Guardião", max: 50 },
-                { name: "Campeã Real", max: 25 },
-                { name: "Equipamentos Comuns (Geral)", max: 15 }, { name: "Equipamentos Épicos (Geral)", max: 18 }
+                { name: "Rei Bárbaro", max: 75 },
+                { name: "Rainha Arqueira", max: 75 },
+                { name: "Príncipe Servo", max: 50 },
+                { name: "Grande Guardião", max: 50 },
+                { name: "Campeã Real", max: 25 }
             ],
-            army: [
-                { name: "Bárbaro", max: 9 }, { name: "Arqueira", max: 9 }, { name: "Gigante", max: 10 }, { name: "Goblin", max: 8 },
-                { name: "Quebra-muros", max: 9 }, { name: "Balão", max: 9 }, { name: "Mago", max: 10 }, { name: "Curadora", max: 6 },
-                { name: "Dragão", max: 8 }, { name: "Pekka", max: 9 }, { name: "Bebê Dragão", max: 7 }, { name: "Mineiro", max: 7 },
-                { name: "Dragão Elétrico", max: 4 }, { name: "Yeti", max: 3 }, { name: "Dragão Dirigível", max: 2 },
-                { name: "Servo", max: 9 }, { name: "Corredor", max: 10 }, { name: "Valquíria", max: 8 }, { name: "Golem", max: 10 },
-                { name: "Bruxa", max: 5 }, { name: "Lava-hound", max: 6 }, { name: "Lançador", max: 5 }, { name: "Golem de Gelo", max: 5 },
-                { name: "Caçadora de Heróis", max: 3 }, { name: "Aprendiz de Guardião", max: 2 },
-                { name: "Feitiço de Raio", max: 9 }, { name: "Feitiço de Cura", max: 8 }, { name: "Feitiço de Fúria", max: 6 },
-                { name: "Feitiço de Salto", max: 4 }, { name: "Feitiço de Gelo", max: 7 }, { name: "Feitiço de Clone", max: 6 },
-                { name: "Feitiço de Invisibilidade", max: 4 }, { name: "Feitiço de Retorno", max: 2 }, { name: "Feitiço de Veneno", max: 7 },
-                { name: "Feitiço Terremoto", max: 5 }, { name: "Feitiço de Aceleração", max: 5 }, { name: "Feitiço de Esqueletos", max: 7 },
-                { name: "Feitiço de Morcego", max: 5 }, { name: "Feitiço de Raízes", max: 2 },
-                { name: "Quebra-muros (Máquina)", max: 4 }, { name: "Dirigível Bélico", max: 4 }, { name: "Quebradora de Pedras", max: 4 },
-                { name: "Quartel de Cerco", max: 4 }, { name: "Lança Troncos", max: 4 },
-                { name: "Lassi (Casa de Animais)", max: 10 }, { name: "Coruja Elétrica", max: 10 }, { name: "Poderoso Iaque", max: 10 }, { name: "Unicórnio", max: 10 }
+            equipamentos: [
+                // Rei Bárbaro - Comum
+                { name: "[Rei] Boneco de Bárbaro", max: 15 },
+                { name: "[Rei] Frasco de Fúria", max: 15 },
+                { name: "[Rei] Bota Terremoto", max: 15 },
+                { name: "[Rei] Bigode de Vampiro", max: 15 },
+                // Rei Bárbaro - Épico
+                { name: "[Rei] Manopla Agigantadora", max: 18 },
+                { name: "[Rei] Bola de Espinhos", max: 18 },
+                { name: "[Rei] Amuleto Ofídico", max: 18 },
+                { name: "[Rei] Cavalo de Pau", max: 18 },
+                // Rainha Arqueira - Comum
+                { name: "[Rainha] Boneco de Arqueira", max: 15 },
+                { name: "[Rainha] Frasco de Invisibilidade", max: 15 },
+                { name: "[Rainha] Flecha Gigante", max: 15 },
+                { name: "[Rainha] Boneco de Curadora", max: 15 },
+                // Rainha Arqueira - Épico
+                { name: "[Rainha] Flecha Congelante", max: 18 },
+                { name: "[Rainha] Espelho Mágico", max: 18 },
+                { name: "[Rainha] Boneco Gigante", max: 18 },
+                { name: "[Rainha] Flecha Monolítica", max: 18 },
+                // Príncipe Servo - Comum
+                { name: "[Príncipe] Boneco de Capanga", max: 15 },
+                { name: "[Príncipe] Orbe Sombrio", max: 15 },
+                { name: "[Príncipe] Calça de Metal", max: 15 },
+                { name: "[Príncipe] Ferro Nobre", max: 15 },
+                // Príncipe Servo - Épico
+                { name: "[Príncipe] Coroa Sombria", max: 18 },
+                { name: "[Príncipe] Bastão de Meteoros", max: 18 },
+                // Grande Guardião - Comum
+                { name: "[Guardião] Tomo Eterno", max: 15 },
+                { name: "[Guardião] Gema da Vida", max: 15 },
+                { name: "[Guardião] Gema de Fúria", max: 15 },
+                { name: "[Guardião] Tomo de Cura", max: 15 },
+                // Grande Guardião - Épico
+                { name: "[Guardião] Bola de Fogo", max: 18 },
+                { name: "[Guardião] Boneco de Lavalão", max: 18 },
+                { name: "[Guardião] Tocha Heroica", max: 18 },
+                // Campeã Real - Comum
+                { name: "[Campeã] Escudo Escaldante", max: 15 },
+                { name: "[Campeã] Gema Real", max: 15 },
+                // Campeã Real - Épico
+                { name: "[Campeã] Lança Brutal", max: 18 },
+                { name: "[Campeã] Par de Botas Elétricas", max: 18 },
+                { name: "[Campeã] Floco de Neve", max: 18 }
+            ],
+            tropasElixir: [
+                { name: "Bárbaro", max: 9 },
+                { name: "Arqueira", max: 9 },
+                { name: "Gigante", max: 10 },
+                { name: "Goblin", max: 8 },
+                { name: "Quebra Muros", max: 9 },
+                { name: "Balão", max: 9 },
+                { name: "Mago", max: 10 },
+                { name: "Curadora", max: 6 },
+                { name: "Dragão", max: 8 },
+                { name: "Pekka", max: 9 },
+                { name: "Bebê Dragão", max: 7 },
+                { name: "Mineiro", max: 7 },
+                { name: "Dragão Elétrico", max: 4 },
+                { name: "Yeti", max: 3 },
+                { name: "Dragão Dirigível", max: 2 }
+            ],
+            tropasNegro: [
+                { name: "Servo", max: 9 },
+                { name: "Corredor", max: 10 },
+                { name: "Valquíria", max: 8 },
+                { name: "Golem", max: 10 },
+                { name: "Bruxa", max: 5 },
+                { name: "Lava-hound", max: 6 },
+                { name: "Lançador", max: 5 },
+                { name: "Golem de Gelo", max: 5 },
+                { name: "Caçadora de Heróis", max: 3 },
+                { name: "Aprendiz de Guardião", max: 2 }
+            ],
+            feiticosElixir: [
+                { name: "Raio", max: 9 },
+                { name: "Cura", max: 8 },
+                { name: "Fúria", max: 6 },
+                { name: "Salto", max: 4 },
+                { name: "Gelo", max: 7 },
+                { name: "Clone", max: 6 },
+                { name: "Invisibilidade", max: 4 },
+                { name: "Retorno", max: 2 }
+            ],
+            feiticosNegro: [
+                { name: "Veneno", max: 7 },
+                { name: "Terremoto", max: 5 },
+                { name: "Aceleração", max: 5 },
+                { name: "Esqueletos", max: 7 },
+                { name: "Morcego", max: 5 },
+                { name: "Raízes", max: 2 }
+            ],
+            maquinasCerco: [
+                { name: "Quebra-muros", max: 4 },
+                { name: "Dirigível Bélico", max: 4 },
+                { name: "Quebradora de Pedras", max: 4 },
+                { name: "Quartel de Cerco", max: 4 },
+                { name: "Lança Troncos", max: 4 }
             ],
             defenses: [
-                { name: "Disseminador (x2)", max: 2 }, { name: "Artilharia Águia (x1)", max: 4 }, { name: "Torre Inferno (x3)", max: 7 },
-                { name: "X-Besta (x4)", max: 8 }, { name: "Tesla Oculta (x5)", max: 12 }, { name: "Defesa Aérea (x4)", max: 11 },
-                { name: "Torre do Mago (x5)", max: 13 }, { name: "Canhão (x7)", max: 19 }, { name: "Torre Arqueira (x8)", max: 19 },
-                { name: "Morteiro (x4)", max: 13 }, { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 8 },
-                { name: "Cabana do Construtor (x5)", max: 1 }
+                { name: "Cabana do Construtor", limit: 5, max: 1 },
+                { name: "Canhão", limit: 7, max: 19 },
+                { name: "Torre Arqueira", limit: 8, max: 19 },
+                { name: "Torre do Mago", limit: 5, max: 13 },
+                { name: "Defesa Aérea", limit: 4, max: 11 },
+                { name: "Morteiro", limit: 4, max: 13 },
+                { name: "Tesla Oculta", limit: 5, max: 12 },
+                { name: "X-Besta", limit: 4, max: 8 },
+                { name: "Torre Inferno", limit: 3, max: 7 },
+                { name: "Dispersor Aéreo", limit: 2, max: 7 },
+                { name: "Artilharia Águia", limit: 1, max: 4 },
+                { name: "Torre de Bombas", limit: 2, max: 8 },
+                { name: "Disseminador", limit: 2, max: 2 }
             ],
-            other: [
-                { name: "Muros (x300)", max: 14 }, { name: "Bomba (x7)", max: 9 }, { name: "Armadilha de Mola (x9)", max: 8 },
-                { name: "Bomba Aérea (x6)", max: 8 }, { name: "Bomba Gigante (x6)", max: 8 }, { name: "Mina Aérea Guiada (x7)", max: 4 },
-                { name: "Armadilha de Esqueleto (x3)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
-                { name: "Coletor de Elixir (x7)", max: 15 }, { name: "Depósito de Elixir (x4)", max: 14 },
-                { name: "Mina de Ouro (x7)", max: 15 }, { name: "Depósito de Ouro (x4)", max: 14 },
-                { name: "Broca de Elixir Negro (x3)", max: 9 }, { name: "Depósito de Elixir Negro (x1)", max: 8 },
-                { name: "Castelo do Clã", max: 9 }, { name: "Assistente de Laboratório", max: 8 },
-                { name: "Aprendiz de Construtor", max: 7 }, { name: "Alquimista", max: 3 }
-            ]
+            armadilhas: [
+                { name: "Bomba", limit: 7, max: 9 },
+                { name: "Armadilha de Mola", limit: 9, max: 8 },
+                { name: "Bomba Aérea", limit: 6, max: 8 },
+                { name: "Bomba Gigante", limit: 6, max: 8 },
+                { name: "Mina Aérea Guiada", limit: 7, max: 4 },
+                { name: "Armadilha de Esqueleto", limit: 3, max: 4 },
+                { name: "Tornado Arapuca", limit: 1, max: 3 }
+            ],
+            muros: [
+                { name: "Muros", limit: 300, max: 14 }
+            ],
+            armazenamento: [
+                { name: "Coletor de Elixir", limit: 7, max: 15 },
+                { name: "Depósito de Elixir", limit: 4, max: 14 },
+                { name: "Mina de Ouro", limit: 7, max: 15 },
+                { name: "Depósito de Ouro", limit: 4, max: 14 },
+                { name: "Broca de Elixir Negro", limit: 3, max: 9 },
+                { name: "Depósito de Elixir Negro", limit: 1, max: 8 },
+                { name: "Castelo do Clã", limit: 1, max: 9 }
+            ],
+            auxiliares: [
+                { name: "Assistente de Laboratório", max: 8 },
+                { name: "Aprendiz de Construtor", max: 7 },
+                { name: "Alquimista", max: 3 }
+            ],
+            casaAnimais: []
         },
         14: {
-            heroes: [
-                { name: "Rei Bárbaro", max: 85 }, { name: "Rainha Arqueira", max: 85 },
-                { name: "Príncipe Servo", max: 60 }, { name: "Grande Guardião", max: 60 },
-                { name: "Campeã Real", max: 30 },
-                { name: "Equipamentos Comuns (Geral)", max: 18 }, { name: "Equipamentos Épicos (Geral)", max: 21 }
-            ],
-            army: [
-                { name: "Bárbaro", max: 10 }, { name: "Arqueira", max: 10 }, { name: "Gigante", max: 10 }, { name: "Goblin", max: 8 },
-                { name: "Quebra-muros", max: 10 }, { name: "Balão", max: 10 }, { name: "Mago", max: 10 }, { name: "Curadora", max: 7 },
-                { name: "Dragão", max: 9 }, { name: "Pekka", max: 9 }, { name: "Bebê Dragão", max: 8 }, { name: "Mineiro", max: 8 },
-                { name: "Dragão Elétrico", max: 5 }, { name: "Yeti", max: 4 }, { name: "Dragão Dirigível", max: 3 }, { name: "Titã Elétrica", max: 2 },
-                { name: "Servo", max: 10 }, { name: "Corredor", max: 11 }, { name: "Valquíria", max: 9 }, { name: "Golem", max: 11 },
-                { name: "Bruxa", max: 5 }, { name: "Lava-hound", max: 6 }, { name: "Lançador", max: 6 }, { name: "Golem de Gelo", max: 6 },
-                { name: "Caçadora de Heróis", max: 3 }, { name: "Aprendiz de Guardião", max: 3 }, { name: "Druida", max: 2 },
-                { name: "Feitiços Elixir/Negro", max: 8 }, { name: "Escudo de Gelo", max: 2 }, { name: "Feitiço de Raízes", max: 3 },
-                { name: "Trabuco Flamejante (Máquina)", max: 4 }
-            ],
-            defenses: [
-                { name: "Artilharia Águia (x1)", max: 5 }, { name: "Torre Inferno (x3)", max: 8 }, { name: "Disseminador (x2)", max: 3 },
-                { name: "X-Besta (x4)", max: 9 }, { name: "Tesla Oculta (x5)", max: 13 }, { name: "Defesa Aérea (x4)", max: 12 },
-                { name: "Torre do Mago (x5)", max: 14 }, { name: "Canhão (x7)", max: 20 }, { name: "Torre Arqueira (x8)", max: 20 },
-                { name: "Morteiro (x4)", max: 14 }, { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 9 },
-                { name: "Cabana do Construtor (x5)", max: 4 }
-            ],
-            other: [
-                { name: "Muros (x325)", max: 15 }, { name: "Bomba (x8)", max: 10 }, { name: "Armadilha de Mola (x9)", max: 9 },
-                { name: "Bomba Aérea (x7)", max: 9 }, { name: "Bomba Gigante (x7)", max: 8 }, { name: "Mina Aérea Guiada (x8)", max: 4 },
-                { name: "Armadilha de Esqueleto (x4)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
-                { name: "Coletor de Elixir (x7)", max: 15 }, { name: "Depósito de Elixir (x4)", max: 14 },
-                { name: "Mina de Ouro (x7)", max: 15 }, { name: "Depósito de Ouro (x4)", max: 14 },
-                { name: "Broca de Elixir Negro (x3)", max: 9 }, { name: "Depósito de Elixir Negro (x1)", max: 8 },
-                { name: "Castelo do Clã", max: 9 }, { name: "Assistente de Laboratório", max: 10 },
-                { name: "Aprendiz de Construtor", max: 8 }, { name: "Alquimista", max: 4 }
+            heroes: [],
+            equipamentos: [],
+            tropasElixir: [],
+            tropasNegro: [],
+            feiticosElixir: [],
+            feiticosNegro: [],
+            maquinasCerco: [],
+            defenses: [],
+            armadilhas: [],
+            muros: [],
+            armazenamento: [],
+            auxiliares: [],
+            casaAnimais: [
+                { name: "Lassi", max: 10 },
+                { name: "Coruja Elétrica", max: 10 },
+                { name: "Poderoso Iaque", max: 10 },
+                { name: "Unicórnio", max: 10 }
             ]
         },
         15: {
-            heroes: [
-                { name: "Rei Bárbaro", max: 90 }, { name: "Rainha Arqueira", max: 90 },
-                { name: "Príncipe Servo", max: 70 }, { name: "Grande Guardião", max: 65 },
-                { name: "Campeã Real", max: 40 }, { name: "Duque Dracônico", max: 10 },
-                { name: "Equipamentos Comuns (Geral)", max: 18 }, { name: "Equipamentos Épicos (Geral)", max: 24 }
-            ],
-            army: [
-                { name: "Bárbaro", max: 11 }, { name: "Arqueira", max: 11 }, { name: "Gigante", max: 11 }, { name: "Goblin", max: 9 },
-                { name: "Quebra-muros", max: 11 }, { name: "Balão", max: 10 }, { name: "Mago", max: 11 }, { name: "Curadora", max: 8 },
-                { name: "Dragão", max: 10 }, { name: "Pekka", max: 10 }, { name: "Bebê Dragão", max: 9 }, { name: "Mineiro", max: 9 },
-                { name: "Dragão Elétrico", max: 6 }, { name: "Yeti", max: 5 }, { name: "Dragão Dirigível", max: 3 }, { name: "Titã Elétrica", max: 3 },
-                { name: "Poderosa Hera", max: 2 }, { name: "Servo", max: 11 }, { name: "Corredor", max: 12 }, { name: "Valquíria", max: 10 },
-                { name: "Golem", max: 13 }, { name: "Bruxa", max: 6 }, { name: "Lava-hound", max: 6 }, { name: "Lançador", max: 7 },
-                { name: "Golem de Gelo", max: 7 }, { name: "Caçadora de Heróis", max: 3 }, { name: "Aprendiz de Guardião", max: 4 },
-                { name: "Druida", max: 3 }, { name: "Fornalha", max: 2 }, { name: "Feitiço de Reanimação", max: 2 }, { name: "Raiva Líquida", max: 1 },
-                { name: "Escavadeira Bélica (Máquina)", max: 4 }
-            ],
-            defenses: [
-                { name: "Monólito (x1)", max: 2 }, { name: "Torre de Feitiços (x2)", max: 3 }, { name: "Artilharia Águia (x1)", max: 6 },
-                { name: "Torre Inferno (x3)", max: 9 }, { name: "Disseminador (x2)", max: 4 }, { name: "X-Besta (x4)", max: 10 },
-                { name: "Tesla Oculta (x5)", max: 14 }, { name: "Defesa Aérea (x4)", max: 13 }, { name: "Torre do Mago (x5)", max: 15 },
-                { name: "Canhão (x7)", max: 21 }, { name: "Torre Arqueira (x8)", max: 21 }, { name: "Morteiro (x4)", max: 15 },
-                { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 10 }, { name: "Cabana do Construtor (x5)", max: 5 }
-            ],
-            other: [
-                { name: "Muros (x325)", max: 16 }, { name: "Bomba (x8)", max: 11 }, { name: "Armadilha de Mola (x9)", max: 10 },
-                { name: "Bomba Aérea (x7)", max: 10 }, { name: "Bomba Gigante (x7)", max: 9 }, { name: "Mina Aérea Guiada (x8)", max: 5 },
-                { name: "Armadilha de Esqueleto (x4)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
-                { name: "Coletor de Elixir (x7)", max: 16 }, { name: "Depósito de Elixir (x4)", max: 16 },
-                { name: "Mina de Ouro (x7)", max: 16 }, { name: "Depósito de Ouro (x4)", max: 16 },
-                { name: "Broca de Elixir Negro (x3)", max: 10 }, { name: "Depósito de Elixir Negro (x1)", max: 10 },
-                { name: "Castelo do Clã", max: 11 }, { name: "Assistente de Laboratório", max: 11 },
-                { name: "Aprendiz de Construtor", max: 8 }, { name: "Alquimista", max: 5 }
+            heroes: [],
+            equipamentos: [],
+            tropasElixir: [],
+            tropasNegro: [],
+            feiticosElixir: [],
+            feiticosNegro: [],
+            maquinasCerco: [],
+            defenses: [],
+            armadilhas: [],
+            muros: [],
+            armazenamento: [],
+            auxiliares: [],
+            casaAnimais: [
+                { name: "Lassi", max: 10 },
+                { name: "Coruja Elétrica", max: 10 },
+                { name: "Poderoso Iaque", max: 10 },
+                { name: "Unicórnio", max: 10 }
             ]
         }
     };
@@ -484,41 +892,88 @@
     let progressData = JSON.parse(localStorage.getItem('cocProgress')) || {};
     let selectedCV = 11;
 
-    function generateRows(itemList, section) {
+    function generateRows(itemList, section, hasLimit = false) {
         return itemList.map((item, index) => {
             const key = `${selectedCV}_${section}_${index}`;
             const currentValue = progressData[key] || 0;
             const remaining = item.max - currentValue;
 
-            return `
-                <tr>
-                    <td><span class="item-name">${item.name}</span></td>
-                    <td><span class="level-info">Nível ${item.max}</span></td>
-                    <td>
-                        <input type="number" 
-                               value="${currentValue}" 
-                               min="0" 
-                               max="${item.max}"
-                               data-key="${key}"
-                               onchange="updateProgress()"
-                               onkeyup="updateProgress()">
-                    </td>
-                    <td>
-                        <span class="status-badge ${remaining === 0 ? 'status-max' : 'status-remaining'}">
-                            ${remaining === 0 ? 'MÁXIMO' : `${remaining}`}
-                        </span>
-                    </td>
-                </tr>
-            `;
+            if (hasLimit) {
+                return `
+                    <tr>
+                        <td><span class="item-name">${item.name}</span></td>
+                        <td><span class="level-info">${item.limit}</span></td>
+                        <td><span class="level-info">Nível ${item.max}</span></td>
+                        <td>
+                            <input type="number" 
+                                   value="${currentValue}" 
+                                   min="0" 
+                                   max="${item.max}"
+                                   data-key="${key}"
+                                   onchange="updateProgress()"
+                                   onkeyup="updateProgress()">
+                        </td>
+                        <td>
+                            <span class="status-badge ${remaining === 0 ? 'status-max' : 'status-remaining'}">
+                                ${remaining === 0 ? 'MÁXIMO' : `${remaining}`}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                return `
+                    <tr>
+                        <td><span class="item-name">${item.name}</span></td>
+                        <td><span class="level-info">Nível ${item.max}</span></td>
+                        <td>
+                            <input type="number" 
+                                   value="${currentValue}" 
+                                   min="0" 
+                                   max="${item.max}"
+                                   data-key="${key}"
+                                   onchange="updateProgress()"
+                                   onkeyup="updateProgress()">
+                        </td>
+                        <td>
+                            <span class="status-badge ${remaining === 0 ? 'status-max' : 'status-remaining'}">
+                                ${remaining === 0 ? 'MÁXIMO' : `${remaining}`}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }
         }).join('');
     }
 
     function renderCV() {
         const data = cvData[selectedCV];
+        
         document.getElementById('heroesTable').innerHTML = generateRows(data.heroes, 'heroes');
-        document.getElementById('armyTable').innerHTML = generateRows(data.army, 'army');
-        document.getElementById('defensesTable').innerHTML = generateRows(data.defenses, 'defenses');
-        document.getElementById('otherTable').innerHTML = generateRows(data.other, 'other');
+        document.getElementById('equipamentosTable').innerHTML = generateRows(data.equipamentos, 'equipamentos');
+        document.getElementById('tropasElixirTable').innerHTML = generateRows(data.tropasElixir, 'tropasElixir');
+        document.getElementById('tropasNegroTable').innerHTML = generateRows(data.tropasNegro, 'tropasNegro');
+        document.getElementById('feiticosElixirTable').innerHTML = generateRows(data.feiticosElixir, 'feiticosElixir');
+        document.getElementById('feiticosNegroTable').innerHTML = generateRows(data.feiticosNegro, 'feiticosNegro');
+        document.getElementById('maquinasCercoTable').innerHTML = generateRows(data.maquinasCerco, 'maquinasCerco');
+        document.getElementById('defensesTable').innerHTML = generateRows(data.defenses, 'defenses', true);
+        document.getElementById('armadilhasTable').innerHTML = generateRows(data.armadilhas, 'armadilhas', true);
+        document.getElementById('murosTable').innerHTML = generateRows(data.muros, 'muros', true);
+        document.getElementById('armazenamentoTable').innerHTML = generateRows(data.armazenamento, 'armazenamento', true);
+        document.getElementById('auxiliaresTable').innerHTML = generateRows(data.auxiliares, 'auxiliares');
+        
+        // Casa de Animais - mostrar apenas se houver dados
+        const casaAnimaisTitle = document.getElementById('casaAnimaisTitle');
+        const casaAnimaisCard = document.getElementById('casaAnimaisCard');
+        
+        if (data.casaAnimais.length > 0) {
+            casaAnimaisTitle.style.display = 'block';
+            casaAnimaisCard.style.display = 'block';
+            document.getElementById('casaAnimaisTable').innerHTML = generateRows(data.casaAnimais, 'casaAnimais');
+        } else {
+            casaAnimaisTitle.style.display = 'none';
+            casaAnimaisCard.style.display = 'none';
+        }
+        
         updateProgress();
     }
 
@@ -540,40 +995,16 @@
         let totalCurrent = 0;
         let maxedItems = 0;
 
-        // Contar para heróis
-        data.heroes.forEach((item, index) => {
-            const key = `${selectedCV}_heroes_${index}`;
-            const current = progressData[key] || 0;
-            totalMax += item.max;
-            totalCurrent += current;
-            if (current === item.max) maxedItems++;
-        });
+        const sections = ['heroes', 'equipamentos', 'tropasElixir', 'tropasNegro', 'feiticosElixir', 'feiticosNegro', 'maquinasCerco', 'defenses', 'armadilhas', 'muros', 'armazenamento', 'auxiliares', 'casaAnimais'];
 
-        // Contar para exército
-        data.army.forEach((item, index) => {
-            const key = `${selectedCV}_army_${index}`;
-            const current = progressData[key] || 0;
-            totalMax += item.max;
-            totalCurrent += current;
-            if (current === item.max) maxedItems++;
-        });
-
-        // Contar para defesas
-        data.defenses.forEach((item, index) => {
-            const key = `${selectedCV}_defenses_${index}`;
-            const current = progressData[key] || 0;
-            totalMax += item.max;
-            totalCurrent += current;
-            if (current === item.max) maxedItems++;
-        });
-
-        // Contar para outros
-        data.other.forEach((item, index) => {
-            const key = `${selectedCV}_other_${index}`;
-            const current = progressData[key] || 0;
-            totalMax += item.max;
-            totalCurrent += current;
-            if (current === item.max) maxedItems++;
+        sections.forEach(section => {
+            data[section].forEach((item, index) => {
+                const key = `${selectedCV}_${section}_${index}`;
+                const current = progressData[key] || 0;
+                totalMax += item.max;
+                totalCurrent += current;
+                if (current === item.max) maxedItems++;
+            });
         });
 
         const percentage = totalMax > 0 ? Math.round((totalCurrent / totalMax) * 100) : 0;
