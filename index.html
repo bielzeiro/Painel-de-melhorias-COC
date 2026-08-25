@@ -13,6 +13,11 @@
             --text-muted: #94a3b8;
             --border-color: #233146;
             --green-max: #10b981;
+            --red-alert: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
@@ -24,7 +29,7 @@
         }
 
         .container {
-            max-width: 950px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -37,6 +42,8 @@
             border-radius: 12px;
             border: 1px solid var(--border-color);
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         h1 {
@@ -49,10 +56,11 @@
             background: #0d131d;
             color: var(--accent-orange);
             border: 1px solid var(--accent-orange);
-            padding: 6px 12px;
+            padding: 8px 15px;
             border-radius: 20px;
             font-weight: bold;
             cursor: pointer;
+            font-size: 1rem;
         }
 
         .dashboard {
@@ -107,7 +115,7 @@
         }
 
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
@@ -116,25 +124,56 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             text-transform: uppercase;
+            background: rgba(255, 152, 0, 0.05);
         }
 
-        select {
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        input[type="number"] {
             background: #0d131d;
             color: var(--text-main);
             border: 1px solid var(--border-color);
             padding: 6px 10px;
             border-radius: 6px;
-            width: 100%;
-            max-width: 110px;
+            width: 80px;
+            font-size: 1rem;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-orange);
         }
 
         .status-badge {
             font-size: 0.85rem;
             font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .status-remaining {
+            color: var(--red-alert);
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .status-max {
             color: var(--green-max);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .item-name {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .level-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -162,8 +201,8 @@
             <div class="val" id="remainingUpgrades">0</div>
         </div>
         <div class="dash-card">
-            <h3>Foco Sugerido</h3>
-            <div class="val" id="suggestedFocus" style="font-size: 1.2rem; color: #ef4444;">Heróis</div>
+            <h3>Itens Maxados</h3>
+            <div class="val" id="maxedItems">0</div>
         </div>
     </div>
 
@@ -174,9 +213,9 @@
             <thead>
                 <tr>
                     <th>Herói / Equipamento</th>
-                    <th>Nível Máximo CV</th>
-                    <th>Nível Atual</th>
-                    <th>Status</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
                 </tr>
             </thead>
             <tbody id="heroesTable"></tbody>
@@ -190,9 +229,9 @@
             <thead>
                 <tr>
                     <th>Tropa / Feitiço / Máquina</th>
-                    <th>Nível Máximo CV</th>
-                    <th>Nível Atual</th>
-                    <th>Status</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
                 </tr>
             </thead>
             <tbody id="armyTable"></tbody>
@@ -206,9 +245,9 @@
             <thead>
                 <tr>
                     <th>Estrutura Defensiva</th>
-                    <th>Nível Máximo</th>
-                    <th>Nível Atual (Seletor)</th>
-                    <th>Status</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
                 </tr>
             </thead>
             <tbody id="defensesTable"></tbody>
@@ -222,9 +261,9 @@
             <thead>
                 <tr>
                     <th>Item / Construção</th>
-                    <th>Nível / Qtd. Máxima</th>
-                    <th>Nível Atual (Seletor)</th>
-                    <th>Status</th>
+                    <th>Máximo</th>
+                    <th>Atual</th>
+                    <th>Falta</th>
                 </tr>
             </thead>
             <tbody id="otherTable"></tbody>
@@ -233,27 +272,23 @@
 </div>
 
 <script>
-    // BASE DE DADOS COMPLETA EXTRAÍDA DO PDF (CV 11 AO 15)
+    // BASE DE DADOS EXTRAÍDA DO PDF
     const cvData = {
         11: {
             heroes: [
                 { name: "Rei Bárbaro", max: 50 }, { name: "Rainha Arqueira", max: 50 },
                 { name: "Príncipe Servo", max: 30 }, { name: "Grande Guardião", max: 20 },
-                // Equipamentos Rei Bárbaro
                 { name: "[Rei] Boneco de Bárbaro", max: 12 }, { name: "[Rei] Frasco de Fúria", max: 12 },
                 { name: "[Rei] Bota Terremoto", max: 12 }, { name: "[Rei] Bigode de Vampiro", max: 12 },
                 { name: "[Rei] Manopla Agigantadora (Épico)", max: 15 }, { name: "[Rei] Bola de Espinhos (Épico)", max: 15 },
                 { name: "[Rei] Amuleto Ofídico (Épico)", max: 15 }, { name: "[Rei] Cavalo de Pau (Épico)", max: 15 },
-                // Equipamentos Rainha Arqueira
                 { name: "[Rainha] Boneco de Arqueira", max: 12 }, { name: "[Rainha] Frasco de Invisibilidade", max: 12 },
                 { name: "[Rainha] Flecha Gigante", max: 12 }, { name: "[Rainha] Flecha Congelante (Épico)", max: 15 },
                 { name: "[Rainha] Espelho Mágico (Épico)", max: 15 }, { name: "[Rainha] Boneco Gigante (Épico)", max: 15 },
                 { name: "[Rainha] Flecha Monolítica (Épico)", max: 15 },
-                // Equipamentos Príncipe Servo
                 { name: "[Príncipe] Boneco de Capanga", max: 12 }, { name: "[Príncipe] Orbe Sombrio", max: 12 },
                 { name: "[Príncipe] Calça de Metal", max: 12 }, { name: "[Príncipe] Coroa Sombria (Épico)", max: 15 },
                 { name: "[Príncipe] Bastão de Meteoros (Épico)", max: 15 },
-                // Equipamentos Grande Guardião
                 { name: "[Guardião] Tomo Eterno", max: 12 }, { name: "[Guardião] Gema da Vida", max: 12 },
                 { name: "[Guardião] Gema de Fúria", max: 12 }, { name: "[Guardião] Bola de Fogo (Épico)", max: 15 },
                 { name: "[Guardião] Boneco de Lavalão (Épico)", max: 15 }, { name: "[Guardião] Tocha Heroica (Épico)", max: 15 }
@@ -294,7 +329,6 @@
             heroes: [
                 { name: "Rei Bárbaro", max: 65 }, { name: "Rainha Arqueira", max: 65 },
                 { name: "Príncipe Servo", max: 40 }, { name: "Grande Guardião", max: 40 },
-                // Equipamentos
                 { name: "[Rei] Equipamentos Comuns", max: 15 }, { name: "[Rei] Equipamentos Épicos", max: 18 },
                 { name: "[Rainha] Equipamentos Comuns", max: 15 }, { name: "[Rainha] Equipamentos Épicos", max: 18 },
                 { name: "[Príncipe] Equipamentos Comuns", max: 15 }, { name: "[Príncipe] Equipamentos Épicos", max: 18 },
@@ -335,7 +369,6 @@
                 { name: "Rei Bárbaro", max: 75 }, { name: "Rainha Arqueira", max: 75 },
                 { name: "Príncipe Servo", max: 50 }, { name: "Grande Guardião", max: 50 },
                 { name: "Campeã Real", max: 25 },
-                // Equipamentos
                 { name: "Equipamentos Comuns (Geral)", max: 15 }, { name: "Equipamentos Épicos (Geral)", max: 18 }
             ],
             army: [
@@ -378,7 +411,6 @@
                 { name: "Rei Bárbaro", max: 85 }, { name: "Rainha Arqueira", max: 85 },
                 { name: "Príncipe Servo", max: 60 }, { name: "Grande Guardião", max: 60 },
                 { name: "Campeã Real", max: 30 },
-                // Equipamentos
                 { name: "Equipamentos Comuns (Geral)", max: 18 }, { name: "Equipamentos Épicos (Geral)", max: 21 }
             ],
             army: [
@@ -415,7 +447,6 @@
                 { name: "Rei Bárbaro", max: 90 }, { name: "Rainha Arqueira", max: 90 },
                 { name: "Príncipe Servo", max: 70 }, { name: "Grande Guardião", max: 65 },
                 { name: "Campeã Real", max: 40 }, { name: "Duque Dracônico", max: 10 },
-                // Equipamentos
                 { name: "Equipamentos Comuns (Geral)", max: 18 }, { name: "Equipamentos Épicos (Geral)", max: 24 }
             ],
             army: [
@@ -449,74 +480,113 @@
         }
     };
 
+    // Sistema de persistência com localStorage
+    let progressData = JSON.parse(localStorage.getItem('cocProgress')) || {};
     let selectedCV = 11;
 
-    function renderOptions(max) {
-        let options = "";
-        for (let i = 0; i <= max; i++) {
-            options += `<option value="${i}">${i}</option>`;
-        }
-        return options;
-    }
+    function generateRows(itemList, section) {
+        return itemList.map((item, index) => {
+            const key = `${selectedCV}_${section}_${index}`;
+            const currentValue = progressData[key] || 0;
+            const remaining = item.max - currentValue;
 
-    function generateRows(itemList) {
-        return itemList.map(item => `
-            <tr>
-                <td><strong>${item.name}</strong></td>
-                <td>Nível ${item.max}</td>
-                <td>
-                    <select onchange="recalculate()">
-                        ${renderOptions(item.max)}
-                    </select>
-                </td>
-                <td><span class="status-badge">- ${item.max}</span></td>
-            </tr>
-        `).join('');
+            return `
+                <tr>
+                    <td><span class="item-name">${item.name}</span></td>
+                    <td><span class="level-info">Nível ${item.max}</span></td>
+                    <td>
+                        <input type="number" 
+                               value="${currentValue}" 
+                               min="0" 
+                               max="${item.max}"
+                               data-key="${key}"
+                               onchange="updateProgress()"
+                               onkeyup="updateProgress()">
+                    </td>
+                    <td>
+                        <span class="status-badge ${remaining === 0 ? 'status-max' : 'status-remaining'}">
+                            ${remaining === 0 ? 'MÁXIMO' : `${remaining}`}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }).join('');
     }
 
     function renderCV() {
         const data = cvData[selectedCV];
-        document.getElementById('heroesTable').innerHTML = generateRows(data.heroes);
-        document.getElementById('armyTable').innerHTML = generateRows(data.army);
-        document.getElementById('defensesTable').innerHTML = generateRows(data.defenses);
-        document.getElementById('otherTable').innerHTML = generateRows(data.other);
-        recalculate();
+        document.getElementById('heroesTable').innerHTML = generateRows(data.heroes, 'heroes');
+        document.getElementById('armyTable').innerHTML = generateRows(data.army, 'army');
+        document.getElementById('defensesTable').innerHTML = generateRows(data.defenses, 'defenses');
+        document.getElementById('otherTable').innerHTML = generateRows(data.other, 'other');
+        updateProgress();
     }
 
     function changeCV() {
-        selectedCV = document.getElementById('cvSelect').value;
+        selectedCV = parseInt(document.getElementById('cvSelect').value);
         renderCV();
     }
 
-    function recalculate() {
-        const selects = document.querySelectorAll('select:not(#cvSelect)');
+    function updateProgress() {
+        // Atualizar localStorage com os valores dos inputs
+        document.querySelectorAll('input[type="number"][data-key]').forEach(input => {
+            progressData[input.dataset.key] = parseInt(input.value) || 0;
+        });
+        localStorage.setItem('cocProgress', JSON.stringify(progressData));
+
+        // Calcular estatísticas
+        const data = cvData[selectedCV];
         let totalMax = 0;
         let totalCurrent = 0;
+        let maxedItems = 0;
 
-        selects.forEach(s => {
-            const max = parseInt(s.options[s.options.length - 1].value);
-            const val = parseInt(s.value);
-            totalMax += max;
-            totalCurrent += val;
-
-            const statusCell = s.parentElement.nextElementSibling.querySelector('.status-badge');
-            const remaining = max - val;
-            if (remaining === 0) {
-                statusCell.className = "status-badge status-max";
-                statusCell.innerText = "MAX";
-            } else {
-                statusCell.className = "status-badge";
-                statusCell.innerText = `- ${remaining}`;
-            }
+        // Contar para heróis
+        data.heroes.forEach((item, index) => {
+            const key = `${selectedCV}_heroes_${index}`;
+            const current = progressData[key] || 0;
+            totalMax += item.max;
+            totalCurrent += current;
+            if (current === item.max) maxedItems++;
         });
 
-        const pct = totalMax > 0 ? Math.round((totalCurrent / totalMax) * 100) : 0;
-        document.getElementById('globalProgress').innerText = `${pct}%`;
-        document.getElementById('remainingUpgrades').innerText = totalMax - totalCurrent;
+        // Contar para exército
+        data.army.forEach((item, index) => {
+            const key = `${selectedCV}_army_${index}`;
+            const current = progressData[key] || 0;
+            totalMax += item.max;
+            totalCurrent += current;
+            if (current === item.max) maxedItems++;
+        });
+
+        // Contar para defesas
+        data.defenses.forEach((item, index) => {
+            const key = `${selectedCV}_defenses_${index}`;
+            const current = progressData[key] || 0;
+            totalMax += item.max;
+            totalCurrent += current;
+            if (current === item.max) maxedItems++;
+        });
+
+        // Contar para outros
+        data.other.forEach((item, index) => {
+            const key = `${selectedCV}_other_${index}`;
+            const current = progressData[key] || 0;
+            totalMax += item.max;
+            totalCurrent += current;
+            if (current === item.max) maxedItems++;
+        });
+
+        const percentage = totalMax > 0 ? Math.round((totalCurrent / totalMax) * 100) : 0;
+        const remaining = totalMax - totalCurrent;
+
+        document.getElementById('globalProgress').textContent = `${percentage}%`;
+        document.getElementById('remainingUpgrades').textContent = remaining;
+        document.getElementById('maxedItems').textContent = maxedItems;
     }
 
     // Inicialização
     renderCV();
 </script>
+
 </body>
 </html>
