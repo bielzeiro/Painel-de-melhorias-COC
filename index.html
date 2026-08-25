@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clash Planner & Workspace</title>
+    <title>Clash Organizer & Tracker</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -12,11 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        [contenteditable]:empty:before {
-            content: attr(data-placeholder);
-            color: #64748b;
-            cursor: text;
-        }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
@@ -31,7 +26,7 @@
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-950 text-slate-100 h-screen flex flex-col overflow-hidden">
 
-    <!-- Modal de Identificação -->
+    <!-- Modal de Identificação (Exibido Imediatamente ao Entrar) -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300">
         <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md border-t border-slate-700 relative overflow-hidden">
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -41,7 +36,7 @@
                     <i class="fa-solid fa-shield-halved text-3xl"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-white tracking-tight">Clash Organizer</h2>
-                <p class="text-slate-400 text-xs sm:text-sm mt-1">Selecione suas credenciais e o Centro de Vila inicial</p>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1">Informe sua conta e selecione seu Centro de Vila atual</p>
             </div>
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
                 <div class="flex flex-col items-center justify-center mb-2">
@@ -58,7 +53,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome do Jogador</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome do Jogador / Vila Principal</label>
                     <input type="text" id="displayNameInput" required value="Gabriel Santos" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all">
                 </div>
                 <div>
@@ -70,7 +65,7 @@
                     <input type="text" id="playerTagInput" required value="#LUU9VYJLP" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all uppercase">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-1.5">Escolha o Centro de Vila Atual</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-amber-400 mb-1.5">Qual o seu Centro de Vila atual?</label>
                     <select id="initialTownHallSelect" class="w-full bg-slate-900 border border-amber-500/50 rounded-lg px-4 py-3 text-white font-bold focus:outline-none focus:border-amber-500">
                         <option value="18">Centro de Vila 18</option>
                         <option value="17">Centro de Vila 17</option>
@@ -78,12 +73,12 @@
                         <option value="15">Centro de Vila 15</option>
                         <option value="14">Centro de Vila 14</option>
                         <option value="13">Centro de Vila 13</option>
-                        <option value="12" selected>Centro de Vila 12</option>
-                        <option value="11">Centro de Vila 11</option>
+                        <option value="12">Centro de Vila 12</option>
+                        <option value="11" selected>Centro de Vila 11</option>
                     </select>
                 </div>
                 <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold py-3.5 rounded-lg shadow-lg shadow-amber-500/25 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2">
-                    <i class="fa-solid fa-right-to-bracket"></i> Acessar Minha Vila
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar na Vila
                 </button>
             </form>
         </div>
@@ -92,25 +87,25 @@
     <!-- Aplicação Principal -->
     <div id="appContainer" class="hidden flex-1 flex flex-col overflow-hidden relative">
 
-        <!-- Banner de Desenvolvedor -->
+        <!-- Banner do Desenvolvedor (Controle Administrativo) -->
         <div id="devBanner" class="hidden bg-purple-900/90 border-b border-purple-500/50 px-4 py-2 text-xs flex justify-between items-center z-50 text-purple-200 flex-shrink-0">
             <span class="font-bold flex items-center gap-2">
-                <i class="fa-solid fa-code"></i> MODO DESENVOLVEDOR ATIVO (Gabriel Santos)
+                <i class="fa-solid fa-shield-halved"></i> PAINEL ADMINISTRATIVO (Gabriel Santos)
             </span>
             <div class="flex items-center gap-3">
                 <label class="flex items-center gap-1.5 cursor-pointer text-slate-200 hover:text-white">
                     <input type="checkbox" id="viewAsPlayerToggle" onchange="toggleViewMode()" class="rounded border-purple-500">
                     <span>Ver como Jogador</span>
                 </label>
-                <span id="devStatusBadge" class="bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">Dev Access</span>
+                <span id="devStatusBadge" class="bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase">ADM Access</span>
             </div>
         </div>
 
         <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
             <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
 
-            <!-- Sidebar -->
-            <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
+            <!-- Sidebar Lateral: Perfil + Histórico de Contas Secundárias -->
+            <aside id="sidebar" class="fixed md:relative z-40 w-80 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
                 <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <div class="relative group cursor-pointer flex-shrink-0" onclick="document.getElementById('profileAvatarInput').click()" title="Alterar Foto de Perfil">
@@ -136,38 +131,26 @@
                     </button>
                 </div>
 
-                <div class="p-4 border-b border-slate-800/50 space-y-3">
+                <!-- Histórico de Centros de Vila / Contas Secundárias -->
+                <div class="p-4 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/20">
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Alternar Centro de Vila</label>
-                        <select id="sidebarAccountSelect" onchange="switchVillageFromSidebar()" class="w-full bg-slate-900 border border-slate-700 text-amber-400 font-bold text-xs rounded-lg p-2.5 focus:outline-none focus:border-amber-500">
-                            <option value="18">🏰 Centro de Vila 18</option>
-                            <option value="17">🏰 Centro de Vila 17</option>
-                            <option value="16">🏰 Centro de Vila 16</option>
-                            <option value="15">🏰 Centro de Vila 15</option>
-                            <option value="14">🏰 Centro de Vila 14</option>
-                            <option value="13">🏰 Centro de Vila 13</option>
-                            <option value="12" selected>🏰 Centro de Vila 12</option>
-                            <option value="11">🏰 Centro de Vila 11</option>
-                        </select>
+                        <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-users-gear"></i> Minhas Vilas (Até 7)
+                        </h4>
+                        <p class="text-[10px] text-slate-400">Gerencie e alterne entre suas contas</p>
                     </div>
-
-                    <div class="gap-2 flex">
-                        <button onclick="createNewFolder()" class="flex-1 bg-slate-800/50 hover:bg-slate-700 text-slate-300 text-xs font-semibold py-2 px-2 rounded-lg border border-slate-700/50 transition-colors flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-folder-plus text-amber-500"></i> Pasta
-                        </button>
-                        <button onclick="createNewPage()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold py-2 px-2 rounded-lg shadow-md shadow-amber-500/10 transition-colors flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-file-circle-plus"></i> Nota
-                        </button>
-                    </div>
+                    <button onclick="openAddAccountModal()" class="bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-slate-950 border border-amber-500/30 p-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1" title="Adicionar Conta Secundária">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
                 </div>
 
-                <div class="flex-1 overflow-y-auto px-3 py-3 space-y-3" id="folderTree"></div>
+                <div class="flex-1 overflow-y-auto p-3 space-y-2" id="accountsListContainer"></div>
 
                 <div class="p-4 bg-slate-950/80 border-t border-slate-800/50 text-xs text-slate-400 flex justify-between items-center">
-                    <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-cloud-check text-emerald-500"></i> Sincronizado</span>
+                    <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-cloud-check text-emerald-500"></i> Dados Salvos</span>
                     <div class="flex items-center gap-1">
-                        <button onclick="resetTrackerData()" title="Resetar Dados do CV Atual" class="hover:text-red-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-rotate"></i></button>
-                        <button onclick="exportData()" title="Fazer Backup (JSON)" class="hover:text-amber-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-download"></i></button>
+                        <button onclick="resetTrackerData()" title="Resetar CV Atual" class="hover:text-red-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-rotate"></i></button>
+                        <button onclick="exportData()" title="Backup JSON" class="hover:text-amber-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-download"></i></button>
                     </div>
                 </div>
             </aside>
@@ -175,73 +158,64 @@
             <!-- Área Principal -->
             <main class="flex-1 flex flex-col overflow-hidden w-full relative">
                 
-                <header class="h-16 glass-panel border-b-0 border-slate-800/50 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2 z-10 shadow-sm">
-                    <div class="flex items-center gap-3 overflow-hidden">
+                <!-- Cabeçalho Superior Limpo -->
+                <header class="h-14 glass-panel border-b-0 border-slate-800/50 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2 z-10 shadow-sm">
+                    <div class="flex items-center gap-3">
                         <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
                             <i class="fa-solid fa-bars text-lg"></i>
                         </button>
-                        <span id="currentBreadcrumb" class="text-xs sm:text-sm font-medium text-slate-400 truncate flex items-center gap-2">
-                            <i class="fa-solid fa-shield-halved text-amber-500"></i> Meu Espaço / <span class="text-white font-semibold">Rastreador</span>
+                        <span class="text-xs sm:text-sm font-bold text-white tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-chess-king text-amber-500"></i> Painel de Evolução do Clash
                         </span>
-                    </div>
-                    
-                    <div class="flex bg-slate-900/80 p-1 rounded-lg border border-slate-700/50 flex-shrink-0 shadow-inner">
-                        <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md">
-                            <i class="fa-solid fa-list-check sm:mr-1.5"></i><span class="hidden sm:inline"> Rastreador</span>
-                        </button>
-                        <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
-                            <i class="fa-solid fa-file-pen sm:mr-1.5"></i><span class="hidden sm:inline"> Anotações</span>
-                        </button>
                     </div>
                 </header>
 
-                <!-- RASTREADOR CLASH -->
+                <!-- CONTEÚDO DO RASTREADOR -->
                 <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
                     
-                    <!-- Header da Vila & Alternador de Equipamentos -->
+                    <!-- Header da Vila com Seletor Administrativo -->
                     <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
                         
                         <div class="flex items-center gap-4">
                             <div class="bg-gradient-to-br from-amber-500/20 to-orange-500/20 text-amber-400 p-3.5 rounded-xl border border-amber-500/30 shadow-inner">
-                                <i class="fa-solid fa-chess-rook text-2xl"></i>
+                                <i class="fa-solid fa-castle text-2xl"></i>
                             </div>
                             <div>
-                                <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">Painel da Vila</h2>
-                                <p class="text-xs text-slate-400 mt-0.5">Gerencie upgrades da Vila Principal e do Ferreiro de forma independente</p>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight" id="activeAccountTitle">Vila Principal</h2>
+                                    <span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[11px] font-black px-2 py-0.5 rounded" id="currentCVBadge">CV 11</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-0.5">Acompanhe seu progresso de construções, laboratório e equipamentos</p>
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                            <!-- Botão Liga/Desliga da Coluna de Equipamentos -->
-                            <button id="toggleEquipmentsBtn" onclick="toggleEquipmentsVisibility()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-400 text-xs font-bold px-3.5 py-2.5 rounded-lg transition-all flex items-center gap-2">
-                                <i class="fa-solid fa-shield-cat"></i> <span id="toggleEquipmentsText">Ocultar Equipamentos</span>
-                            </button>
-
-                            <div class="flex items-center gap-2">
-                                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">CV:</label>
-                                <select id="townHallSelect" onchange="renderTracker()" class="bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 font-bold text-amber-400">
-                                    <option value="18">Nível 18</option>
-                                    <option value="17">Nível 17</option>
-                                    <option value="16">Nível 16</option>
-                                    <option value="15">Nível 15</option>
-                                    <option value="14">Nível 14</option>
-                                    <option value="13">Nível 13</option>
-                                    <option value="12" selected>Nível 12</option>
-                                    <option value="11">Nível 11</option>
-                                </select>
-                            </div>
+                        <!-- Seletor de CV Reservado Apenas para Administrador -->
+                        <div id="adminCVSelectorWrapper" class="hidden flex-wrap items-center gap-3 w-full sm:w-auto bg-purple-950/40 p-2.5 rounded-xl border border-purple-500/30">
+                            <label class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-user-gear"></i> Seletor ADM:
+                            </label>
+                            <select id="townHallSelect" onchange="adminSwitchCV()" class="bg-slate-900 border border-purple-500/50 text-white text-xs rounded-lg px-3 py-1.5 focus:outline-none font-bold text-purple-300">
+                                <option value="18">CV 18</option>
+                                <option value="17">CV 17</option>
+                                <option value="16">CV 16</option>
+                                <option value="15">CV 15</option>
+                                <option value="14">CV 14</option>
+                                <option value="13">CV 13</option>
+                                <option value="12">CV 12</option>
+                                <option value="11" selected>CV 11</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- Galeria de Registros -->
+                    <!-- Galeria de Registros & Comparativos -->
                     <div class="glass-panel p-5 rounded-2xl space-y-4 border border-slate-700/50">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                             <div class="flex items-center gap-2.5">
                                 <i class="fa-solid fa-images text-amber-500 text-lg"></i>
                                 <div>
-                                    <h3 class="font-bold text-white text-sm sm:text-base">Galeria de Registros & Comparativos</h3>
-                                    <p class="text-[11px] text-slate-400">Anexe imagens da sua vila para comparar a evolução ao longo do tempo</p>
+                                    <h3 class="font-bold text-white text-sm sm:text-base">Galeria de Registros da Vila</h3>
+                                    <p class="text-[11px] text-slate-400">Anexe capturas de tela para comparar o layout e evolução ao longo do tempo</p>
                                 </div>
                             </div>
                             <button onclick="document.getElementById('villageGalleryInput').click()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs flex items-center gap-2 transition-all shadow-md shadow-amber-500/10">
@@ -253,10 +227,10 @@
                         <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </div>
 
-                    <!-- Métricas Globais da Vila Principal -->
+                    <!-- Métricas Globais da Vila -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Vila (Progresso Global)</span>
+                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Progresso Global da Vila</span>
                             <div class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mt-1" id="totalProgressPercent">0%</div>
                             <div class="w-full bg-slate-900/80 rounded-full h-2 mt-3 border border-slate-800 overflow-hidden shadow-inner">
                                 <div id="totalProgressBar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
@@ -265,45 +239,45 @@
                         <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
                             <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Upgrades Pendentes</span>
                             <div class="text-2xl sm:text-3xl font-black text-white mt-1" id="remainingUpgradesCount">0</div>
-                            <span class="text-[10px] text-slate-500 font-medium">melhorias na vila</span>
+                            <span class="text-[10px] text-slate-500 font-medium">melhorias restantes</span>
                         </div>
                         <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between">
                             <div>
-                                <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Setor Mais Atrasado</span>
+                                <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Foco Prioritário</span>
                                 <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
                             </div>
-                            <span class="text-[10px] text-slate-500 font-medium mt-2">foco recomendado</span>
+                            <span class="text-[10px] text-slate-500 font-medium mt-2">setor mais atrasado</span>
                         </div>
                         <div class="glass-panel p-4 rounded-2xl border-dashed border-2 border-slate-700/50 hover:border-amber-500/50 hover:bg-amber-500/5 transition-all duration-300 flex flex-col items-center justify-center text-center cursor-pointer group" onclick="openAddItemModal()">
                             <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-900 transition-colors mb-2 shadow-lg">
                                 <i class="fa-solid fa-plus"></i>
                             </div>
-                            <span class="text-xs font-bold text-slate-300 group-hover:text-amber-400 transition-colors">Criar Novo Item</span>
+                            <span class="text-xs font-bold text-slate-300 group-hover:text-amber-400 transition-colors">Adicionar Item</span>
                         </div>
                     </div>
 
                     <!-- LAYOUT EM COLUNAS: VILA PRINCIPAL | FERREIRO -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                        <!-- Coluna 1: Vila Principal (Métricas Globais) -->
+                        <!-- Coluna 1: Vila Principal -->
                         <div id="villageMainColumn" class="lg:col-span-7 space-y-6">
                             <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                                 <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                    <i class="fa-solid fa-castle"></i> Progresso da Vila Principal
+                                    <i class="fa-solid fa-hammer"></i> Estruturas & Laboratório
                                 </h3>
                             </div>
                             <div id="villageCategoriesContainer" class="space-y-6"></div>
                         </div>
 
-                        <!-- Coluna 2: Equipamentos (Ferreiro - Progresso Isolado) -->
+                        <!-- Coluna 2: Equipamentos (Ferreiro) -->
                         <div id="equipmentsColumn" class="lg:col-span-5 space-y-6">
                             <div class="glass-panel p-4 rounded-2xl border border-amber-500/30">
                                 <div class="flex items-center justify-between mb-2">
                                     <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                        <i class="fa-solid fa-hammer text-amber-500"></i> Ferreiro (Equipamentos)
+                                        <i class="fa-solid fa-shield-cat text-amber-500"></i> Equipamentos dos Heróis
                                     </h3>
                                     <span id="equipPercentBadge" class="text-xs font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded border border-amber-500/30">0%</span>
                                 </div>
-                                <p class="text-[11px] text-slate-400 mb-3">Defina se possui cada equipamento (incluindo Épicos). Os equipamentos não alteram a porcentagem global da vila.</p>
+                                <p class="text-[11px] text-slate-400 mb-3">Ative ou desative equipamentos épicos de acordo com a sua conta para ajustar o cálculo.</p>
                                 <div class="w-full bg-slate-900/80 rounded-full h-2 border border-slate-800 overflow-hidden shadow-inner">
                                     <div id="equipProgressBar" class="bg-gradient-to-r from-amber-400 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                                 </div>
@@ -312,39 +286,62 @@
                         </div>
                     </div>
 
-                </div>
-
-                <!-- EDITOR DE ANOTAÇÕES -->
-                <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-slate-900/50">
-                    <div class="glass-panel border-b-0 border-slate-800/50 p-2 flex flex-wrap items-center gap-1.5 text-slate-300 overflow-x-auto rounded-b-xl mx-4 sm:mx-8 mt-4 shadow-lg z-10">
-                        <button onclick="execCmd('bold')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm font-bold w-9 h-9 transition-colors">B</button>
-                        <button onclick="execCmd('italic')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm italic w-9 h-9 transition-colors">I</button>
-                        <button onclick="execCmd('underline')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm underline w-9 h-9 transition-colors">U</button>
-                        <div class="h-5 w-px bg-slate-700 mx-1"></div>
-                        <button onclick="execCmd('insertUnorderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ul"></i></button>
-                        <button onclick="execCmd('insertOrderedList')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm w-9 h-9 transition-colors"><i class="fa-solid fa-list-ol"></i></button>
-                        <div class="h-5 w-px bg-slate-700 mx-1"></div>
-                        <button onclick="execCmd('formatBlock', 'H1')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs font-bold transition-colors">Título</button>
-                        <button onclick="execCmd('formatBlock', 'P')" class="px-3 py-1.5 hover:bg-slate-700/50 hover:text-white rounded-lg text-xs transition-colors">Texto</button>
-                        <div class="h-5 w-px bg-slate-700 mx-1"></div>
-                        <button onclick="execCmd('foreColor', '#ef4444')" title="Vermelho" class="p-2 hover:bg-slate-700/50 rounded-lg text-red-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
-                        <button onclick="execCmd('foreColor', '#f59e0b')" title="Amarelo" class="p-2 hover:bg-slate-700/50 rounded-lg text-amber-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
-                        <button onclick="execCmd('foreColor', '#10b981')" title="Verde" class="p-2 hover:bg-slate-700/50 rounded-lg text-emerald-400 font-bold text-sm w-9 h-9 transition-colors">A</button>
+                    <!-- Botão Final: Concluir Melhorias e Ir para o Próximo CV -->
+                    <div class="pt-6 pb-12 flex justify-center">
+                        <button onclick="advanceToNextTownHall()" class="w-full max-w-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-base sm:text-lg py-5 px-8 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 border border-emerald-400/50">
+                            <i class="fa-solid fa-circle-check text-2xl"></i>
+                            <span>Melhorias Concluídas! Ir para o Próximo CV</span>
+                            <i class="fa-solid fa-arrow-right text-xl"></i>
+                        </button>
                     </div>
 
-                    <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center pb-20">
-                        <div class="w-full max-w-4xl glass-panel rounded-2xl p-6 sm:p-10 min-h-[600px] shadow-2xl flex flex-col border border-slate-700/30">
-                            <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento..." class="bg-transparent text-2xl sm:text-3xl font-black text-white mb-6 focus:outline-none border-b border-slate-700 pb-3 placeholder-slate-600 transition-colors focus:border-amber-500">
-                            <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Comece a registrar suas estratégias e ideias aqui..." class="flex-1 text-slate-300 text-sm sm:text-base leading-relaxed focus:outline-none prose prose-invert prose-amber max-w-none"></div>
-                        </div>
-                    </div>
                 </div>
 
             </main>
         </div>
     </div>
 
-    <!-- Modal Adicionar Item -->
+    <!-- Modal Adicionar Conta Secundária -->
+    <div id="addAccountModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center z-50 p-4 transition-opacity">
+        <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-700 w-full max-w-md shadow-2xl">
+            <div class="flex items-center gap-3 mb-5">
+                <div class="bg-amber-500/20 text-amber-500 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white tracking-tight">Adicionar Conta / Vila</h3>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome da Conta / Apelido</label>
+                    <input type="text" id="newAccName" placeholder="Ex: Mini Biel, Conta Guerra..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">TAG do Jogador</label>
+                    <input type="text" id="newAccTag" placeholder="#TAG12345" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 uppercase">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Centro de Vila Atual</label>
+                    <select id="newAccCV" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-amber-400 font-bold focus:outline-none focus:border-amber-500">
+                        <option value="18">CV 18</option>
+                        <option value="17">CV 17</option>
+                        <option value="16">CV 16</option>
+                        <option value="15">CV 15</option>
+                        <option value="14">CV 14</option>
+                        <option value="13">CV 13</option>
+                        <option value="12">CV 12</option>
+                        <option value="11" selected>CV 11</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-8">
+                <button onclick="closeAddAccountModal()" class="px-5 py-2.5 bg-slate-800 text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors">Cancelar</button>
+                <button onclick="confirmAddAccount()" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-sm font-bold rounded-lg hover:from-amber-400 hover:to-orange-400 shadow-lg shadow-amber-500/20 transition-all">Cadastrar Vila</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Item Customizado -->
     <div id="addItemModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center z-50 p-4 transition-opacity">
         <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-700 w-full max-w-md shadow-2xl">
             <div class="flex items-center gap-3 mb-5">
@@ -358,7 +355,7 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Categoria</label>
                     <select id="newItemCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                        <option value="Heróis & Equipamentos">Heróis (Base)</option>
+                        <option value="Heróis & Equipamentos">Heróis (Nível Base)</option>
                         <option value="Equipamentos (Ferreiro)">Equipamentos (Ferreiro)</option>
                         <option value="Laboratório">Laboratório</option>
                         <option value="Máquinas de Cerco">Máquinas de Cerco</option>
@@ -396,139 +393,160 @@
         </div>
     </div>
 
-    <!-- Script Principal -->
+    <!-- Script de Lógica do Sistema -->
     <script>
         const DEV_USER = "Gabriel Santos";
 
+        // Mapeamento das especificações do CV11 (com o Príncipe Servo, Equipamentos e níveis máximos de CV11)
+        function getCV11Data() {
+            return [
+                // --- HERÓIS BASE (CV11 MAX: Rei 50, Rainha 50, Guardião 20, Príncipe Servo 20) ---
+                { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 50, max: 50 },
+                { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 50, max: 50 },
+                { category: 'Heróis & Equipamentos', name: 'Príncipe Servo', current: 20, max: 20 },
+                { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 20, max: 20 },
+
+                // --- EQUIPAMENTOS (FERREIRO) ---
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Boneco de Bárbaro', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Frasco de Fúria', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bota Terremoto', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bigode de Vampiro', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Manopla Agigantadora', current: 15, max: 15, owned: true, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bola de Espinhos', current: 15, max: 15, owned: true, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Amuleto Ofídico', current: 15, max: 15, owned: true, epic: true },
+                
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Arqueira', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Frasco de Invisibilidade', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Gigante', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Curadora', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Congelante', current: 15, max: 15, owned: true, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 15, max: 15, owned: true, epic: true },
+
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Boneco de Capanga', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Orbe Sombrio', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Coroa Sombria', current: 15, max: 15, owned: true, epic: true },
+
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tomo Eterno', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema da Vida', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema de Fúria', current: 12, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Bola de Fogo', current: 15, max: 15, owned: true, epic: true },
+
+                // --- LABORATÓRIO (CV11) ---
+                { category: 'Laboratório', name: 'Bárbaro', current: 8, max: 8 },
+                { category: 'Laboratório', name: 'Arqueira', current: 8, max: 8 },
+                { category: 'Laboratório', name: 'Gigante', current: 8, max: 8 },
+                { category: 'Laboratório', name: 'Goblin', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Quebra-muros', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Balão', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Mago', current: 8, max: 8 },
+                { category: 'Laboratório', name: 'Curadora', current: 5, max: 5 },
+                { category: 'Laboratório', name: 'Dragão', current: 6, max: 6 },
+                { category: 'Laboratório', name: 'P.E.K.K.A', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Bebê Dragão', current: 5, max: 5 },
+                { category: 'Laboratório', name: 'Mineiro', current: 5, max: 5 },
+                { category: 'Laboratório', name: 'Dragão Elétrico', current: 2, max: 2 },
+
+                { category: 'Laboratório', name: 'Servo', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Corredor', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Valquíria', current: 6, max: 6 },
+                { category: 'Laboratório', name: 'Golem', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Bruxa', current: 4, max: 4 },
+                { category: 'Laboratório', name: 'Lava Hound', current: 4, max: 4 },
+                { category: 'Laboratório', name: 'Lançador', current: 3, max: 3 },
+                { category: 'Laboratório', name: 'Golem de Gelo', current: 3, max: 3 },
+
+                { category: 'Laboratório', name: 'Feitiço de Raio', current: 8, max: 8 },
+                { category: 'Laboratório', name: 'Feitiço de Cura', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Feitiço de Fúria', current: 5, max: 5 },
+                { category: 'Laboratório', name: 'Feitiço de Salto', current: 3, max: 3 },
+                { category: 'Laboratório', name: 'Feitiço de Gelo', current: 7, max: 7 },
+                { category: 'Laboratório', name: 'Feitiço de Clone', current: 4, max: 4 },
+                { category: 'Laboratório', name: 'Feitiço de Veneno', current: 5, max: 5 },
+                { category: 'Laboratório', name: 'Feitiço de Terremoto', current: 5, max: 5 },
+                { category: 'Laboratório', name: 'Feitiço de Aceleração', current: 5, max: 5 },
+                { category: 'Laboratório', name: 'Feitiço de Esqueletos', current: 4, max: 4 },
+                { category: 'Laboratório', name: 'Feitiço de Morcego', current: 4, max: 4 },
+
+                // --- DEFESAS (CV11) ---
+                { category: 'Defesas', name: 'Canhão (x7)', current: 15, max: 15 },
+                { category: 'Defesas', name: 'Torre Arqueira (x8)', current: 15, max: 15 },
+                { category: 'Defesas', name: 'Torre do Mago (x5)', current: 10, max: 10 },
+                { category: 'Defesas', name: 'Defesa Aérea (x4)', current: 9, max: 9 },
+                { category: 'Defesas', name: 'Morteiro (x4)', current: 10, max: 10 },
+                { category: 'Defesas', name: 'Tesla Oculta (x5)', current: 9, max: 9 },
+                { category: 'Defesas', name: 'X-Besta (x4)', current: 5, max: 5 },
+                { category: 'Defesas', name: 'Torre Inferno (x2)', current: 5, max: 5 },
+                { category: 'Defesas', name: 'Dispersor Aéreo (x2)', current: 7, max: 7 },
+                { category: 'Defesas', name: 'Artilharia Águia (x1)', current: 2, max: 2 },
+
+                // --- MUROS & ARMADILHAS ---
+                { category: 'Muros', name: 'Segmento de Muros (x300)', current: 12, max: 12 },
+                { category: 'Armadilhas', name: 'Bomba (x6)', current: 7, max: 7 },
+                { category: 'Armadilhas', name: 'Armadilha de Mola (x6)', current: 6, max: 6 },
+                { category: 'Armadilhas', name: 'Bomba Aérea (x5)', current: 5, max: 5 },
+                { category: 'Armadilhas', name: 'Bomba Gigante (x5)', current: 5, max: 5 },
+                { category: 'Armadilhas', name: 'Mina Aérea Guiada (x5)', current: 3, max: 3 },
+                { category: 'Armadilhas', name: 'Armadilha de Esqueleto (x3)', current: 4, max: 4 },
+                { category: 'Armadilhas', name: 'Tornado Arapuca (x1)', current: 2, max: 2 },
+
+                // --- RECURSOS & AUXILIARES ---
+                { category: 'Recursos & Auxiliares', name: 'Castelo do Clã', current: 7, max: 7 },
+                { category: 'Recursos & Auxiliares', name: 'Coletor de Elixir (x7)', current: 14, max: 14 },
+                { category: 'Recursos & Auxiliares', name: 'Depósito de Elixir (x4)', current: 12, max: 12 },
+                { category: 'Recursos & Auxiliares', name: 'Mina de Ouro (x7)', current: 14, max: 14 },
+                { category: 'Recursos & Auxiliares', name: 'Depósito de Ouro (x4)', current: 12, max: 12 },
+                { category: 'Recursos & Auxiliares', name: 'Broca de Elixir Negro (x3)', current: 7, max: 7 },
+                { category: 'Recursos & Auxiliares', name: 'Depósito de Elixir Negro (x1)', current: 6, max: 6 }
+            ];
+        }
+
         function getCV12Data() {
             return [
-                // --- HERÓIS BASE ---
                 { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 65, max: 65 },
                 { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 65, max: 65 },
                 { category: 'Heróis & Equipamentos', name: 'Príncipe Servo', current: 40, max: 40 },
                 { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 40, max: 40 },
 
-                // --- EQUIPAMENTOS (FERREIRO - NÍVEL 5) ---
-                // Rei Bárbaro
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Boneco de Bárbaro', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Frasco de Fúria', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bota Terremoto', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bigode de Vampiro', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Manopla Agigantadora', current: 18, max: 18, owned: true, epic: true },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bola de Espinhos', current: 18, max: 18, owned: true, epic: true },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Amuleto Ofídico', current: 18, max: 18, owned: true, epic: true },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Cavalo de Pau', current: 18, max: 18, owned: true, epic: true },
                 
-                // Rainha Arqueira
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Arqueira', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Frasco de Invisibilidade', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Gigante', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Curadora', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Congelante', current: 18, max: 18, owned: true, epic: true },
                 { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 18, max: 18, owned: true, epic: true },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco Gigante', current: 18, max: 18, owned: true, epic: true },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Monolítica', current: 18, max: 18, owned: true, epic: true },
-                
-                // Príncipe Servo
+
                 { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Boneco de Capanga', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Orbe Sombrio', current: 15, max: 15, owned: true, epic: false },
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Calça de Metal', current: 15, max: 15, owned: true, epic: false },
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Ferro Nobre', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Coroa Sombria', current: 18, max: 18, owned: true, epic: true },
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Bastão de Meteoros', current: 18, max: 18, owned: true, epic: true },
-                
-                // Grande Guardião
+
                 { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tomo Eterno', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema da Vida', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema de Fúria', current: 15, max: 15, owned: true, epic: false },
                 { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Bola de Fogo', current: 18, max: 18, owned: true, epic: true },
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Boneco de Lavalão', current: 18, max: 18, owned: true, epic: true },
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tocha Heroica', current: 18, max: 18, owned: true, epic: true },
 
-                // --- LABORATÓRIO (TROPAS DE ELIXIR) ---
                 { category: 'Laboratório', name: 'Bárbaro', current: 9, max: 9 },
                 { category: 'Laboratório', name: 'Arqueira', current: 9, max: 9 },
                 { category: 'Laboratório', name: 'Gigante', current: 9, max: 9 },
-                { category: 'Laboratório', name: 'Goblin', current: 8, max: 8 },
-                { category: 'Laboratório', name: 'Quebra-muros', current: 8, max: 8 },
-                { category: 'Laboratório', name: 'Balão', current: 8, max: 8 },
                 { category: 'Laboratório', name: 'Mago', current: 9, max: 9 },
-                { category: 'Laboratório', name: 'Curadora', current: 5, max: 5 },
                 { category: 'Laboratório', name: 'Dragão', current: 7, max: 7 },
                 { category: 'Laboratório', name: 'P.E.K.K.A', current: 8, max: 8 },
-                { category: 'Laboratório', name: 'Bebê Dragão', current: 6, max: 6 },
-                { category: 'Laboratório', name: 'Mineiro', current: 6, max: 6 },
-                { category: 'Laboratório', name: 'Dragão Elétrico', current: 3, max: 3 },
-                { category: 'Laboratório', name: 'Yeti', current: 2, max: 2 },
 
-                // --- LABORATÓRIO (TROPAS DE ELIXIR NEGRO) ---
-                { category: 'Laboratório', name: 'Servo', current: 8, max: 8 },
-                { category: 'Laboratório', name: 'Corredor', current: 9, max: 9 },
-                { category: 'Laboratório', name: 'Valquíria', current: 7, max: 7 },
-                { category: 'Laboratório', name: 'Golem', current: 9, max: 9 },
-                { category: 'Laboratório', name: 'Bruxa', current: 5, max: 5 },
-                { category: 'Laboratório', name: 'Lava Hound', current: 5, max: 5 },
-                { category: 'Laboratório', name: 'Lançador', current: 4, max: 4 },
-                { category: 'Laboratório', name: 'Golem de Gelo', current: 5, max: 5 },
-                { category: 'Laboratório', name: 'Caçadora de Heróis', current: 2, max: 2 },
-
-                // --- LABORATÓRIO (FEITIÇOS DE ELIXIR) ---
-                { category: 'Laboratório', name: 'Feitiço de Raio', current: 9, max: 9 },
-                { category: 'Laboratório', name: 'Feitiço de Cura', current: 7, max: 7 },
-                { category: 'Laboratório', name: 'Feitiço de Fúria', current: 6, max: 6 },
-                { category: 'Laboratório', name: 'Feitiço de Salto', current: 3, max: 3 },
-                { category: 'Laboratório', name: 'Feitiço de Gelo', current: 7, max: 7 },
-                { category: 'Laboratório', name: 'Feitiço de Clone', current: 5, max: 5 },
-                { category: 'Laboratório', name: 'Feitiço de Invisibilidade', current: 3, max: 3 },
-
-                // --- LABORATÓRIO (FEITIÇOS DE ELIXIR NEGRO) ---
-                { category: 'Laboratório', name: 'Feitiço de Veneno', current: 6, max: 6 },
-                { category: 'Laboratório', name: 'Feitiço de Terremoto', current: 5, max: 5 },
-                { category: 'Laboratório', name: 'Feitiço de Aceleração', current: 5, max: 5 },
-                { category: 'Laboratório', name: 'Feitiço de Esqueletos', current: 6, max: 6 },
-                { category: 'Laboratório', name: 'Feitiço de Morcego', current: 5, max: 5 },
-                { category: 'Laboratório', name: 'Feitiço de Raízes', current: 2, max: 2 },
-
-                // --- MÁQUINAS DE CERCO ---
-                { category: 'Máquinas de Cerco', name: 'Quebra-muros de Cerco', current: 4, max: 4 },
-                { category: 'Máquinas de Cerco', name: 'Dirigível Bélico', current: 4, max: 4 },
-                { category: 'Máquinas de Cerco', name: 'Quebradora de Pedras', current: 4, max: 4 },
-
-                // --- DEFESAS ---
-                { category: 'Defesas', name: 'Cabana do Construtor (x5)', current: 1, max: 1 },
                 { category: 'Defesas', name: 'Canhão (x7)', current: 17, max: 17 },
                 { category: 'Defesas', name: 'Torre Arqueira (x8)', current: 17, max: 17 },
                 { category: 'Defesas', name: 'Torre do Mago (x5)', current: 11, max: 11 },
                 { category: 'Defesas', name: 'Defesa Aérea (x4)', current: 10, max: 10 },
-                { category: 'Defesas', name: 'Morteiro (x4)', current: 12, max: 12 },
-                { category: 'Defesas', name: 'Tesla Oculta (x5)', current: 10, max: 10 },
                 { category: 'Defesas', name: 'X-Besta (x4)', current: 6, max: 6 },
                 { category: 'Defesas', name: 'Torre Inferno (x3)', current: 6, max: 6 },
-                { category: 'Defesas', name: 'Dispersor Aéreo (x2)', current: 7, max: 7 },
                 { category: 'Defesas', name: 'Artilharia Águia (x1)', current: 3, max: 3 },
-                { category: 'Defesas', name: 'Torre de Bombas (x2)', current: 7, max: 7 },
 
-                // --- MUROS & ARMADILHAS ---
                 { category: 'Muros', name: 'Segmento de Muros (x300)', current: 13, max: 13 },
-                { category: 'Armadilhas', name: 'Bomba (x6)', current: 8, max: 8 },
-                { category: 'Armadilhas', name: 'Armadilha de Mola (x8)', current: 7, max: 7 },
-                { category: 'Armadilhas', name: 'Bomba Aérea (x6)', current: 6, max: 6 },
-                { category: 'Armadilhas', name: 'Bomba Gigante (x6)', current: 5, max: 5 },
-                { category: 'Armadilhas', name: 'Mina Aérea Guiada (x6)', current: 3, max: 3 },
-                { category: 'Armadilhas', name: 'Armadilha de Esqueleto (x3)', current: 4, max: 4 },
-                { category: 'Armadilhas', name: 'Tornado Arapuca (x1)', current: 3, max: 3 },
-
-                // --- RECURSOS & AUXILIARES ---
-                { category: 'Recursos & Auxiliares', name: 'Castelo do Clã', current: 8, max: 8 },
-                { category: 'Recursos & Auxiliares', name: 'Coletor de Elixir (x7)', current: 15, max: 15 },
-                { category: 'Recursos & Auxiliares', name: 'Depósito de Elixir (x4)', current: 13, max: 13 },
-                { category: 'Recursos & Auxiliares', name: 'Mina de Ouro (x7)', current: 15, max: 15 },
-                { category: 'Recursos & Auxiliares', name: 'Depósito de Ouro (x4)', current: 13, max: 13 },
-                { category: 'Recursos & Auxiliares', name: 'Broca de Elixir Negro (x3)', current: 9, max: 9 },
-                { category: 'Recursos & Auxiliares', name: 'Depósito de Elixir Negro (x1)', current: 7, max: 7 },
-                { category: 'Recursos & Auxiliares', name: 'Assistente de Laboratório', current: 6, max: 6 },
-                { category: 'Recursos & Auxiliares', name: 'Aprendiz de Construtor', current: 6, max: 6 },
-                { category: 'Recursos & Auxiliares', name: 'Alquimista', current: 2, max: 2 }
+                { category: 'Recursos & Auxiliares', name: 'Castelo do Clã', current: 8, max: 8 }
             ];
         }
 
@@ -539,21 +557,14 @@
             userHandle: "@bielzinho",
             playerTag: "#LUU9VYJLP",
             avatarUrl: null,
-            activeTab: 'tracker',
-            activeTownHall: '12',
-            activeDocId: 'default_doc',
+            activeAccountIndex: 0,
             isDevMode: true,
             viewAsPlayer: false,
-            showEquipments: true,
-            folders: [
-                { id: 'f_cv12', name: 'Centro de Vila 12' }
+            // Lista de Contas Secundárias (Limite de 7)
+            accounts: [
+                { id: 'acc_1', name: 'Vila Principal', tag: '#LUU9VYJLP', townHall: '11' }
             ],
-            documents: [
-                { id: 'default_doc', folderId: 'f_cv12', title: 'Prioridades CV12', content: '<h2><strong>Estratégia Inicial CV12</strong></h2><p>Vila 100% otimizada no nível de Centro de Vila 12 com heróis, equipamentos e defesas atualizados.</p>' }
-            ],
-            trackers: {
-                main_12: getCV12Data()
-            },
+            trackers: {},
             galleries: {}
         };
 
@@ -570,11 +581,11 @@
         }
 
         function saveAllData() {
-            localStorage.setItem('clash_organizer_unified_v1', JSON.stringify(appData));
+            localStorage.setItem('clash_organizer_v2_data', JSON.stringify(appData));
         }
 
         function loadSavedData() {
-            const saved = localStorage.getItem('clash_organizer_unified_v1');
+            const saved = localStorage.getItem('clash_organizer_v2_data');
             if (saved) {
                 try { appData = { ...appData, ...JSON.parse(saved) }; } catch(e) {}
             }
@@ -627,9 +638,18 @@
                 appData.currentUser = name;
                 appData.userHandle = handle.startsWith('@') ? handle : `@${handle}`;
                 appData.playerTag = tag.startsWith('#') ? tag.toUpperCase() : `#${tag.toUpperCase()}`;
-                appData.activeTownHall = initialTH;
                 if (tempAvatarData) appData.avatarUrl = tempAvatarData;
                 
+                // Define a primeira conta
+                if (!appData.accounts || appData.accounts.length === 0) {
+                    appData.accounts = [{ id: 'acc_1', name: name, tag: appData.playerTag, townHall: initialTH }];
+                } else {
+                    appData.accounts[0].name = name;
+                    appData.accounts[0].tag = appData.playerTag;
+                    appData.accounts[0].townHall = initialTH;
+                }
+
+                appData.activeAccountIndex = 0;
                 saveAllData();
                 showApp();
             }
@@ -662,19 +682,14 @@
             document.getElementById('displayTag').innerText = appData.playerTag || '#TAG';
             renderAvatar();
 
-            document.getElementById('townHallSelect').value = appData.activeTownHall;
-            document.getElementById('sidebarAccountSelect').value = appData.activeTownHall;
-
             if (appData.currentUser === DEV_USER) {
                 document.getElementById('devBanner').classList.remove('hidden');
             } else {
                 document.getElementById('devBanner').classList.add('hidden');
             }
 
-            renderFolderTree();
+            renderAccountsList();
             renderTracker();
-            loadDocumentIntoEditor();
-            switchTab(appData.activeTab || 'tracker');
         }
 
         function toggleViewMode() {
@@ -685,279 +700,153 @@
                 statusBadge.innerText = "Modo Jogador";
                 statusBadge.className = "bg-amber-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase";
             } else {
-                statusBadge.innerText = "Dev Access";
+                statusBadge.innerText = "ADM Access";
                 statusBadge.className = "bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase";
             }
             renderTracker();
         }
 
-        function switchVillageFromSidebar() {
-            const selectedCV = document.getElementById('sidebarAccountSelect').value;
-            appData.activeTownHall = selectedCV;
-            document.getElementById('townHallSelect').value = selectedCV;
-            renderTracker();
-        }
-
-        function switchTab(tab) {
-            appData.activeTab = tab;
-            const trackerBtn = document.getElementById('tabTrackerBtn');
-            const editorBtn = document.getElementById('tabEditorBtn');
-            const trackerSec = document.getElementById('trackerSection');
-            const editorSec = document.getElementById('editorSection');
-
-            const activeClass = 'px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md';
-            const inactiveClass = 'px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50';
-
-            if (tab === 'tracker') {
-                trackerBtn.className = activeClass;
-                editorBtn.className = inactiveClass;
-                trackerSec.classList.remove('hidden');
-                editorSec.classList.add('hidden');
-                editorSec.classList.remove('flex');
-            } else {
-                editorBtn.className = activeClass;
-                trackerBtn.className = inactiveClass;
-                editorSec.classList.remove('hidden');
-                editorSec.classList.add('flex');
-                trackerSec.classList.add('hidden');
-            }
-            saveAllData();
-        }
-
-        function renderFolderTree() {
-            const container = document.getElementById('folderTree');
+        // --- GERENCIAMENTO DE CONTAS SECUNDÁRIAS (LIMITE DE 7) ---
+        function renderAccountsList() {
+            const container = document.getElementById('accountsListContainer');
             container.innerHTML = '';
 
-            appData.folders.forEach(folder => {
-                const folderDiv = document.createElement('div');
-                folderDiv.className = 'space-y-1 mb-2';
-                const docsInFolder = appData.documents.filter(d => d.folderId === folder.id);
+            appData.accounts.forEach((acc, index) => {
+                const isActive = appData.activeAccountIndex === index;
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${isActive ? 'bg-amber-500/10 border-amber-500/50 text-white shadow-lg' : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:bg-slate-800/50'}`;
+                card.onclick = () => selectAccount(index);
 
-                folderDiv.innerHTML = `
-                    <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-500 p-2 hover:bg-slate-800/50 rounded-lg group cursor-pointer transition-colors">
-                        <span class="flex items-center gap-2 truncate">
-                            <i class="fa-solid fa-folder-open text-amber-500/70"></i> ${folder.name}
-                        </span>
-                        <button onclick="createNewPage('${folder.id}')" title="Nova Nota" class="text-slate-500 hover:text-amber-400 opacity-0 group-hover:opacity-100 transition-all p-1">
-                            <i class="fa-solid fa-plus"></i>
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-8 h-8 rounded-lg ${isActive ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'} flex items-center justify-center text-xs font-bold flex-shrink-0">
+                            CV${acc.townHall}
+                        </div>
+                        <div class="truncate">
+                            <h5 class="text-xs font-bold text-white truncate">${acc.name}</h5>
+                            <span class="text-[10px] text-slate-500 font-mono">${acc.tag}</span>
+                        </div>
+                    </div>
+                    ${appData.accounts.length > 1 ? `
+                        <button onclick="deleteAccount(event, ${index})" title="Remover Conta" class="text-slate-600 hover:text-red-400 text-xs p-1.5 rounded hover:bg-slate-800 transition-colors">
+                            <i class="fa-solid fa-trash-can"></i>
                         </button>
-                    </div>
-                    <div class="pl-2 space-y-1">
-                        ${docsInFolder.map(doc => `
-                            <div onclick="selectDocument('${doc.id}')" class="flex items-center justify-between text-xs p-2 rounded-lg cursor-pointer transition-all ${appData.activeDocId === doc.id ? 'bg-amber-500/10 text-amber-400 font-semibold border-l-2 border-amber-500 shadow-inner' : 'text-slate-300 hover:bg-slate-800/50'}">
-                                <span class="truncate flex items-center gap-2">
-                                    <i class="fa-regular fa-file-lines ${appData.activeDocId === doc.id ? 'text-amber-400' : 'text-slate-500'}"></i> ${doc.title || 'Sem título'}
-                                </span>
-                                <button onclick="deleteDocument(event, '${doc.id}')" class="text-slate-600 hover:text-red-400 text-[10px] p-1 rounded hover:bg-slate-700 transition-colors">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        `).join('')}
-                    </div>
+                    ` : ''}
                 `;
-                container.appendChild(folderDiv);
+                container.appendChild(card);
             });
         }
 
-        function createNewFolder() {
-            const name = prompt("Nome da Nova Pasta:");
-            if (name) {
-                appData.folders.push({ id: 'f_' + Date.now(), name: name });
-                saveAllData();
-                renderFolderTree();
-            }
-        }
-
-        function createNewPage(folderId = null) {
-            const targetFolder = folderId || (appData.folders[0] ? appData.folders[0].id : null);
-            if (!targetFolder) return alert("Crie uma pasta primeiro!");
-            
-            const newDoc = {
-                id: 'doc_' + Date.now(),
-                folderId: targetFolder,
-                title: 'Nova Nota',
-                content: '<p>Escreva suas anotações aqui...</p>'
-            };
-            appData.documents.push(newDoc);
-            appData.activeDocId = newDoc.id;
-            saveAllData();
-            renderFolderTree();
-            loadDocumentIntoEditor();
-            switchTab('editor');
-            if (window.innerWidth < 768) toggleSidebar();
-        }
-
-        function selectDocument(docId) {
-            appData.activeDocId = docId;
-            saveAllData();
-            renderFolderTree();
-            loadDocumentIntoEditor();
-            switchTab('editor');
-            if (window.innerWidth < 768) toggleSidebar();
-        }
-
-        function deleteDocument(e, docId) {
-            e.stopPropagation();
-            if (confirm("Excluir nota?")) {
-                appData.documents = appData.documents.filter(d => d.id !== docId);
-                if (appData.activeDocId === docId) {
-                    appData.activeDocId = appData.documents[0] ? appData.documents[0].id : null;
-                }
-                saveAllData();
-                renderFolderTree();
-                loadDocumentIntoEditor();
-            }
-        }
-
-        function loadDocumentIntoEditor() {
-            const currentDoc = appData.documents.find(d => d.id === appData.activeDocId);
-            const breadcrumb = document.getElementById('currentBreadcrumb');
-            if (currentDoc) {
-                document.getElementById('documentTitle').value = currentDoc.title;
-                document.getElementById('wordEditor').innerHTML = currentDoc.content;
-                breadcrumb.innerHTML = `<i class="fa-solid fa-folder text-amber-500"></i> Anotações / <span class="text-white font-semibold">${currentDoc.title}</span>`;
-            } else {
-                document.getElementById('documentTitle').value = '';
-                document.getElementById('wordEditor').innerHTML = '';
-                breadcrumb.innerHTML = `<i class="fa-solid fa-folder text-amber-500"></i> Anotações / <span class="text-white font-semibold">Nenhum</span>`;
-            }
-        }
-
-        function saveCurrentDocument() {
-            const currentDoc = appData.documents.find(d => d.id === appData.activeDocId);
-            if (currentDoc) {
-                currentDoc.title = document.getElementById('documentTitle').value;
-                currentDoc.content = document.getElementById('wordEditor').innerHTML;
-                saveAllData();
-                renderFolderTree();
-            }
-        }
-
-        function execCmd(command, value = null) {
-            document.execCommand(command, false, value);
-            saveCurrentDocument();
-        }
-
-        function getTrackerKey() {
-            return `main_${appData.activeTownHall}`;
-        }
-
-        function handleGalleryUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const now = new Date();
-                const timestampStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
-                const thKey = appData.activeTownHall;
-
-                if (!appData.galleries) appData.galleries = {};
-                if (!appData.galleries[thKey]) appData.galleries[thKey] = [];
-
-                appData.galleries[thKey].unshift({
-                    id: 'img_' + Date.now(),
-                    url: e.target.result,
-                    timestamp: timestampStr
-                });
-
-                saveAllData();
-                renderGallery();
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function renderGallery() {
-            const thKey = appData.activeTownHall;
-            const container = document.getElementById('galleryContainer');
-            const list = (appData.galleries && appData.galleries[thKey]) ? appData.galleries[thKey] : [];
-
-            if (list.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full py-8 text-center text-slate-500 text-xs font-medium bg-slate-900/40 rounded-xl border border-dashed border-slate-800">
-                        <i class="fa-solid fa-images text-2xl mb-2 text-slate-600"></i>
-                        <p>Nenhum registro da vila anexado para este Centro de Vila.</p>
-                    </div>
-                `;
+        function openAddAccountModal() {
+            if (appData.accounts.length >= 7) {
+                alert("Você já atingiu o limite máximo de 7 contas cadastradas!");
                 return;
             }
-
-            container.innerHTML = list.map((item) => `
-                <div class="relative group glass-panel rounded-xl overflow-hidden border border-slate-700/50 shadow-md">
-                    <img src="${item.url}" class="w-full h-44 object-cover">
-                    <div class="p-2 bg-slate-950/90 flex justify-between items-center text-[10px] text-slate-400">
-                        <span class="flex items-center gap-1 font-mono text-amber-400/90">
-                            <i class="fa-solid fa-clock"></i> ${item.timestamp}
-                        </span>
-                        <button onclick="deleteGalleryItem('${item.id}')" title="Excluir Registro" class="text-slate-500 hover:text-red-400 p-1 transition-colors">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+            document.getElementById('addAccountModal').classList.remove('hidden');
+            document.getElementById('addAccountModal').classList.add('flex');
         }
 
-        function deleteGalleryItem(imgId) {
-            const thKey = appData.activeTownHall;
-            if (confirm("Remover esta imagem da galeria?")) {
-                appData.galleries[thKey] = appData.galleries[thKey].filter(i => i.id !== imgId);
-                saveAllData();
-                renderGallery();
-            }
+        function closeAddAccountModal() {
+            document.getElementById('addAccountModal').classList.add('hidden');
+            document.getElementById('addAccountModal').classList.remove('flex');
         }
 
-        function resetTrackerData() {
-            const key = getTrackerKey();
-            if (confirm(`Deseja resetar os dados do nível selecionado (${key}) para os valores padrão?`)) {
-                if (key === 'main_12') {
-                    appData.trackers[key] = getCV12Data();
-                } else {
-                    appData.trackers[key] = [];
+        function confirmAddAccount() {
+            const name = document.getElementById('newAccName').value.trim();
+            const tag = document.getElementById('newAccTag').value.trim();
+            const cv = document.getElementById('newAccCV').value;
+
+            if (!name || !tag) return alert("Por favor, informe o Nome e a TAG da vila!");
+
+            appData.accounts.push({
+                id: 'acc_' + Date.now(),
+                name: name,
+                tag: tag.startsWith('#') ? tag.toUpperCase() : `#${tag.toUpperCase()}`,
+                townHall: cv
+            });
+
+            appData.activeAccountIndex = appData.accounts.length - 1;
+            saveAllData();
+            closeAddAccountModal();
+            document.getElementById('newAccName').value = '';
+            document.getElementById('newAccTag').value = '';
+            renderAccountsList();
+            renderTracker();
+        }
+
+        function selectAccount(index) {
+            appData.activeAccountIndex = index;
+            saveAllData();
+            renderAccountsList();
+            renderTracker();
+            if (window.innerWidth < 768) toggleSidebar();
+        }
+
+        function deleteAccount(e, index) {
+            e.stopPropagation();
+            if (confirm("Remover esta conta secundária do histórico?")) {
+                appData.accounts.splice(index, 1);
+                if (appData.activeAccountIndex >= appData.accounts.length) {
+                    appData.activeAccountIndex = 0;
                 }
+                saveAllData();
+                renderAccountsList();
                 renderTracker();
             }
         }
 
-        function toggleEquipmentsVisibility() {
-            appData.showEquipments = !appData.showEquipments;
-            saveAllData();
-            updateEquipmentsColumnLayout();
-        }
-
-        function updateEquipmentsColumnLayout() {
-            const eqCol = document.getElementById('equipmentsColumn');
-            const vilCol = document.getElementById('villageMainColumn');
-            const btnText = document.getElementById('toggleEquipmentsText');
-
-            if (appData.showEquipments) {
-                eqCol.classList.remove('hidden');
-                vilCol.className = "lg:col-span-7 space-y-6";
-                btnText.innerText = "Ocultar Equipamentos";
-            } else {
-                eqCol.classList.add('hidden');
-                vilCol.className = "lg:col-span-12 space-y-6";
-                btnText.innerText = "Mostrar Equipamentos";
+        // --- SELETOR ADM ---
+        function adminSwitchCV() {
+            const newCV = document.getElementById('townHallSelect').value;
+            const currentAcc = appData.accounts[appData.activeAccountIndex];
+            if (currentAcc) {
+                currentAcc.townHall = newCV;
+                saveAllData();
+                renderAccountsList();
+                renderTracker();
             }
         }
 
-        function renderTracker() {
-            appData.activeTownHall = document.getElementById('townHallSelect').value;
-            document.getElementById('sidebarAccountSelect').value = appData.activeTownHall;
-            const key = getTrackerKey();
+        function getAccountTrackerKey() {
+            const currentAcc = appData.accounts[appData.activeAccountIndex] || appData.accounts[0];
+            return `${currentAcc.id}_cv${currentAcc.townHall}`;
+        }
 
-            if (!appData.trackers[key] || (key === 'main_12' && appData.trackers[key].length < 10)) {
-                if (key === 'main_12') {
+        // --- RENDERIZAÇÃO DO RASTREADOR ---
+        function renderTracker() {
+            const currentAcc = appData.accounts[appData.activeAccountIndex] || { name: 'Vila', townHall: '11', tag: '#TAG' };
+            
+            document.getElementById('activeAccountTitle').innerText = currentAcc.name;
+            document.getElementById('currentCVBadge').innerText = `CV ${currentAcc.townHall}`;
+
+            // Controle de Exibição do Seletor Administrativo (Apenas no Modo Dev e não "Ver como Jogador")
+            const adminWrapper = document.getElementById('adminCVSelectorWrapper');
+            if (appData.isDevMode && !appData.viewAsPlayer) {
+                adminWrapper.classList.remove('hidden');
+                adminWrapper.classList.add('flex');
+                document.getElementById('townHallSelect').value = currentAcc.townHall;
+            } else {
+                adminWrapper.classList.add('hidden');
+                adminWrapper.classList.remove('flex');
+            }
+
+            const key = getAccountTrackerKey();
+
+            // Se ainda não houver dados gravados para a conta neste CV, carrega a estrutura padrão
+            if (!appData.trackers[key]) {
+                if (currentAcc.townHall === '11') {
+                    appData.trackers[key] = getCV11Data();
+                } else if (currentAcc.townHall === '12') {
                     appData.trackers[key] = getCV12Data();
                 } else {
                     appData.trackers[key] = [
-                        { category: 'Defesas', name: 'Canhão', current: 1, max: 10 },
+                        { category: 'Defesas', name: 'Canhão', current: 1, max: 15 },
                         { category: 'Muros', name: 'Segmento de Muros', current: 1, max: 100 }
                     ];
                 }
             }
 
             renderGallery();
-            updateEquipmentsColumnLayout();
 
             const items = appData.trackers[key];
             const villageCategoriesContainer = document.getElementById('villageCategoriesContainer');
@@ -979,7 +868,7 @@
             let globalVillageCurrent = 0, globalVillageMax = 0, villagePendingCount = 0;
             let villageCategoryStats = {};
 
-            // 1. RENDERIZAR VILA PRINCIPAL (SEM EQUIPAMENTOS)
+            // 1. RENDERIZAR TABELAS DA VILA PRINCIPAL
             villageCategories.forEach(cat => {
                 const catItems = items.filter(i => i.category === cat);
                 let catCurrent = 0, catMax = 0;
@@ -1051,7 +940,7 @@
                 villageCategoriesContainer.appendChild(card);
             });
 
-            // 2. RENDERIZAR COLUNA DE EQUIPAMENTOS (FERREIRO)
+            // 2. RENDERIZAR FERREIRO DE EQUIPAMENTOS (COM BOTÃO DESATIVAR ÉPICOS)
             const equipItems = items.filter(i => i.category === 'Equipamentos (Ferreiro)');
             let equipCurrent = 0, equipMax = 0;
 
@@ -1073,8 +962,8 @@
                     <table class="w-full text-left text-xs sm:text-sm text-slate-300">
                         <thead class="bg-slate-900/60 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-700/50">
                             <tr>
-                                <th class="p-3 sm:p-4">Possui?</th>
                                 <th class="p-3 sm:p-4">Equipamento</th>
+                                <th class="p-3 sm:p-4 text-center">Ativar/Desativar</th>
                                 <th class="p-3 sm:p-4 text-center">Nível</th>
                                 <th class="p-3 sm:p-4 text-center">Status</th>
                             </tr>
@@ -1089,9 +978,6 @@
                                 const globalIndex = items.indexOf(item);
                                 return `
                                     <tr class="hover:bg-slate-800/40 transition-colors ${!isOwned ? 'opacity-40 bg-slate-950/40' : (isMaxed ? 'bg-emerald-500/5' : '')}">
-                                        <td class="p-3 sm:p-4 text-center">
-                                            <input type="checkbox" ${isOwned ? 'checked' : ''} onchange="toggleItemOwned(${globalIndex})" class="w-4 h-4 rounded border-slate-700 text-amber-500 focus:ring-amber-500 cursor-pointer">
-                                        </td>
                                         <td class="p-3 sm:p-4 font-semibold whitespace-nowrap ${isMaxed && isOwned ? 'text-emerald-400' : 'text-slate-200'}">
                                             <div class="flex items-center gap-1.5">
                                                 ${item.name}
@@ -1099,12 +985,17 @@
                                             </div>
                                         </td>
                                         <td class="p-3 sm:p-4 text-center">
+                                            <button onclick="toggleItemOwned(${globalIndex})" class="px-2.5 py-1 rounded text-[10px] font-bold transition-all ${isOwned ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30' : 'bg-slate-800 text-slate-500 border border-slate-700 hover:bg-slate-700'}">
+                                                <i class="fa-solid ${isOwned ? 'fa-eye' : 'fa-eye-slash'} mr-1"></i> ${isOwned ? 'Possui' : 'Não possui'}
+                                            </button>
+                                        </td>
+                                        <td class="p-3 sm:p-4 text-center">
                                             <input type="number" min="0" max="${item.max}" value="${item.current}" ${!isOwned ? 'disabled' : ''} onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-12 sm:w-14 bg-slate-950/50 border ${isMaxed && isOwned ? 'border-emerald-500 text-emerald-400 font-black' : 'border-slate-600 text-amber-400 font-bold'} rounded-md px-1.5 py-1 text-center focus:outline-none focus:border-amber-500 transition-all disabled:opacity-30">
                                             <span class="text-[10px] text-slate-500 font-mono">/ ${item.max}</span>
                                         </td>
                                         <td class="p-3 sm:p-4 text-center whitespace-nowrap">
                                             ${!isOwned ? `
-                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-500 border border-slate-700">Bloqueado</span>
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-500 border border-slate-700">Ignorado</span>
                                             ` : `
                                                 <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isMaxed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-800 text-slate-400'}">
                                                     ${isMaxed ? 'MAX' : `- ${missing}`}
@@ -1135,17 +1026,119 @@
             saveAllData();
         }
 
+        // --- AVANÇAR PARA O PRÓXIMO CENTRO DE VILA ---
+        function advanceToNextTownHall() {
+            const currentAcc = appData.accounts[appData.activeAccountIndex];
+            const currentCV = parseInt(currentAcc.townHall);
+
+            if (currentCV >= 18) {
+                alert("Sua vila já está no Centro de Vila máximo (CV 18)!");
+                return;
+            }
+
+            const nextCV = currentCV + 1;
+            if (confirm(`Parabéns pelo progresso! Deseja concluir as melhorias do CV ${currentCV} e avançar para o Centro de Vila ${nextCV}?`)) {
+                // Maximiza todos os itens do CV atual
+                const key = getAccountTrackerKey();
+                if (appData.trackers[key]) {
+                    appData.trackers[key].forEach(i => i.current = i.max);
+                }
+
+                // Atualiza o CV da conta atual
+                currentAcc.townHall = nextCV.toString();
+                saveAllData();
+                renderAccountsList();
+                renderTracker();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
         function updateItemLevel(index, field, value) {
-            const key = getTrackerKey();
+            const key = getAccountTrackerKey();
             appData.trackers[key][index][field] = parseInt(value) || 0;
             renderTracker();
         }
 
         function toggleItemOwned(index) {
-            const key = getTrackerKey();
+            const key = getAccountTrackerKey();
             const item = appData.trackers[key][index];
             item.owned = !(item.owned !== false);
             renderTracker();
+        }
+
+        function handleGalleryUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const now = new Date();
+                const timestampStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
+                const key = getAccountTrackerKey();
+
+                if (!appData.galleries) appData.galleries = {};
+                if (!appData.galleries[key]) appData.galleries[key] = [];
+
+                appData.galleries[key].unshift({
+                    id: 'img_' + Date.now(),
+                    url: e.target.result,
+                    timestamp: timestampStr
+                });
+
+                saveAllData();
+                renderGallery();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderGallery() {
+            const key = getAccountTrackerKey();
+            const container = document.getElementById('galleryContainer');
+            const list = (appData.galleries && appData.galleries[key]) ? appData.galleries[key] : [];
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-8 text-center text-slate-500 text-xs font-medium bg-slate-900/40 rounded-xl border border-dashed border-slate-800">
+                        <i class="fa-solid fa-images text-2xl mb-2 text-slate-600"></i>
+                        <p>Nenhum registro da vila anexado para esta conta neste CV.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map((item) => `
+                <div class="relative group glass-panel rounded-xl overflow-hidden border border-slate-700/50 shadow-md">
+                    <img src="${item.url}" class="w-full h-44 object-cover">
+                    <div class="p-2 bg-slate-950/90 flex justify-between items-center text-[10px] text-slate-400">
+                        <span class="flex items-center gap-1 font-mono text-amber-400/90">
+                            <i class="fa-solid fa-clock"></i> ${item.timestamp}
+                        </span>
+                        <button onclick="deleteGalleryItem('${item.id}')" title="Excluir Registro" class="text-slate-500 hover:text-red-400 p-1 transition-colors">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteGalleryItem(imgId) {
+            const key = getAccountTrackerKey();
+            if (confirm("Remover esta imagem da galeria?")) {
+                appData.galleries[key] = appData.galleries[key].filter(i => i.id !== imgId);
+                saveAllData();
+                renderGallery();
+            }
+        }
+
+        function resetTrackerData() {
+            const key = getAccountTrackerKey();
+            const currentAcc = appData.accounts[appData.activeAccountIndex];
+            if (confirm(`Deseja resetar os dados do CV ${currentAcc.townHall} para os valores padrão?`)) {
+                if (currentAcc.townHall === '11') appData.trackers[key] = getCV11Data();
+                else if (currentAcc.townHall === '12') appData.trackers[key] = getCV12Data();
+                else appData.trackers[key] = [];
+                renderTracker();
+            }
         }
 
         function openAddItemModal() {
@@ -1167,7 +1160,7 @@
 
             if (!name) return alert("Informe o nome do item!");
 
-            const key = getTrackerKey();
+            const key = getAccountTrackerKey();
             if (!appData.trackers[key]) appData.trackers[key] = [];
 
             const newItem = { category: cat, name: name, current: current, max: max };
