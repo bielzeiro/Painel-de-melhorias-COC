@@ -4,861 +4,519 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clash Organizer & Tracker</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        :root {
+            --bg-color: #0d131d;
+            --card-bg: #161f2e;
+            --accent-orange: #ff9800;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #233146;
+            --green-max: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: var(--accent-orange);
+        }
+
+        .cv-selector {
+            background: #0d131d;
+            color: var(--accent-orange);
+            border: 1px solid var(--accent-orange);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .dash-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .dash-card h3 {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+        }
+
+        .dash-card .val {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-orange);
+        }
+
+        .section-title {
+            color: var(--accent-orange);
+            font-size: 1.1rem;
+            margin: 25px 0 15px 0;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .tracker-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        select {
+            background: #0d131d;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
+            border-radius: 6px;
+            width: 100%;
+            max-width: 110px;
+        }
+
+        .status-badge {
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status-max {
+            color: var(--green-max);
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-950 text-slate-100 h-screen flex flex-col overflow-hidden">
+<body>
 
-    <!-- Modal 1: Identificação do Jogador -->
-    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300">
-        <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md border-t border-slate-700 relative overflow-hidden">
-            <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
-            
-            <div class="text-center mb-6 relative z-10">
-                <div class="bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/30 transform rotate-3 hover:rotate-0 transition-transform">
-                    <i class="fa-solid fa-shield-halved text-3xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-white tracking-tight">Clash Organizer</h2>
-                <p class="text-slate-400 text-xs sm:text-sm mt-1">Informe os dados do seu perfil</p>
-            </div>
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
-                <div class="flex flex-col items-center justify-center mb-2">
-                    <div class="relative group cursor-pointer" onclick="document.getElementById('loginAvatarInput').click()">
-                        <div id="loginAvatarPreview" class="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-3xl shadow-lg overflow-hidden border-2 border-amber-400/50">
-                            G
-                        </div>
-                        <div class="absolute inset-0 bg-black/50 rounded-2xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-semibold">
-                            <i class="fa-solid fa-camera mr-1"></i> Foto
-                        </div>
-                    </div>
-                    <input type="file" id="loginAvatarInput" accept="image/*" class="hidden" onchange="previewLoginAvatar(event)">
-                    <span class="text-[10px] text-slate-400 mt-1">Clique para escolher foto de perfil</span>
-                </div>
+<div class="container">
+    <header>
+        <h1>Clash Organizer & Tracker</h1>
+        <select id="cvSelect" class="cv-selector" onchange="changeCV()">
+            <option value="11">Centro de Vila 11</option>
+            <option value="12">Centro de Vila 12</option>
+            <option value="13">Centro de Vila 13</option>
+            <option value="14">Centro de Vila 14</option>
+            <option value="15">Centro de Vila 15</option>
+        </select>
+    </header>
 
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome do Jogador / Vila</label>
-                    <input type="text" id="displayNameInput" required value="Gabriel Santos" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">@Username</label>
-                    <input type="text" id="usernameInput" required value="@bielzinho" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">TAG do Jogador</label>
-                    <input type="text" id="playerTagInput" required value="#LUU9VYJLP" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all uppercase">
-                </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold py-3.5 rounded-lg shadow-lg shadow-amber-500/25 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2 mt-2">
-                    <i class="fa-solid fa-right-to-bracket"></i> Continuar
-                </button>
-            </form>
+    <div class="dashboard">
+        <div class="dash-card">
+            <h3>Progresso Global</h3>
+            <div class="val" id="globalProgress">0%</div>
+        </div>
+        <div class="dash-card">
+            <h3>Melhorias Restantes</h3>
+            <div class="val" id="remainingUpgrades">0</div>
+        </div>
+        <div class="dash-card">
+            <h3>Foco Sugerido</h3>
+            <div class="val" id="suggestedFocus" style="font-size: 1.2rem; color: #ef4444;">Heróis</div>
         </div>
     </div>
 
-    <!-- Modal 2: Pop-up Inicial de Seleção do Centro de Vila Sendo Melhorado -->
-    <div id="initialCVModal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden items-center justify-center z-50 p-4">
-        <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] w-full max-w-md border border-amber-500/50 text-center relative">
-            <div class="w-16 h-16 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-amber-500/30">
-                <i class="fa-solid fa-castle text-3xl"></i>
-            </div>
-            <h3 class="text-xl font-bold text-white mb-1">Qual Centro de Vila você está melhorando?</h3>
-            <p class="text-xs text-slate-400 mb-6">Esta opção vai ajustar automaticamente as quantidades e níveis máximos de construções e defesas para o seu progresso.</p>
-            
-            <div class="mb-6">
-                <select id="popTownHallSelect" class="w-full bg-slate-900 border-2 border-amber-500 rounded-xl px-4 py-3.5 text-white font-extrabold text-lg focus:outline-none text-center">
-                    <option value="18">Centro de Vila 18</option>
-                    <option value="17">Centro de Vila 17</option>
-                    <option value="16">Centro de Vila 16</option>
-                    <option value="15">Centro de Vila 15</option>
-                    <option value="14">Centro de Vila 14</option>
-                    <option value="13">Centro de Vila 13</option>
-                    <option value="12">Centro de Vila 12</option>
-                    <option value="11" selected>Centro de Vila 11</option>
-                </select>
-            </div>
-
-            <button onclick="confirmInitialCV()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black py-3.5 rounded-xl shadow-lg shadow-amber-500/30 transition-all text-base uppercase tracking-wider">
-                Confirmar e Entrar na Vila
-            </button>
-        </div>
+    <!-- 1. HERÓIS -->
+    <div class="section-title">1. Prioridade Máxima: Heróis & Equipamentos</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Herói / Equipamento</th>
+                    <th>Nível Máximo CV</th>
+                    <th>Nível Atual</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="heroesTable"></tbody>
+        </table>
     </div>
 
-    <!-- Aplicação Principal -->
-    <div id="appContainer" class="hidden flex-1 flex flex-col overflow-hidden relative">
-
-        <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
-            <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
-
-            <!-- Sidebar Lateral: Perfil + Salvadores de Centros de Vila (Até 7) -->
-            <aside id="sidebar" class="fixed md:relative z-40 w-80 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
-                
-                <!-- Perfil do Jogador -->
-                <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="relative group cursor-pointer flex-shrink-0" onclick="document.getElementById('profileAvatarInput').click()" title="Alterar Foto de Perfil">
-                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-xl shadow-inner overflow-hidden border border-amber-400/30" id="avatarContainer">
-                                <span id="avatarLetter">G</span>
-                            </div>
-                            <div class="absolute inset-0 bg-black/60 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[10px]">
-                                <i class="fa-solid fa-camera"></i>
-                            </div>
-                        </div>
-                        <input type="file" id="profileAvatarInput" accept="image/*" class="hidden" onchange="updateProfileAvatar(event)">
-
-                        <div class="truncate">
-                            <h3 class="font-bold text-sm text-white truncate" id="displayUsername">Gabriel Santos</h3>
-                            <div class="flex flex-col">
-                                <span class="text-[10px] text-amber-400 font-bold tracking-wide" id="displayHandle">@bielzinho</span>
-                                <span class="text-[10px] text-slate-400 font-mono tracking-wider" id="displayTag">#LUU9VYJLP</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button onclick="handleLogout()" title="Sair" class="text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg p-2 transition-colors">
-                        <i class="fa-solid fa-power-off text-sm"></i>
-                    </button>
-                </div>
-
-                <!-- Salvadores de Centros de Vila (Até 7 salvamentos) -->
-                <div class="p-4 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/20">
-                    <div>
-                        <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-bookmark"></i> Salvadores de CVs (Até 7)
-                        </h4>
-                        <p class="text-[10px] text-slate-400">Alterne facilmente entre suas vilas preparadas</p>
-                    </div>
-                    <button onclick="openAddAccountModal()" class="bg-amber-500/20 hover:bg-amber-500 text-amber-400 hover:text-slate-950 border border-amber-500/30 p-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1" title="Salvar Novo CV">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                </div>
-
-                <div class="flex-1 overflow-y-auto p-3 space-y-2" id="accountsListContainer"></div>
-
-                <div class="p-4 bg-slate-950/80 border-t border-slate-800/50 text-xs text-slate-400 flex justify-between items-center">
-                    <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-cloud-check text-emerald-500"></i> Dados Salvos</span>
-                    <div class="flex items-center gap-1">
-                        <button onclick="resetTrackerData()" title="Resetar CV Atual" class="hover:text-red-400 p-1.5 rounded hover:bg-slate-800 transition-colors"><i class="fa-solid fa-rotate"></i></button>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Área Principal -->
-            <main class="flex-1 flex flex-col overflow-hidden w-full relative">
-                
-                <!-- Cabeçalho Superior -->
-                <header class="h-14 glass-panel border-b-0 border-slate-800/50 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2 z-10 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
-                            <i class="fa-solid fa-bars text-lg"></i>
-                        </button>
-                        <span class="text-xs sm:text-sm font-bold text-white tracking-wide flex items-center gap-2">
-                            <i class="fa-solid fa-chess-king text-amber-500"></i> Clash Organizer & Tracker
-                        </span>
-                    </div>
-
-                    <!-- Alternador de Abas (Rastreador x Anotações) -->
-                    <div class="flex bg-slate-900/80 p-1 rounded-lg border border-slate-700/50 flex-shrink-0 shadow-inner">
-                        <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-3 sm:px-4 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md">
-                            <i class="fa-solid fa-list-check mr-1"></i> Rastreador
-                        </button>
-                        <button id="tabEditorBtn" onclick="switchTab('editor')" class="px-3 sm:px-4 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
-                            <i class="fa-solid fa-file-pen mr-1"></i> Anotações
-                        </button>
-                    </div>
-                </header>
-
-                <!-- CONTEÚDO 1: RASTREADOR CLASH -->
-                <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-                    
-                    <!-- Header da Vila Atual -->
-                    <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-                        
-                        <div class="flex items-center gap-4">
-                            <div class="bg-gradient-to-br from-amber-500/20 to-orange-500/20 text-amber-400 p-3.5 rounded-xl border border-amber-500/30 shadow-inner">
-                                <i class="fa-solid fa-castle text-2xl"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight" id="activeAccountTitle">Vila Principal</h2>
-                                    <span class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[11px] font-black px-2.5 py-0.5 rounded-full" id="currentCVBadge">CV 11</span>
-                                </div>
-                                <p class="text-xs text-slate-400 mt-0.5">Coordenador do progresso de construções, armadilhas, laboratório e equipamentos.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Métricas Globais da Vila (Baseadas APENAS em melhorias ativas) -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Porcentagem Global da Vila</span>
-                            <div class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mt-1" id="totalProgressPercent">0%</div>
-                            <div class="w-full bg-slate-900/80 rounded-full h-2 mt-3 border border-slate-800 overflow-hidden shadow-inner">
-                                <div id="totalProgressBar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Melhorias Restantes</span>
-                            <div class="text-2xl sm:text-3xl font-black text-white mt-1" id="remainingUpgradesCount">0</div>
-                            <span class="text-[10px] text-slate-500 font-medium">níveis para maximizar</span>
-                        </div>
-                        <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between">
-                            <div>
-                                <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Setor Menos Evoluído</span>
-                                <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
-                            </div>
-                            <span class="text-[10px] text-slate-500 font-medium mt-2">foco sugerido</span>
-                        </div>
-                    </div>
-
-                    <!-- LAYOUT EM COLUNAS: VILA PRINCIPAL | FERREIRO -->
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                        <!-- Coluna 1: Construções, Defesas, Muros, Laboratório -->
-                        <div id="villageMainColumn" class="lg:col-span-7 space-y-6">
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                                <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                    <i class="fa-solid fa-hammer"></i> Estruturas, Defesas & Laboratório
-                                </h3>
-                            </div>
-                            <div id="villageCategoriesContainer" class="space-y-6"></div>
-                        </div>
-
-                        <!-- Coluna 2: Equipamentos dos Heróis (Ferreiro) -->
-                        <div id="equipmentsColumn" class="lg:col-span-5 space-y-6">
-                            <div class="glass-panel p-4 rounded-2xl border border-amber-500/30">
-                                <div class="flex items-center justify-between mb-1">
-                                    <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                                        <i class="fa-solid fa-shield-cat text-amber-500"></i> Equipamentos dos Heróis
-                                    </h3>
-                                    <span id="equipPercentBadge" class="text-xs font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded border border-amber-500/30">0%</span>
-                                </div>
-                                <p class="text-[11px] text-slate-400 mb-3">Equipamentos Épicos vm desligados por padrão. Ligue apenas os que você possui na conta.</p>
-                                <div class="w-full bg-slate-900/80 rounded-full h-2 border border-slate-800 overflow-hidden shadow-inner">
-                                    <div id="equipProgressBar" class="bg-gradient-to-r from-amber-400 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
-                                </div>
-                            </div>
-                            <div id="equipmentsCategoryContainer"></div>
-                        </div>
-                    </div>
-
-                    <!-- Botão Próximo Centro de Vila (Com Pop-up de Confirmação) -->
-                    <div class="pt-6 pb-12 flex justify-center">
-                        <button onclick="advanceToNextTownHall()" class="w-full max-w-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-base sm:text-lg py-5 px-8 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 border border-emerald-400/50">
-                            <i class="fa-solid fa-circle-check text-2xl"></i>
-                            <span>Ir para o Próximo Centro de Vila</span>
-                            <i class="fa-solid fa-arrow-right text-xl"></i>
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- CONTEÚDO 2: EDITOR DE ANOTAÇÕES (SEÇÃO TOTALMENTE LIMPA SEM O CABEÇALHO ANTERIOR) -->
-                <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-slate-900/40 p-6 space-y-4">
-                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 flex-1 flex flex-col">
-                        <input type="text" placeholder="Título da Anotação..." class="bg-transparent text-xl font-bold text-white border-b border-slate-700 pb-3 mb-4 focus:outline-none focus:border-amber-500">
-                        <textarea placeholder="Escreva aqui suas estratégias, planos de ataque ou anotações sobre a vila..." class="w-full flex-1 bg-transparent text-slate-300 text-sm focus:outline-none resize-none leading-relaxed"></textarea>
-                    </div>
-                </div>
-
-            </main>
-        </div>
+    <!-- 2. EXÉRCITO -->
+    <div class="section-title">2. Exército (Laboratório & Máquinas)</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tropa / Feitiço / Máquina</th>
+                    <th>Nível Máximo CV</th>
+                    <th>Nível Atual</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="armyTable"></tbody>
+        </table>
     </div>
 
-    <!-- Modal Adicionar Novo Salvador de CV (Até 7) -->
-    <div id="addAccountModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden items-center justify-center z-50 p-4 transition-opacity">
-        <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-slate-700 w-full max-w-md shadow-2xl">
-            <div class="flex items-center gap-3 mb-5">
-                <div class="bg-amber-500/20 text-amber-500 w-10 h-10 rounded-lg flex items-center justify-center">
-                    <i class="fa-solid fa-bookmark"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white tracking-tight">Salvar Centro de Vila</h3>
-            </div>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Identificação da Vila / Apelido</label>
-                    <input type="text" id="newAccName" placeholder="Ex: Vila Principal, Conta de Guerra..." class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">TAG do Jogador</label>
-                    <input type="text" id="newAccTag" placeholder="#TAG12345" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 uppercase">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Centro de Vila</label>
-                    <select id="newAccCV" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-amber-400 font-bold focus:outline-none focus:border-amber-500">
-                        <option value="18">CV 18</option>
-                        <option value="17">CV 17</option>
-                        <option value="16">CV 16</option>
-                        <option value="15">CV 15</option>
-                        <option value="14">CV 14</option>
-                        <option value="13">CV 13</option>
-                        <option value="12">CV 12</option>
-                        <option value="11" selected>CV 11</option>
-                    </select>
-                </div>
-            </div>
-            <div class="flex justify-end gap-3 mt-8">
-                <button onclick="closeAddAccountModal()" class="px-5 py-2.5 bg-slate-800 text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors">Cancelar</button>
-                <button onclick="confirmAddAccount()" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-sm font-bold rounded-lg hover:from-amber-400 hover:to-orange-400 shadow-lg shadow-amber-500/20 transition-all">Salvar Vila</button>
-            </div>
-        </div>
+    <!-- 3. DEFESAS -->
+    <div class="section-title">3. Defesas</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Estrutura Defensiva</th>
+                    <th>Nível Máximo</th>
+                    <th>Nível Atual (Seletor)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="defensesTable"></tbody>
+        </table>
     </div>
 
-    <!-- Script da Lógica Atualizada do Sistema -->
-    <script>
-        // Configuração de dados base dos Centros de Vila com quantidade e níveis de construções fixados
-        function getCVData(townHallLevel) {
-            const level = parseInt(townHallLevel) || 11;
+    <!-- 4. RESTANTE -->
+    <div class="section-title">4. Recursos, Armadilhas & Auxiliares</div>
+    <div class="tracker-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Item / Construção</th>
+                    <th>Nível / Qtd. Máxima</th>
+                    <th>Nível Atual (Seletor)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="otherTable"></tbody>
+        </table>
+    </div>
+</div>
 
-            if (level === 11) {
-                return [
-                    // --- HERÓIS BASE ---
-                    { category: 'Heróis', name: 'Rei Bárbaro', current: 0, max: 50 },
-                    { category: 'Heróis', name: 'Rainha Arqueira', current: 0, max: 50 },
-                    { category: 'Heróis', name: 'Príncipe Servo', current: 0, max: 20 },
-                    { category: 'Heróis', name: 'Grande Guardião', current: 0, max: 20 },
-
-                    // --- EQUIPAMENTOS (FERREIRO) - ÉPICOS DESLIGADOS (owned: false) POR PADRÃO ---
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Boneco de Bárbaro', current: 12, max: 12, owned: true, epic: false },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Frasco de Fúria', current: 12, max: 12, owned: true, epic: false },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Manopla Agigantadora', current: 0, max: 15, owned: false, epic: true },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bola de Espinhos', current: 0, max: 15, owned: false, epic: true },
-                    
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Arqueira', current: 12, max: 12, owned: true, epic: false },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Frasco de Invisibilidade', current: 12, max: 12, owned: true, epic: false },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Congelante', current: 0, max: 15, owned: false, epic: true },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 0, max: 15, owned: false, epic: true },
-
-                    { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Boneco de Capanga', current: 12, max: 12, owned: true, epic: false },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Coroa Sombria', current: 0, max: 15, owned: false, epic: true },
-
-                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tomo Eterno', current: 12, max: 12, owned: true, epic: false },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Bola de Fogo', current: 0, max: 15, owned: false, epic: true },
-
-                    // --- LABORATÓRIO (CV11) ---
-                    { category: 'Laboratório', name: 'Tropas Elixir / Negro', current: 0, max: 8 },
-                    { category: 'Laboratório', name: 'Feitiços Elixir / Negro', current: 0, max: 6 },
-
-                    // --- DEFESAS & CONSTRUÇÕES ---
-                    { category: 'Defesas', name: 'Artilharia Águia (x1)', current: 0, max: 2 },
-                    { category: 'Defesas', name: 'Torre Inferno (x2)', current: 0, max: 5 },
-                    { category: 'Defesas', name: 'X-Besta (x4)', current: 0, max: 5 },
-                    { category: 'Defesas', name: 'Tesla Oculta (x5)', current: 0, max: 9 },
-                    { category: 'Defesas', name: 'Defesa Aérea (x4)', current: 0, max: 9 },
-                    { category: 'Defesas', name: 'Torre do Mago (x5)', current: 0, max: 10 },
-                    { category: 'Defesas', name: 'Canhão (x7)', current: 0, max: 15 },
-                    { category: 'Defesas', name: 'Torre Arqueira (x8)', current: 0, max: 15 },
-                    { category: 'Defesas', name: 'Morteiro (x4)', current: 0, max: 10 },
-
-                    // --- MUROS & ARMADILHAS ---
-                    { category: 'Muros', name: 'Segmentos de Muro (x300)', current: 0, max: 12 },
-                    { category: 'Armadilhas', name: 'Bombas e Armadilhas Aéreas', current: 0, max: 7 },
-                    { category: 'Recursos & Auxiliares', name: 'Depósitos e Coletores', current: 0, max: 12 }
-                ];
-            } else {
-                return [
-                    { category: 'Heróis', name: 'Rei Bárbaro', current: 0, max: 65 },
-                    { category: 'Heróis', name: 'Rainha Arqueira', current: 0, max: 65 },
-                    { category: 'Heróis', name: 'Grande Guardião', current: 0, max: 40 },
-
-                    { category: 'Equipamentos (Ferreiro)', name: 'Manopla Agigantadora', current: 0, max: 18, owned: false, epic: true },
-                    { category: 'Equipamentos (Ferreiro)', name: 'Flecha Congelante', current: 0, max: 18, owned: false, epic: true },
-
-                    { category: 'Defesas', name: 'Artilharia Águia (x1)', current: 0, max: 3 },
-                    { category: 'Defesas', name: 'Torre Inferno (x3)', current: 0, max: 6 },
-                    { category: 'Defesas', name: 'X-Besta (x4)', current: 0, max: 6 },
-                    { category: 'Muros', name: 'Segmentos de Muro (x300)', current: 0, max: 13 }
-                ];
-            }
-        }
-
-        let tempAvatarData = null;
-
-        let appData = {
-            currentUser: "Gabriel Santos",
-            userHandle: "@bielzinho",
-            playerTag: "#LUU9VYJLP",
-            avatarUrl: null,
-            activeAccountIndex: 0,
-            accounts: [
-                { id: 'acc_1', name: 'Vila Principal', tag: '#LUU9VYJLP', townHall: '11' }
+<script>
+    // BASE DE DADOS COMPLETA EXTRAÍDA DO PDF (CV 11 AO 15)
+    const cvData = {
+        11: {
+            heroes: [
+                { name: "Rei Bárbaro", max: 50 }, { name: "Rainha Arqueira", max: 50 },
+                { name: "Príncipe Servo", max: 30 }, { name: "Grande Guardião", max: 20 },
+                // Equipamentos Rei Bárbaro
+                { name: "[Rei] Boneco de Bárbaro", max: 12 }, { name: "[Rei] Frasco de Fúria", max: 12 },
+                { name: "[Rei] Bota Terremoto", max: 12 }, { name: "[Rei] Bigode de Vampiro", max: 12 },
+                { name: "[Rei] Manopla Agigantadora (Épico)", max: 15 }, { name: "[Rei] Bola de Espinhos (Épico)", max: 15 },
+                { name: "[Rei] Amuleto Ofídico (Épico)", max: 15 }, { name: "[Rei] Cavalo de Pau (Épico)", max: 15 },
+                // Equipamentos Rainha Arqueira
+                { name: "[Rainha] Boneco de Arqueira", max: 12 }, { name: "[Rainha] Frasco de Invisibilidade", max: 12 },
+                { name: "[Rainha] Flecha Gigante", max: 12 }, { name: "[Rainha] Flecha Congelante (Épico)", max: 15 },
+                { name: "[Rainha] Espelho Mágico (Épico)", max: 15 }, { name: "[Rainha] Boneco Gigante (Épico)", max: 15 },
+                { name: "[Rainha] Flecha Monolítica (Épico)", max: 15 },
+                // Equipamentos Príncipe Servo
+                { name: "[Príncipe] Boneco de Capanga", max: 12 }, { name: "[Príncipe] Orbe Sombrio", max: 12 },
+                { name: "[Príncipe] Calça de Metal", max: 12 }, { name: "[Príncipe] Coroa Sombria (Épico)", max: 15 },
+                { name: "[Príncipe] Bastão de Meteoros (Épico)", max: 15 },
+                // Equipamentos Grande Guardião
+                { name: "[Guardião] Tomo Eterno", max: 12 }, { name: "[Guardião] Gema da Vida", max: 12 },
+                { name: "[Guardião] Gema de Fúria", max: 12 }, { name: "[Guardião] Bola de Fogo (Épico)", max: 15 },
+                { name: "[Guardião] Boneco de Lavalão (Épico)", max: 15 }, { name: "[Guardião] Tocha Heroica (Épico)", max: 15 }
             ],
-            trackers: {}
-        };
-
-        window.onload = function() {
-            loadSavedData();
-            checkSession();
-        };
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('mobileOverlay');
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
+            army: [
+                { name: "Bárbaro", max: 8 }, { name: "Arqueira", max: 8 }, { name: "Gigante", max: 8 },
+                { name: "Goblin", max: 7 }, { name: "Quebra-muros", max: 7 }, { name: "Balão", max: 7 },
+                { name: "Mago", max: 8 }, { name: "Curadora", max: 5 }, { name: "Dragão", max: 6 },
+                { name: "Pekka", max: 7 }, { name: "Bebê Dragão", max: 5 }, { name: "Mineiro", max: 5 },
+                { name: "Dragão Elétrico", max: 2 }, { name: "Servo", max: 7 }, { name: "Corredor", max: 7 },
+                { name: "Valquíria", max: 6 }, { name: "Golem", max: 7 }, { name: "Bruxa", max: 4 },
+                { name: "Lava-hound", max: 4 }, { name: "Lançador", max: 3 }, { name: "Golem de Gelo", max: 3 },
+                { name: "Feitiço de Raio", max: 8 }, { name: "Feitiço de Cura", max: 7 }, { name: "Feitiço de Fúria", max: 5 },
+                { name: "Feitiço de Salto", max: 3 }, { name: "Feitiço de Gelo", max: 6 }, { name: "Feitiço de Clone", max: 5 },
+                { name: "Feitiço de Invisibilidade", max: 2 }, { name: "Feitiço de Veneno", max: 5 }, { name: "Feitiço Terremoto", max: 5 },
+                { name: "Feitiço de Aceleração", max: 5 }, { name: "Feitiço de Esqueletos", max: 4 }, { name: "Feitiço de Morcego", max: 4 }
+            ],
+            defenses: [
+                { name: "Artilharia Águia (x1)", max: 2 }, { name: "Torre Inferno (x2)", max: 5 },
+                { name: "X-Besta (x4)", max: 5 }, { name: "Tesla Oculta (x4)", max: 9 },
+                { name: "Defesa Aérea (x4)", max: 9 }, { name: "Torre do Mago (x5)", max: 10 },
+                { name: "Canhão (x7)", max: 15 }, { name: "Torre Arqueira (x8)", max: 15 },
+                { name: "Morteiro (x4)", max: 10 }, { name: "Dispersor Aéreo (x2)", max: 7 },
+                { name: "Torre de Bombas (x2)", max: 6 }, { name: "Cabana do Construtor (x5)", max: 1 }
+            ],
+            other: [
+                { name: "Muros (x300)", max: 12 }, { name: "Bomba (x6)", max: 8 }, { name: "Armadilha de Mola (x6)", max: 6 },
+                { name: "Bomba Aérea (x5)", max: 5 }, { name: "Bomba Gigante (x5)", max: 5 }, { name: "Mina Aérea Guiada (x5)", max: 3 },
+                { name: "Armadilha de Esqueleto (x3)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 2 },
+                { name: "Coletor de Elixir (x7)", max: 14 }, { name: "Depósito de Elixir (x4)", max: 12 },
+                { name: "Mina de Ouro (x7)", max: 14 }, { name: "Depósito de Ouro (x4)", max: 12 },
+                { name: "Broca de Elixir Negro (x3)", max: 8 }, { name: "Depósito de Elixir Negro (x1)", max: 6 },
+                { name: "Castelo do Clã", max: 7 }, { name: "Assistente de Laboratório", max: 4 },
+                { name: "Aprendiz de Construtor", max: 4 }, { name: "Alquimista", max: 1 }
+            ]
+        },
+        12: {
+            heroes: [
+                { name: "Rei Bárbaro", max: 65 }, { name: "Rainha Arqueira", max: 65 },
+                { name: "Príncipe Servo", max: 40 }, { name: "Grande Guardião", max: 40 },
+                // Equipamentos
+                { name: "[Rei] Equipamentos Comuns", max: 15 }, { name: "[Rei] Equipamentos Épicos", max: 18 },
+                { name: "[Rainha] Equipamentos Comuns", max: 15 }, { name: "[Rainha] Equipamentos Épicos", max: 18 },
+                { name: "[Príncipe] Equipamentos Comuns", max: 15 }, { name: "[Príncipe] Equipamentos Épicos", max: 18 },
+                { name: "[Guardião] Equipamentos Comuns", max: 15 }, { name: "[Guardião] Equipamentos Épicos", max: 18 }
+            ],
+            army: [
+                { name: "Bárbaro", max: 9 }, { name: "Arqueira", max: 9 }, { name: "Gigante", max: 9 }, { name: "Goblin", max: 8 },
+                { name: "Quebra-muros", max: 8 }, { name: "Balão", max: 8 }, { name: "Mago", max: 9 }, { name: "Curadora", max: 5 },
+                { name: "Dragão", max: 7 }, { name: "Pekka", max: 8 }, { name: "Bebê Dragão", max: 6 }, { name: "Mineiro", max: 6 },
+                { name: "Dragão Elétrico", max: 3 }, { name: "Yeti", max: 2 }, { name: "Servo", max: 8 }, { name: "Corredor", max: 9 },
+                { name: "Valquíria", max: 7 }, { name: "Golem", max: 9 }, { name: "Bruxa", max: 5 }, { name: "Lava-hound", max: 5 },
+                { name: "Lançador", max: 4 }, { name: "Golem de Gelo", max: 5 }, { name: "Caçadora de Heróis", max: 2 },
+                { name: "Feitiço de Raio", max: 9 }, { name: "Feitiço de Cura", max: 7 }, { name: "Feitiço de Fúria", max: 6 },
+                { name: "Feitiço de Salto", max: 3 }, { name: "Feitiço de Gelo", max: 7 }, { name: "Feitiço de Clone", max: 5 },
+                { name: "Feitiço de Invisibilidade", max: 3 }, { name: "Feitiço de Veneno", max: 6 }, { name: "Feitiço Terremoto", max: 5 },
+                { name: "Feitiço de Aceleração", max: 5 }, { name: "Feitiço de Esqueletos", max: 6 }, { name: "Feitiço de Morcego", max: 5 },
+                { name: "Feitiço de Raízes", max: 2 }, { name: "Quebra-muros (Máquina)", max: 4 }, { name: "Dirigível Bélico", max: 4 }, { name: "Quebradora de Pedras", max: 4 }
+            ],
+            defenses: [
+                { name: "Artilharia Águia (x1)", max: 3 }, { name: "Torre Inferno (x3)", max: 6 }, { name: "X-Besta (x4)", max: 6 },
+                { name: "Tesla Oculta (x5)", max: 10 }, { name: "Defesa Aérea (x4)", max: 10 }, { name: "Torre do Mago (x5)", max: 11 },
+                { name: "Canhão (x7)", max: 17 }, { name: "Torre Arqueira (x8)", max: 17 }, { name: "Morteiro (x4)", max: 12 },
+                { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 7 }, { name: "Cabana do Construtor (x5)", max: 1 }
+            ],
+            other: [
+                { name: "Muros (x300)", max: 13 }, { name: "Bomba (x6)", max: 8 }, { name: "Armadilha de Mola (x8)", max: 7 },
+                { name: "Bomba Aérea (x6)", max: 6 }, { name: "Bomba Gigante (x6)", max: 5 }, { name: "Mina Aérea Guiada (x6)", max: 3 },
+                { name: "Armadilha de Esqueleto (x3)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
+                { name: "Coletor de Elixir (x7)", max: 15 }, { name: "Depósito de Elixir (x4)", max: 13 },
+                { name: "Mina de Ouro (x7)", max: 15 }, { name: "Depósito de Ouro (x4)", max: 13 },
+                { name: "Broca de Elixir Negro (x3)", max: 9 }, { name: "Depósito de Elixir Negro (x1)", max: 7 },
+                { name: "Castelo do Clã", max: 8 }, { name: "Assistente de Laboratório", max: 6 },
+                { name: "Aprendiz de Construtor", max: 6 }, { name: "Alquimista", max: 2 }
+            ]
+        },
+        13: {
+            heroes: [
+                { name: "Rei Bárbaro", max: 75 }, { name: "Rainha Arqueira", max: 75 },
+                { name: "Príncipe Servo", max: 50 }, { name: "Grande Guardião", max: 50 },
+                { name: "Campeã Real", max: 25 },
+                // Equipamentos
+                { name: "Equipamentos Comuns (Geral)", max: 15 }, { name: "Equipamentos Épicos (Geral)", max: 18 }
+            ],
+            army: [
+                { name: "Bárbaro", max: 9 }, { name: "Arqueira", max: 9 }, { name: "Gigante", max: 10 }, { name: "Goblin", max: 8 },
+                { name: "Quebra-muros", max: 9 }, { name: "Balão", max: 9 }, { name: "Mago", max: 10 }, { name: "Curadora", max: 6 },
+                { name: "Dragão", max: 8 }, { name: "Pekka", max: 9 }, { name: "Bebê Dragão", max: 7 }, { name: "Mineiro", max: 7 },
+                { name: "Dragão Elétrico", max: 4 }, { name: "Yeti", max: 3 }, { name: "Dragão Dirigível", max: 2 },
+                { name: "Servo", max: 9 }, { name: "Corredor", max: 10 }, { name: "Valquíria", max: 8 }, { name: "Golem", max: 10 },
+                { name: "Bruxa", max: 5 }, { name: "Lava-hound", max: 6 }, { name: "Lançador", max: 5 }, { name: "Golem de Gelo", max: 5 },
+                { name: "Caçadora de Heróis", max: 3 }, { name: "Aprendiz de Guardião", max: 2 },
+                { name: "Feitiço de Raio", max: 9 }, { name: "Feitiço de Cura", max: 8 }, { name: "Feitiço de Fúria", max: 6 },
+                { name: "Feitiço de Salto", max: 4 }, { name: "Feitiço de Gelo", max: 7 }, { name: "Feitiço de Clone", max: 6 },
+                { name: "Feitiço de Invisibilidade", max: 4 }, { name: "Feitiço de Retorno", max: 2 }, { name: "Feitiço de Veneno", max: 7 },
+                { name: "Feitiço Terremoto", max: 5 }, { name: "Feitiço de Aceleração", max: 5 }, { name: "Feitiço de Esqueletos", max: 7 },
+                { name: "Feitiço de Morcego", max: 5 }, { name: "Feitiço de Raízes", max: 2 },
+                { name: "Quebra-muros (Máquina)", max: 4 }, { name: "Dirigível Bélico", max: 4 }, { name: "Quebradora de Pedras", max: 4 },
+                { name: "Quartel de Cerco", max: 4 }, { name: "Lança Troncos", max: 4 },
+                { name: "Lassi (Casa de Animais)", max: 10 }, { name: "Coruja Elétrica", max: 10 }, { name: "Poderoso Iaque", max: 10 }, { name: "Unicórnio", max: 10 }
+            ],
+            defenses: [
+                { name: "Disseminador (x2)", max: 2 }, { name: "Artilharia Águia (x1)", max: 4 }, { name: "Torre Inferno (x3)", max: 7 },
+                { name: "X-Besta (x4)", max: 8 }, { name: "Tesla Oculta (x5)", max: 12 }, { name: "Defesa Aérea (x4)", max: 11 },
+                { name: "Torre do Mago (x5)", max: 13 }, { name: "Canhão (x7)", max: 19 }, { name: "Torre Arqueira (x8)", max: 19 },
+                { name: "Morteiro (x4)", max: 13 }, { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 8 },
+                { name: "Cabana do Construtor (x5)", max: 1 }
+            ],
+            other: [
+                { name: "Muros (x300)", max: 14 }, { name: "Bomba (x7)", max: 9 }, { name: "Armadilha de Mola (x9)", max: 8 },
+                { name: "Bomba Aérea (x6)", max: 8 }, { name: "Bomba Gigante (x6)", max: 8 }, { name: "Mina Aérea Guiada (x7)", max: 4 },
+                { name: "Armadilha de Esqueleto (x3)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
+                { name: "Coletor de Elixir (x7)", max: 15 }, { name: "Depósito de Elixir (x4)", max: 14 },
+                { name: "Mina de Ouro (x7)", max: 15 }, { name: "Depósito de Ouro (x4)", max: 14 },
+                { name: "Broca de Elixir Negro (x3)", max: 9 }, { name: "Depósito de Elixir Negro (x1)", max: 8 },
+                { name: "Castelo do Clã", max: 9 }, { name: "Assistente de Laboratório", max: 8 },
+                { name: "Aprendiz de Construtor", max: 7 }, { name: "Alquimista", max: 3 }
+            ]
+        },
+        14: {
+            heroes: [
+                { name: "Rei Bárbaro", max: 85 }, { name: "Rainha Arqueira", max: 85 },
+                { name: "Príncipe Servo", max: 60 }, { name: "Grande Guardião", max: 60 },
+                { name: "Campeã Real", max: 30 },
+                // Equipamentos
+                { name: "Equipamentos Comuns (Geral)", max: 18 }, { name: "Equipamentos Épicos (Geral)", max: 21 }
+            ],
+            army: [
+                { name: "Bárbaro", max: 10 }, { name: "Arqueira", max: 10 }, { name: "Gigante", max: 10 }, { name: "Goblin", max: 8 },
+                { name: "Quebra-muros", max: 10 }, { name: "Balão", max: 10 }, { name: "Mago", max: 10 }, { name: "Curadora", max: 7 },
+                { name: "Dragão", max: 9 }, { name: "Pekka", max: 9 }, { name: "Bebê Dragão", max: 8 }, { name: "Mineiro", max: 8 },
+                { name: "Dragão Elétrico", max: 5 }, { name: "Yeti", max: 4 }, { name: "Dragão Dirigível", max: 3 }, { name: "Titã Elétrica", max: 2 },
+                { name: "Servo", max: 10 }, { name: "Corredor", max: 11 }, { name: "Valquíria", max: 9 }, { name: "Golem", max: 11 },
+                { name: "Bruxa", max: 5 }, { name: "Lava-hound", max: 6 }, { name: "Lançador", max: 6 }, { name: "Golem de Gelo", max: 6 },
+                { name: "Caçadora de Heróis", max: 3 }, { name: "Aprendiz de Guardião", max: 3 }, { name: "Druida", max: 2 },
+                { name: "Feitiços Elixir/Negro", max: 8 }, { name: "Escudo de Gelo", max: 2 }, { name: "Feitiço de Raízes", max: 3 },
+                { name: "Trabuco Flamejante (Máquina)", max: 4 }
+            ],
+            defenses: [
+                { name: "Artilharia Águia (x1)", max: 5 }, { name: "Torre Inferno (x3)", max: 8 }, { name: "Disseminador (x2)", max: 3 },
+                { name: "X-Besta (x4)", max: 9 }, { name: "Tesla Oculta (x5)", max: 13 }, { name: "Defesa Aérea (x4)", max: 12 },
+                { name: "Torre do Mago (x5)", max: 14 }, { name: "Canhão (x7)", max: 20 }, { name: "Torre Arqueira (x8)", max: 20 },
+                { name: "Morteiro (x4)", max: 14 }, { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 9 },
+                { name: "Cabana do Construtor (x5)", max: 4 }
+            ],
+            other: [
+                { name: "Muros (x325)", max: 15 }, { name: "Bomba (x8)", max: 10 }, { name: "Armadilha de Mola (x9)", max: 9 },
+                { name: "Bomba Aérea (x7)", max: 9 }, { name: "Bomba Gigante (x7)", max: 8 }, { name: "Mina Aérea Guiada (x8)", max: 4 },
+                { name: "Armadilha de Esqueleto (x4)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
+                { name: "Coletor de Elixir (x7)", max: 15 }, { name: "Depósito de Elixir (x4)", max: 14 },
+                { name: "Mina de Ouro (x7)", max: 15 }, { name: "Depósito de Ouro (x4)", max: 14 },
+                { name: "Broca de Elixir Negro (x3)", max: 9 }, { name: "Depósito de Elixir Negro (x1)", max: 8 },
+                { name: "Castelo do Clã", max: 9 }, { name: "Assistente de Laboratório", max: 10 },
+                { name: "Aprendiz de Construtor", max: 8 }, { name: "Alquimista", max: 4 }
+            ]
+        },
+        15: {
+            heroes: [
+                { name: "Rei Bárbaro", max: 90 }, { name: "Rainha Arqueira", max: 90 },
+                { name: "Príncipe Servo", max: 70 }, { name: "Grande Guardião", max: 65 },
+                { name: "Campeã Real", max: 40 }, { name: "Duque Dracônico", max: 10 },
+                // Equipamentos
+                { name: "Equipamentos Comuns (Geral)", max: 18 }, { name: "Equipamentos Épicos (Geral)", max: 24 }
+            ],
+            army: [
+                { name: "Bárbaro", max: 11 }, { name: "Arqueira", max: 11 }, { name: "Gigante", max: 11 }, { name: "Goblin", max: 9 },
+                { name: "Quebra-muros", max: 11 }, { name: "Balão", max: 10 }, { name: "Mago", max: 11 }, { name: "Curadora", max: 8 },
+                { name: "Dragão", max: 10 }, { name: "Pekka", max: 10 }, { name: "Bebê Dragão", max: 9 }, { name: "Mineiro", max: 9 },
+                { name: "Dragão Elétrico", max: 6 }, { name: "Yeti", max: 5 }, { name: "Dragão Dirigível", max: 3 }, { name: "Titã Elétrica", max: 3 },
+                { name: "Poderosa Hera", max: 2 }, { name: "Servo", max: 11 }, { name: "Corredor", max: 12 }, { name: "Valquíria", max: 10 },
+                { name: "Golem", max: 13 }, { name: "Bruxa", max: 6 }, { name: "Lava-hound", max: 6 }, { name: "Lançador", max: 7 },
+                { name: "Golem de Gelo", max: 7 }, { name: "Caçadora de Heróis", max: 3 }, { name: "Aprendiz de Guardião", max: 4 },
+                { name: "Druida", max: 3 }, { name: "Fornalha", max: 2 }, { name: "Feitiço de Reanimação", max: 2 }, { name: "Raiva Líquida", max: 1 },
+                { name: "Escavadeira Bélica (Máquina)", max: 4 }
+            ],
+            defenses: [
+                { name: "Monólito (x1)", max: 2 }, { name: "Torre de Feitiços (x2)", max: 3 }, { name: "Artilharia Águia (x1)", max: 6 },
+                { name: "Torre Inferno (x3)", max: 9 }, { name: "Disseminador (x2)", max: 4 }, { name: "X-Besta (x4)", max: 10 },
+                { name: "Tesla Oculta (x5)", max: 14 }, { name: "Defesa Aérea (x4)", max: 13 }, { name: "Torre do Mago (x5)", max: 15 },
+                { name: "Canhão (x7)", max: 21 }, { name: "Torre Arqueira (x8)", max: 21 }, { name: "Morteiro (x4)", max: 15 },
+                { name: "Dispersor Aéreo (x2)", max: 7 }, { name: "Torre de Bombas (x2)", max: 10 }, { name: "Cabana do Construtor (x5)", max: 5 }
+            ],
+            other: [
+                { name: "Muros (x325)", max: 16 }, { name: "Bomba (x8)", max: 11 }, { name: "Armadilha de Mola (x9)", max: 10 },
+                { name: "Bomba Aérea (x7)", max: 10 }, { name: "Bomba Gigante (x7)", max: 9 }, { name: "Mina Aérea Guiada (x8)", max: 5 },
+                { name: "Armadilha de Esqueleto (x4)", max: 4 }, { name: "Tornado Arapuca (x1)", max: 3 },
+                { name: "Coletor de Elixir (x7)", max: 16 }, { name: "Depósito de Elixir (x4)", max: 16 },
+                { name: "Mina de Ouro (x7)", max: 16 }, { name: "Depósito de Ouro (x4)", max: 16 },
+                { name: "Broca de Elixir Negro (x3)", max: 10 }, { name: "Depósito de Elixir Negro (x1)", max: 10 },
+                { name: "Castelo do Clã", max: 11 }, { name: "Assistente de Laboratório", max: 11 },
+                { name: "Aprendiz de Construtor", max: 8 }, { name: "Alquimista", max: 5 }
+            ]
         }
+    };
 
-        function saveAllData() {
-            localStorage.setItem('clash_organizer_v3_data', JSON.stringify(appData));
+    let selectedCV = 11;
+
+    function renderOptions(max) {
+        let options = "";
+        for (let i = 0; i <= max; i++) {
+            options += `<option value="${i}">${i}</option>`;
         }
+        return options;
+    }
 
-        function loadSavedData() {
-            const saved = localStorage.getItem('clash_organizer_v3_data');
-            if (saved) {
-                try { appData = { ...appData, ...JSON.parse(saved) }; } catch(e) {}
-            }
-        }
+    function generateRows(itemList) {
+        return itemList.map(item => `
+            <tr>
+                <td><strong>${item.name}</strong></td>
+                <td>Nível ${item.max}</td>
+                <td>
+                    <select onchange="recalculate()">
+                        ${renderOptions(item.max)}
+                    </select>
+                </td>
+                <td><span class="status-badge">- ${item.max}</span></td>
+            </tr>
+        `).join('');
+    }
 
-        function previewLoginAvatar(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    tempAvatarData = e.target.result;
-                    document.getElementById('loginAvatarPreview').innerHTML = `<img src="${tempAvatarData}" class="w-full h-full object-cover rounded-2xl">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+    function renderCV() {
+        const data = cvData[selectedCV];
+        document.getElementById('heroesTable').innerHTML = generateRows(data.heroes);
+        document.getElementById('armyTable').innerHTML = generateRows(data.army);
+        document.getElementById('defensesTable').innerHTML = generateRows(data.defenses);
+        document.getElementById('otherTable').innerHTML = generateRows(data.other);
+        recalculate();
+    }
 
-        function updateProfileAvatar(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    appData.avatarUrl = e.target.result;
-                    renderAvatar();
-                    saveAllData();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+    function changeCV() {
+        selectedCV = document.getElementById('cvSelect').value;
+        renderCV();
+    }
 
-        function renderAvatar() {
-            const container = document.getElementById('avatarContainer');
-            if (appData.avatarUrl) {
-                container.innerHTML = `<img src="${appData.avatarUrl}" class="w-full h-full object-cover rounded-xl">`;
+    function recalculate() {
+        const selects = document.querySelectorAll('select:not(#cvSelect)');
+        let totalMax = 0;
+        let totalCurrent = 0;
+
+        selects.forEach(s => {
+            const max = parseInt(s.options[s.options.length - 1].value);
+            const val = parseInt(s.value);
+            totalMax += max;
+            totalCurrent += val;
+
+            const statusCell = s.parentElement.nextElementSibling.querySelector('.status-badge');
+            const remaining = max - val;
+            if (remaining === 0) {
+                statusCell.className = "status-badge status-max";
+                statusCell.innerText = "MAX";
             } else {
-                const firstLetter = (appData.currentUser || 'G').charAt(0).toUpperCase();
-                container.innerHTML = `<span id="avatarLetter">${firstLetter}</span>`;
+                statusCell.className = "status-badge";
+                statusCell.innerText = `- ${remaining}`;
             }
-        }
+        });
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const name = document.getElementById('displayNameInput').value.trim();
-            const handle = document.getElementById('usernameInput').value.trim();
-            const tag = document.getElementById('playerTagInput').value.trim();
+        const pct = totalMax > 0 ? Math.round((totalCurrent / totalMax) * 100) : 0;
+        document.getElementById('globalProgress').innerText = `${pct}%`;
+        document.getElementById('remainingUpgrades').innerText = totalMax - totalCurrent;
+    }
 
-            if (name && handle && tag) {
-                appData.currentUser = name;
-                appData.userHandle = handle.startsWith('@') ? handle : `@${handle}`;
-                appData.playerTag = tag.startsWith('#') ? tag.toUpperCase() : `#${tag.toUpperCase()}`;
-                if (tempAvatarData) appData.avatarUrl = tempAvatarData;
-                
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('initialCVModal').classList.remove('hidden');
-                document.getElementById('initialCVModal').classList.add('flex');
-            }
-        }
-
-        function confirmInitialCV() {
-            const selectedCV = document.getElementById('popTownHallSelect').value;
-            
-            if (!appData.accounts || appData.accounts.length === 0) {
-                appData.accounts = [{ id: 'acc_1', name: appData.currentUser, tag: appData.playerTag, townHall: selectedCV }];
-            } else {
-                appData.accounts[0].townHall = selectedCV;
-            }
-
-            appData.activeAccountIndex = 0;
-            saveAllData();
-            
-            document.getElementById('initialCVModal').classList.add('hidden');
-            document.getElementById('initialCVModal').classList.remove('flex');
-            showApp();
-        }
-
-        function checkSession() {
-            if (appData.currentUser && appData.playerTag) { 
-                showApp(); 
-            } else {
-                document.getElementById('loginModal').classList.remove('hidden');
-                document.getElementById('appContainer').classList.add('hidden');
-            }
-        }
-
-        function handleLogout() {
-            appData.currentUser = null;
-            appData.userHandle = null;
-            appData.playerTag = null;
-            saveAllData();
-            document.getElementById('loginModal').classList.remove('hidden');
-            document.getElementById('appContainer').classList.add('hidden');
-        }
-
-        function showApp() {
-            document.getElementById('loginModal').classList.add('hidden');
-            document.getElementById('appContainer').classList.remove('hidden');
-
-            document.getElementById('displayUsername').innerText = appData.currentUser;
-            document.getElementById('displayHandle').innerText = appData.userHandle || '@chefe';
-            document.getElementById('displayTag').innerText = appData.playerTag || '#TAG';
-            renderAvatar();
-
-            renderAccountsList();
-            renderTracker();
-        }
-
-        function switchTab(tab) {
-            const trackerSection = document.getElementById('trackerSection');
-            const editorSection = document.getElementById('editorSection');
-            const btnTracker = document.getElementById('tabTrackerBtn');
-            const btnEditor = document.getElementById('tabEditorBtn');
-
-            if (tab === 'tracker') {
-                trackerSection.classList.remove('hidden');
-                editorSection.classList.add('hidden');
-                btnTracker.className = "px-3 sm:px-4 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md";
-                btnEditor.className = "px-3 sm:px-4 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50";
-            } else {
-                trackerSection.classList.add('hidden');
-                editorSection.classList.remove('hidden');
-                editorSection.classList.add('flex');
-                btnEditor.className = "px-3 sm:px-4 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md";
-                btnTracker.className = "px-3 sm:px-4 py-1.5 rounded-md text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/50";
-            }
-        }
-
-        // --- SALVADORES DE CENTROS DE VILA (MÁXIMO 7) ---
-        function renderAccountsList() {
-            const container = document.getElementById('accountsListContainer');
-            container.innerHTML = '';
-
-            appData.accounts.forEach((acc, index) => {
-                const isActive = appData.activeAccountIndex === index;
-                const card = document.createElement('div');
-                card.className = `p-3 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${isActive ? 'bg-amber-500/10 border-amber-500/50 text-white shadow-lg' : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:bg-slate-800/50'}`;
-                card.onclick = () => selectAccount(index);
-
-                card.innerHTML = `
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-8 h-8 rounded-lg ${isActive ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'} flex items-center justify-center text-xs font-bold flex-shrink-0">
-                            CV${acc.townHall}
-                        </div>
-                        <div class="truncate">
-                            <h5 class="text-xs font-bold text-white truncate">${acc.name}</h5>
-                            <span class="text-[10px] text-slate-500 font-mono">${acc.tag}</span>
-                        </div>
-                    </div>
-                    ${appData.accounts.length > 1 ? `
-                        <button onclick="deleteAccount(event, ${index})" title="Remover" class="text-slate-600 hover:text-red-400 text-xs p-1.5 rounded hover:bg-slate-800 transition-colors">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    ` : ''}
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function openAddAccountModal() {
-            if (appData.accounts.length >= 7) {
-                alert("Limite máximo atingido! Você pode manter até 7 Salvadores de Centros de Vila.");
-                return;
-            }
-            document.getElementById('addAccountModal').classList.remove('hidden');
-            document.getElementById('addAccountModal').classList.add('flex');
-        }
-
-        function closeAddAccountModal() {
-            document.getElementById('addAccountModal').classList.add('hidden');
-            document.getElementById('addAccountModal').classList.remove('flex');
-        }
-
-        function confirmAddAccount() {
-            const name = document.getElementById('newAccName').value.trim();
-            const tag = document.getElementById('newAccTag').value.trim();
-            const cv = document.getElementById('newAccCV').value;
-
-            if (!name || !tag) return alert("Por favor, preencha o Nome e a TAG!");
-
-            appData.accounts.push({
-                id: 'acc_' + Date.now(),
-                name: name,
-                tag: tag.startsWith('#') ? tag.toUpperCase() : `#${tag.toUpperCase()}`,
-                townHall: cv
-            });
-
-            appData.activeAccountIndex = appData.accounts.length - 1;
-            saveAllData();
-            closeAddAccountModal();
-            document.getElementById('newAccName').value = '';
-            document.getElementById('newAccTag').value = '';
-            renderAccountsList();
-            renderTracker();
-        }
-
-        function selectAccount(index) {
-            appData.activeAccountIndex = index;
-            saveAllData();
-            renderAccountsList();
-            renderTracker();
-            if (window.innerWidth < 768) toggleSidebar();
-        }
-
-        function deleteAccount(e, index) {
-            e.stopPropagation();
-            if (confirm("Deseja remover este salvador de Centro de Vila?")) {
-                appData.accounts.splice(index, 1);
-                if (appData.activeAccountIndex >= appData.accounts.length) {
-                    appData.activeAccountIndex = 0;
-                }
-                saveAllData();
-                renderAccountsList();
-                renderTracker();
-            }
-        }
-
-        function getAccountTrackerKey() {
-            const currentAcc = appData.accounts[appData.activeAccountIndex] || appData.accounts[0];
-            return `${currentAcc.id}_cv${currentAcc.townHall}`;
-        }
-
-        // --- RENDERIZAÇÃO DO RASTREADOR & CÁLCULOS ---
-        function renderTracker() {
-            const currentAcc = appData.accounts[appData.activeAccountIndex] || { name: 'Vila', townHall: '11', tag: '#TAG' };
-            
-            document.getElementById('activeAccountTitle').innerText = currentAcc.name;
-            document.getElementById('currentCVBadge').innerText = `CV ${currentAcc.townHall}`;
-
-            const key = getAccountTrackerKey();
-
-            if (!appData.trackers[key]) {
-                appData.trackers[key] = getCVData(currentAcc.townHall);
-            }
-
-            const items = appData.trackers[key];
-            const villageCategoriesContainer = document.getElementById('villageCategoriesContainer');
-            const equipmentsCategoryContainer = document.getElementById('equipmentsCategoryContainer');
-            
-            villageCategoriesContainer.innerHTML = '';
-            equipmentsCategoryContainer.innerHTML = '';
-
-            const villageCategories = ['Heróis', 'Laboratório', 'Defesas', 'Muros', 'Armadilhas', 'Recursos & Auxiliares'];
-
-            let globalVillageCurrent = 0, globalVillageMax = 0, villagePendingCount = 0;
-            let villageCategoryStats = {};
-
-            // 1. RENDERIZAR TABELAS DA VILA PRINCIPAL (Com fixação de Nível Máximo do CV)
-            villageCategories.forEach(cat => {
-                const catItems = items.filter(i => i.category === cat);
-                let catCurrent = 0, catMax = 0;
-
-                catItems.forEach(i => {
-                    catCurrent += i.current;
-                    catMax += i.max;
-                    if (i.current < i.max) villagePendingCount += (i.max - i.current);
-                });
-
-                globalVillageCurrent += catCurrent;
-                globalVillageMax += catMax;
-                const catPercent = catMax > 0 ? Math.round((catCurrent / catMax) * 100) : 0;
-                villageCategoryStats[cat] = catPercent;
-                const isCatMaxed = catMax > 0 && catCurrent >= catMax;
-
-                const card = document.createElement('div');
-                card.className = `glass-panel rounded-2xl overflow-hidden shadow-lg border transition-all ${isCatMaxed ? 'border-emerald-500/50 bg-emerald-950/10' : 'border-slate-700/50'}`;
-                
-                card.innerHTML = `
-                    <div class="p-4 bg-slate-800/30 border-b border-slate-700/50 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <h3 class="font-bold text-white text-base tracking-tight">${cat}</h3>
-                            <span class="text-[10px] font-bold ${isCatMaxed ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'} px-2.5 py-0.5 rounded-md border">
-                                ${isCatMaxed ? '<i class="fa-solid fa-check mr-1"></i> MAXIMIZADO' : `${catPercent}%`}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs sm:text-sm text-slate-300">
-                            <thead class="bg-slate-900/40 text-[10px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-700/50">
-                                <tr>
-                                    <th class="p-3">Estrutura / Item</th>
-                                    <th class="p-3 text-center">Nível Atual</th>
-                                    <th class="p-3 text-center">Nível Máx CV</th>
-                                    <th class="p-3 text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-700/30">
-                                ${catItems.length === 0 ? `
-                                    <tr><td colspan="4" class="p-4 text-center text-xs text-slate-500">Nenhum item nesta categoria para este CV.</td></tr>
-                                ` : catItems.map((item) => {
-                                    const missing = item.max - item.current;
-                                    const isMaxed = item.current >= item.max;
-                                    const globalIndex = items.indexOf(item);
-                                    return `
-                                        <tr class="hover:bg-slate-800/40 transition-colors ${isMaxed ? 'bg-emerald-500/5' : ''}">
-                                            <td class="p-3 font-semibold ${isMaxed ? 'text-emerald-400' : 'text-slate-200'}">
-                                                ${item.name}
-                                            </td>
-                                            <td class="p-3 text-center">
-                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, this.value)" class="w-16 bg-slate-950/50 border ${isMaxed ? 'border-emerald-500 text-emerald-400 font-black' : 'border-slate-600 text-amber-400 font-bold'} rounded-md px-2 py-1 text-center focus:outline-none focus:border-amber-500">
-                                            </td>
-                                            <td class="p-3 text-center font-bold text-slate-400">
-                                                Nível ${item.max}
-                                            </td>
-                                            <td class="p-3 text-center">
-                                                <span class="px-2.5 py-1 rounded text-[10px] font-bold ${isMaxed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-800 text-slate-400'}">
-                                                    ${isMaxed ? 'MAX' : `- ${missing}`}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    `;
-                                }).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                villageCategoriesContainer.appendChild(card);
-            });
-
-            // 2. RENDERIZAR FERREIRO DE EQUIPAMENTOS (ÉPICOS DESLIGADOS POR PADRÃO)
-            const equipItems = items.filter(i => i.category === 'Equipamentos (Ferreiro)');
-            let equipCurrent = 0, equipMax = 0;
-
-            equipItems.forEach(i => {
-                if (i.owned === true) {
-                    equipCurrent += i.current;
-                    equipMax += i.max;
-                }
-            });
-
-            const equipPercent = equipMax > 0 ? Math.round((equipCurrent / equipMax) * 100) : 0;
-            document.getElementById('equipPercentBadge').innerText = `${equipPercent}%`;
-            document.getElementById('equipProgressBar').style.width = `${equipPercent}%`;
-
-            const equipCard = document.createElement('div');
-            equipCard.className = "glass-panel rounded-2xl overflow-hidden shadow-lg border border-amber-500/20";
-            equipCard.innerHTML = `
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs sm:text-sm text-slate-300">
-                        <thead class="bg-slate-900/60 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-700/50">
-                            <tr>
-                                <th class="p-3">Equipamento</th>
-                                <th class="p-3 text-center">Possui?</th>
-                                <th class="p-3 text-center">Nível</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-700/30">
-                            ${equipItems.length === 0 ? `
-                                <tr><td colspan="3" class="p-4 text-center text-xs text-slate-500">Nenhum equipamento cadastrado.</td></tr>
-                            ` : equipItems.map((item) => {
-                                const isOwned = item.owned === true;
-                                const isMaxed = item.current >= item.max;
-                                const globalIndex = items.indexOf(item);
-                                return `
-                                    <tr class="hover:bg-slate-800/40 transition-colors ${!isOwned ? 'opacity-40 bg-slate-950/40' : (isMaxed ? 'bg-emerald-500/5' : '')}">
-                                        <td class="p-3 font-semibold ${isMaxed && isOwned ? 'text-emerald-400' : 'text-slate-200'}">
-                                            <div class="flex flex-col">
-                                                <span>${item.name}</span>
-                                                ${item.epic ? '<span class="text-[8px] text-purple-400 uppercase font-black tracking-wider">Épico</span>' : ''}
-                                            </div>
-                                        </td>
-                                        <td class="p-3 text-center">
-                                            <button onclick="toggleItemOwned(${globalIndex})" class="px-2.5 py-1 rounded text-[10px] font-bold transition-all ${isOwned ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' : 'bg-slate-800 text-slate-500 border border-slate-700'}">
-                                                ${isOwned ? '<i class="fa-solid fa-check mr-1"></i> Sim' : '<i class="fa-solid fa-xmark mr-1"></i> Não'}
-                                            </button>
-                                        </td>
-                                        <td class="p-3 text-center">
-                                            <input type="number" min="0" max="${item.max}" value="${item.current}" ${!isOwned ? 'disabled' : ''} onchange="updateItemLevel(${globalIndex}, this.value)" class="w-14 bg-slate-950/50 border ${isMaxed && isOwned ? 'border-emerald-500 text-emerald-400 font-black' : 'border-slate-600 text-amber-400 font-bold'} rounded-md px-1.5 py-1 text-center focus:outline-none focus:border-amber-500 disabled:opacity-30">
-                                            <span class="text-[10px] text-slate-500 block">máx ${item.max}</span>
-                                        </td>
-                                    </tr>
-                                `;
-                            }).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-            equipmentsCategoryContainer.appendChild(equipCard);
-
-            // 3. ATUALIZAR MÉTRICAS GLOBAIS DA VILA
-            const overallPercent = globalVillageMax > 0 ? Math.round((globalVillageCurrent / globalVillageMax) * 100) : 0;
-            document.getElementById('totalProgressPercent').innerText = `${overallPercent}%`;
-            document.getElementById('totalProgressBar').style.width = `${overallPercent}%`;
-            document.getElementById('remainingUpgradesCount').innerText = villagePendingCount;
-
-            let minCat = 'Nenhum', minVal = 101;
-            Object.keys(villageCategoryStats).forEach(c => {
-                if (villageCategoryStats[c] < minVal) { minVal = villageCategoryStats[c]; minCat = c; }
-            });
-            document.getElementById('laggingCategory').innerText = minCat;
-
-            saveAllData();
-        }
-
-        function updateItemLevel(index, value) {
-            const key = getAccountTrackerKey();
-            appData.trackers[key][index].current = parseInt(value) || 0;
-            renderTracker();
-        }
-
-        function toggleItemOwned(index) {
-            const key = getAccountTrackerKey();
-            const item = appData.trackers[key][index];
-            item.owned = !item.owned;
-            renderTracker();
-        }
-
-        // --- PRÓXIMO CENTRO DE VILA (POP-UP) ---
-        function advanceToNextTownHall() {
-            const currentAcc = appData.accounts[appData.activeAccountIndex];
-            const currentCV = parseInt(currentAcc.townHall);
-
-            if (currentCV >= 18) {
-                alert("Sua vila já está no Centro de Vila máximo (CV 18)!");
-                return;
-            }
-
-            const nextCV = currentCV + 1;
-            if (confirm(`Parabéns! Deseja concluir todas as melhorias do CV ${currentCV} e avançar para o Centro de Vila ${nextCV}?`)) {
-                // Maximiza vila atual
-                const key = getAccountTrackerKey();
-                if (appData.trackers[key]) {
-                    appData.trackers[key].forEach(i => i.current = i.max);
-                }
-
-                // Avança para o próximo CV
-                currentAcc.townHall = nextCV.toString();
-                saveAllData();
-                renderAccountsList();
-                renderTracker();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function resetTrackerData() {
-            const key = getAccountTrackerKey();
-            const currentAcc = appData.accounts[appData.activeAccountIndex];
-            if (confirm(`Deseja resetar os dados do CV ${currentAcc.townHall}?`)) {
-                appData.trackers[key] = getCVData(currentAcc.townHall);
-                renderTracker();
-            }
-        }
-    </script>
+    // Inicialização
+    renderCV();
+</script>
 </body>
 </html>
