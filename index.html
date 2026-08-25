@@ -46,6 +46,20 @@
                 <p class="text-slate-400 text-xs sm:text-sm mt-1">Selecione suas credenciais e o Centro de Vila inicial</p>
             </div>
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
+                <!-- Seleção de Foto no Login -->
+                <div class="flex flex-col items-center justify-center mb-2">
+                    <div class="relative group cursor-pointer" onclick="document.getElementById('loginAvatarInput').click()">
+                        <div id="loginAvatarPreview" class="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-3xl shadow-lg overflow-hidden border-2 border-amber-400/50">
+                            G
+                        </div>
+                        <div class="absolute inset-0 bg-black/50 rounded-2xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-xs font-semibold">
+                            <i class="fa-solid fa-camera mr-1"></i> Foto
+                        </div>
+                    </div>
+                    <input type="file" id="loginAvatarInput" accept="image/*" class="hidden" onchange="previewLoginAvatar(event)">
+                    <span class="text-[10px] text-slate-400 mt-1">Clique para escolher foto da galeria</span>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Nome do Jogador</label>
                     <input type="text" id="displayNameInput" required value="Gabriel Santos" class="w-full bg-slate-950/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-amber-500 transition-all">
@@ -81,7 +95,7 @@
     <!-- Aplicação Principal -->
     <div id="appContainer" class="hidden flex-1 flex flex-col overflow-hidden relative">
 
-        <!-- Banner de Desenvolvedor (Gabriel Santos) -->
+        <!-- Banner de Desenvolvedor -->
         <div id="devBanner" class="hidden bg-purple-900/90 border-b border-purple-500/50 px-4 py-2 text-xs flex justify-between items-center z-50 text-purple-200 flex-shrink-0">
             <span class="font-bold flex items-center gap-2">
                 <i class="fa-solid fa-code"></i> MODO DESENVOLVEDOR ATIVO (Gabriel Santos)
@@ -101,12 +115,19 @@
 
             <!-- Sidebar -->
             <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
-                <!-- Topo Perfil -->
+                <!-- Topo Perfil com foto alterável -->
                 <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
                     <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-lg flex-shrink-0 shadow-inner" id="avatarLetter">
-                            G
+                        <div class="relative group cursor-pointer flex-shrink-0" onclick="document.getElementById('profileAvatarInput').click()" title="Alterar Foto de Perfil">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-lg shadow-inner overflow-hidden border border-amber-400/30" id="avatarContainer">
+                                <span id="avatarLetter">G</span>
+                            </div>
+                            <div class="absolute inset-0 bg-black/60 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[10px]">
+                                <i class="fa-solid fa-camera"></i>
+                            </div>
                         </div>
+                        <input type="file" id="profileAvatarInput" accept="image/*" class="hidden" onchange="updateProfileAvatar(event)">
+
                         <div class="truncate">
                             <h3 class="font-bold text-sm text-white truncate" id="displayUsername">Gabriel Santos</h3>
                             <div class="flex flex-col">
@@ -120,10 +141,10 @@
                     </button>
                 </div>
 
-                <!-- Alternador de Vila e Ações -->
+                <!-- Alternador de Nível do CV e Ações -->
                 <div class="p-4 border-b border-slate-800/50 space-y-3">
                     <div>
-                        <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Alternar Nível / Progresso</label>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Alternar Centro de Vila</label>
                         <select id="sidebarAccountSelect" onchange="switchVillageFromSidebar()" class="w-full bg-slate-900 border border-slate-700 text-amber-400 font-bold text-xs rounded-lg p-2.5 focus:outline-none focus:border-amber-500">
                             <option value="18">🏰 Centro de Vila 18</option>
                             <option value="17">🏰 Centro de Vila 17</option>
@@ -187,7 +208,7 @@
                 <!-- RASTREADOR CLASH -->
                 <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
                     
-                    <!-- Header de Configuração -->
+                    <!-- Header de Configuração do Centro de Vila -->
                     <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
                         
@@ -201,14 +222,9 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-                            <select id="villageTypeSelect" onchange="changeVillageType()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 appearance-none font-medium">
-                                <option value="main">🏰 Vila Principal</option>
-                                <option value="builder">🔨 Base Construtor</option>
-                                <option value="capital">🏛️ Capital do Clã</option>
-                            </select>
-
-                            <select id="townHallSelect" onchange="renderTracker()" class="flex-1 sm:flex-none bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 appearance-none font-bold text-amber-400">
+                        <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Centro de Vila:</label>
+                            <select id="townHallSelect" onchange="renderTracker()" class="bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 font-bold text-amber-400">
                                 <option value="18">Nível 18</option>
                                 <option value="17">Nível 17</option>
                                 <option value="16">Nível 16</option>
@@ -218,6 +234,28 @@
                                 <option value="12">Nível 12</option>
                                 <option value="11" selected>Nível 11</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Galeria de Registros e Comparativos da Vila -->
+                    <div class="glass-panel p-5 rounded-2xl space-y-4 border border-slate-700/50">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid fa-[#fa9d18] fa-images text-amber-500 text-lg"></i>
+                                <div>
+                                    <h3 class="font-bold text-white text-sm sm:text-base">Galeria de Registros & Comparativos</h3>
+                                    <p class="text-[11px] text-slate-400">Anexe imagens da sua vila para comparar a evolução ao longo do tempo</p>
+                                </div>
+                            </div>
+                            <button onclick="document.getElementById('villageGalleryInput').click()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs flex items-center gap-2 transition-all shadow-md shadow-amber-500/10">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Anexar Imagem
+                            </button>
+                            <input type="file" id="villageGalleryInput" accept="image/*" class="hidden" onchange="handleGalleryUpload(event)">
+                        </div>
+
+                        <!-- Grid da Galeria -->
+                        <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- Inserido dinamicamente via script -->
                         </div>
                     </div>
 
@@ -446,26 +484,28 @@
             ];
         }
 
+        let tempAvatarData = null;
+
         let appData = {
             currentUser: "Gabriel Santos",
             userHandle: "@bielzinho",
             playerTag: "#LUU9VYJLP",
+            avatarUrl: null,
             activeTab: 'tracker',
-            activeVillage: 'main',
             activeTownHall: '11',
             activeDocId: 'default_doc',
             isDevMode: true,
             viewAsPlayer: false,
             folders: [
-                { id: 'f_cv11', name: 'Centro de Vila 11' },
-                { id: 'f_builder', name: 'Base do Construtor' }
+                { id: 'f_cv11', name: 'Centro de Vila 11' }
             ],
             documents: [
                 { id: 'default_doc', folderId: 'f_cv11', title: 'Prioridades CV11', content: '<h2><strong>Estratégia Inicial CV11</strong></h2><p>Priorizar a construção da <strong>Artilharia Águia</strong> e a liberação do <strong>Grande Guardião</strong>.</p>' }
             ],
             trackers: {
                 main_11: getCV11Data()
-            }
+            },
+            galleries: {}
         };
 
         window.onload = function() {
@@ -491,6 +531,42 @@
             }
         }
 
+        function previewLoginAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    tempAvatarData = e.target.result;
+                    const preview = document.getElementById('loginAvatarPreview');
+                    preview.innerHTML = `<img src="${tempAvatarData}" class="w-full h-full object-cover rounded-2xl">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateProfileAvatar(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appData.avatarUrl = e.target.result;
+                    renderAvatar();
+                    saveAllData();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function renderAvatar() {
+            const container = document.getElementById('avatarContainer');
+            if (appData.avatarUrl) {
+                container.innerHTML = `<img src="${appData.avatarUrl}" class="w-full h-full object-cover rounded-xl">`;
+            } else {
+                const firstLetter = (appData.currentUser || 'G').charAt(0).toUpperCase();
+                container.innerHTML = `<span id="avatarLetter">${firstLetter}</span>`;
+            }
+        }
+
         function handleLogin(e) {
             e.preventDefault();
             const name = document.getElementById('displayNameInput').value.trim();
@@ -503,6 +579,7 @@
                 appData.userHandle = handle.startsWith('@') ? handle : `@${handle}`;
                 appData.playerTag = tag.startsWith('#') ? tag.toUpperCase() : `#${tag.toUpperCase()}`;
                 appData.activeTownHall = initialTH;
+                if (tempAvatarData) appData.avatarUrl = tempAvatarData;
                 
                 saveAllData();
                 showApp();
@@ -534,7 +611,7 @@
             document.getElementById('displayUsername').innerText = appData.currentUser;
             document.getElementById('displayHandle').innerText = appData.userHandle || '@chefe';
             document.getElementById('displayTag').innerText = appData.playerTag || '#TAG';
-            document.getElementById('avatarLetter').innerText = appData.currentUser.charAt(0).toUpperCase();
+            renderAvatar();
 
             document.getElementById('townHallSelect').value = appData.activeTownHall;
             document.getElementById('sidebarAccountSelect').value = appData.activeTownHall;
@@ -713,12 +790,71 @@
         }
 
         function getTrackerKey() {
-            return `${appData.activeVillage}_${appData.activeTownHall}`;
+            return `main_${appData.activeTownHall}`;
         }
 
-        function changeVillageType() {
-            appData.activeVillage = document.getElementById('villageTypeSelect').value;
-            renderTracker();
+        function handleGalleryUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const now = new Date();
+                const timestampStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR');
+                const thKey = appData.activeTownHall;
+
+                if (!appData.galleries) appData.galleries = {};
+                if (!appData.galleries[thKey]) appData.galleries[thKey] = [];
+
+                appData.galleries[thKey].unshift({
+                    id: 'img_' + Date.now(),
+                    url: e.target.result,
+                    timestamp: timestampStr
+                });
+
+                saveAllData();
+                renderGallery();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderGallery() {
+            const thKey = appData.activeTownHall;
+            const container = document.getElementById('galleryContainer');
+            const list = (appData.galleries && appData.galleries[thKey]) ? appData.galleries[thKey] : [];
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-8 text-center text-slate-500 text-xs font-medium bg-slate-900/40 rounded-xl border border-dashed border-slate-800">
+                        <i class="fa-solid fa-images text-2xl mb-2 text-slate-600"></i>
+                        <p>Nenhum registro da vila anexado para este Centro de Vila.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map((item, idx) => `
+                <div class="relative group glass-panel rounded-xl overflow-hidden border border-slate-700/50 shadow-md">
+                    <img src="${item.url}" class="w-full h-44 object-cover">
+                    <div class="p-2 bg-slate-950/90 flex justify-between items-center text-[10px] text-slate-400">
+                        <span class="flex items-center gap-1 font-mono text-amber-400/90">
+                            <i class="fa-solid fa-clock"></i> ${item.timestamp}
+                        </span>
+                        <button onclick="deleteGalleryItem('${item.id}')" title="Excluir Registro" class="text-slate-500 hover:text-red-400 p-1 transition-colors">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteGalleryItem(imgId) {
+            const thKey = appData.activeTownHall;
+            if (confirm("Remover esta imagem da galeria?")) {
+                appData.galleries[thKey] = appData.galleries[thKey].filter(i => i.id !== imgId);
+                saveAllData();
+                renderGallery();
+            }
         }
 
         function resetTrackerData() {
@@ -748,6 +884,8 @@
                     ];
                 }
             }
+
+            renderGallery();
 
             const items = appData.trackers[key];
             const categoriesContainer = document.getElementById('categoriesContainer');
