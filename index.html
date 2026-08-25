@@ -17,12 +17,10 @@
             color: #64748b;
             cursor: text;
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
-        /* Glassmorphism utilities */
         .glass-panel {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(12px);
@@ -33,7 +31,7 @@
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-950 text-slate-100 h-screen flex flex-col overflow-hidden">
 
-    <!-- Modal de Identificação do Jogador -->
+    <!-- Modal de Identificação -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300">
         <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md border-t border-slate-700 relative overflow-hidden">
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -46,7 +44,6 @@
                 <p class="text-slate-400 text-xs sm:text-sm mt-1">Selecione suas credenciais e o Centro de Vila inicial</p>
             </div>
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 relative z-10">
-                <!-- Seleção de Foto no Login -->
                 <div class="flex flex-col items-center justify-center mb-2">
                     <div class="relative group cursor-pointer" onclick="document.getElementById('loginAvatarInput').click()">
                         <div id="loginAvatarPreview" class="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-900 font-bold flex items-center justify-center text-3xl shadow-lg overflow-hidden border-2 border-amber-400/50">
@@ -110,12 +107,10 @@
         </div>
 
         <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
-            <!-- Overlay Mobile -->
             <div id="mobileOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
 
             <!-- Sidebar -->
             <aside id="sidebar" class="fixed md:relative z-40 w-72 h-full bg-slate-950/95 md:bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/50 flex flex-col flex-shrink-0 transition-transform duration-300 -translate-x-full md:translate-x-0 shadow-2xl md:shadow-none">
-                <!-- Topo Perfil com foto alterável -->
                 <div class="p-5 border-b border-slate-800/50 flex items-center justify-between bg-slate-900/30">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <div class="relative group cursor-pointer flex-shrink-0" onclick="document.getElementById('profileAvatarInput').click()" title="Alterar Foto de Perfil">
@@ -141,7 +136,6 @@
                     </button>
                 </div>
 
-                <!-- Alternador de Nível do CV e Ações -->
                 <div class="p-4 border-b border-slate-800/50 space-y-3">
                     <div>
                         <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Alternar Centro de Vila</label>
@@ -167,10 +161,8 @@
                     </div>
                 </div>
 
-                <!-- Árvore de Pastas -->
                 <div class="flex-1 overflow-y-auto px-3 py-3 space-y-3" id="folderTree"></div>
 
-                <!-- Rodapé da Sidebar -->
                 <div class="p-4 bg-slate-950/80 border-t border-slate-800/50 text-xs text-slate-400 flex justify-between items-center">
                     <span class="flex items-center gap-1.5 font-medium"><i class="fa-solid fa-cloud-check text-emerald-500"></i> Sincronizado</span>
                     <div class="flex items-center gap-1">
@@ -183,7 +175,6 @@
             <!-- Área Principal -->
             <main class="flex-1 flex flex-col overflow-hidden w-full relative">
                 
-                <!-- Navbar Superior -->
                 <header class="h-16 glass-panel border-b-0 border-slate-800/50 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 gap-2 z-10 shadow-sm">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <button onclick="toggleSidebar()" class="md:hidden text-amber-500 p-2 rounded-lg hover:bg-slate-800/50 transition-colors">
@@ -194,7 +185,6 @@
                         </span>
                     </div>
                     
-                    <!-- Abas de Alternância -->
                     <div class="flex bg-slate-900/80 p-1 rounded-lg border border-slate-700/50 flex-shrink-0 shadow-inner">
                         <button id="tabTrackerBtn" onclick="switchTab('tracker')" class="px-3 sm:px-5 py-1.5 rounded-md text-xs font-bold transition-all bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md">
                             <i class="fa-solid fa-list-check sm:mr-1.5"></i><span class="hidden sm:inline"> Rastreador</span>
@@ -208,7 +198,7 @@
                 <!-- RASTREADOR CLASH -->
                 <div id="trackerSection" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
                     
-                    <!-- Header de Configuração do Centro de Vila -->
+                    <!-- Header da Vila & Alternador de Equipamentos -->
                     <div class="glass-panel p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
                         
@@ -218,30 +208,37 @@
                             </div>
                             <div>
                                 <h2 class="text-lg sm:text-xl font-bold text-white tracking-tight">Painel da Vila</h2>
-                                <p class="text-xs text-slate-400 mt-0.5">Gerencie os upgrades e acompanhe seu progresso real</p>
+                                <p class="text-xs text-slate-400 mt-0.5">Gerencie upgrades da Vila Principal e do Ferreiro de forma independente</p>
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-2.5 w-full sm:w-auto">
-                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">Centro de Vila:</label>
-                            <select id="townHallSelect" onchange="renderTracker()" class="bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 font-bold text-amber-400">
-                                <option value="18">Nível 18</option>
-                                <option value="17">Nível 17</option>
-                                <option value="16">Nível 16</option>
-                                <option value="15">Nível 15</option>
-                                <option value="14">Nível 14</option>
-                                <option value="13">Nível 13</option>
-                                <option value="12">Nível 12</option>
-                                <option value="11" selected>Nível 11</option>
-                            </select>
+                        <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                            <!-- Botão Liga/Desliga da Coluna de Equipamentos -->
+                            <button id="toggleEquipmentsBtn" onclick="toggleEquipmentsVisibility()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-400 text-xs font-bold px-3.5 py-2.5 rounded-lg transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-shield-cat"></i> <span id="toggleEquipmentsText">Ocultar Equipamentos</span>
+                            </button>
+
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs font-bold text-slate-400 uppercase tracking-wider">CV:</label>
+                                <select id="townHallSelect" onchange="renderTracker()" class="bg-slate-900/80 border border-slate-700 text-white text-xs sm:text-sm rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-amber-500 font-bold text-amber-400">
+                                    <option value="18">Nível 18</option>
+                                    <option value="17">Nível 17</option>
+                                    <option value="16">Nível 16</option>
+                                    <option value="15">Nível 15</option>
+                                    <option value="14">Nível 14</option>
+                                    <option value="13">Nível 13</option>
+                                    <option value="12">Nível 12</option>
+                                    <option value="11" selected>Nível 11</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Galeria de Registros e Comparativos da Vila -->
+                    <!-- Galeria de Registros -->
                     <div class="glass-panel p-5 rounded-2xl space-y-4 border border-slate-700/50">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                             <div class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-[#fa9d18] fa-images text-amber-500 text-lg"></i>
+                                <i class="fa-solid fa-images text-amber-500 text-lg"></i>
                                 <div>
                                     <h3 class="font-bold text-white text-sm sm:text-base">Galeria de Registros & Comparativos</h3>
                                     <p class="text-[11px] text-slate-400">Anexe imagens da sua vila para comparar a evolução ao longo do tempo</p>
@@ -253,29 +250,26 @@
                             <input type="file" id="villageGalleryInput" accept="image/*" class="hidden" onchange="handleGalleryUpload(event)">
                         </div>
 
-                        <!-- Grid da Galeria -->
-                        <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <!-- Inserido dinamicamente via script -->
-                        </div>
+                        <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </div>
 
-                    <!-- Cards de Métricas -->
+                    <!-- Métricas Globais da Vila Principal -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Progresso Global</span>
+                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Vila (Progresso Global)</span>
                             <div class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500 mt-1" id="totalProgressPercent">0%</div>
                             <div class="w-full bg-slate-900/80 rounded-full h-2 mt-3 border border-slate-800 overflow-hidden shadow-inner">
                                 <div id="totalProgressBar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                             </div>
                         </div>
                         <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300">
-                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Pendentes</span>
+                            <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Upgrades Pendentes</span>
                             <div class="text-2xl sm:text-3xl font-black text-white mt-1" id="remainingUpgradesCount">0</div>
-                            <span class="text-[10px] text-slate-500 font-medium">melhorias na fila</span>
+                            <span class="text-[10px] text-slate-500 font-medium">melhorias na vila</span>
                         </div>
                         <div class="glass-panel p-4 rounded-2xl hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between">
                             <div>
-                                <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Mais Atrasada</span>
+                                <span class="text-[11px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">Setor Mais Atrasado</span>
                                 <div class="text-sm sm:text-lg font-bold text-red-400 mt-1 truncate" id="laggingCategory">Defesas</div>
                             </div>
                             <span class="text-[10px] text-slate-500 font-medium mt-2">foco recomendado</span>
@@ -288,11 +282,39 @@
                         </div>
                     </div>
 
-                    <!-- Lista de Categorias -->
-                    <div class="space-y-6 pb-10" id="categoriesContainer"></div>
+                    <!-- LAYOUT EM COLUNAS: VILA PRINCIPAL | FERREIRO -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <!-- Coluna 1: Vila Principal (Métricas Globais) -->
+                        <div id="villageMainColumn" class="lg:col-span-7 space-y-6">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-castle"></i> Progresso da Vila Principal
+                                </h3>
+                            </div>
+                            <div id="villageCategoriesContainer" class="space-y-6"></div>
+                        </div>
+
+                        <!-- Coluna 2: Equipamentos (Ferreiro - Progresso Isolado) -->
+                        <div id="equipmentsColumn" class="lg:col-span-5 space-y-6">
+                            <div class="glass-panel p-4 rounded-2xl border border-amber-500/30">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                                        <i class="fa-solid fa-hammer text-amber-500"></i> Ferreiro (Equipamentos)
+                                    </h3>
+                                    <span id="equipPercentBadge" class="text-xs font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded border border-amber-500/30">0%</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mb-3">Defina se possui cada equipamento (incluindo Épicos). Os equipamentos não alteram a porcentagem global da vila.</p>
+                                <div class="w-full bg-slate-900/80 rounded-full h-2 border border-slate-800 overflow-hidden shadow-inner">
+                                    <div id="equipProgressBar" class="bg-gradient-to-r from-amber-400 to-orange-500 h-2 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div id="equipmentsCategoryContainer"></div>
+                        </div>
+                    </div>
+
                 </div>
 
-                <!-- EDITOR WORD DE ANOTAÇÕES -->
+                <!-- EDITOR DE ANOTAÇÕES -->
                 <div id="editorSection" class="hidden flex-1 flex-col overflow-hidden bg-slate-900/50">
                     <div class="glass-panel border-b-0 border-slate-800/50 p-2 flex flex-wrap items-center gap-1.5 text-slate-300 overflow-x-auto rounded-b-xl mx-4 sm:mx-8 mt-4 shadow-lg z-10">
                         <button onclick="execCmd('bold')" class="p-2 hover:bg-slate-700/50 hover:text-white rounded-lg text-sm font-bold w-9 h-9 transition-colors">B</button>
@@ -313,7 +335,6 @@
                     <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex justify-center pb-20">
                         <div class="w-full max-w-4xl glass-panel rounded-2xl p-6 sm:p-10 min-h-[600px] shadow-2xl flex flex-col border border-slate-700/30">
                             <input type="text" id="documentTitle" oninput="saveCurrentDocument()" placeholder="Título do Documento..." class="bg-transparent text-2xl sm:text-3xl font-black text-white mb-6 focus:outline-none border-b border-slate-700 pb-3 placeholder-slate-600 transition-colors focus:border-amber-500">
-                            
                             <div id="wordEditor" contenteditable="true" oninput="saveCurrentDocument()" data-placeholder="Comece a registrar suas estratégias e ideias aqui..." class="flex-1 text-slate-300 text-sm sm:text-base leading-relaxed focus:outline-none prose prose-invert prose-amber max-w-none"></div>
                         </div>
                     </div>
@@ -337,7 +358,7 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Categoria</label>
                     <select id="newItemCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500">
-                        <option value="Heróis & Equipamentos">Heróis & Equipamentos</option>
+                        <option value="Heróis & Equipamentos">Heróis (Base)</option>
                         <option value="Equipamentos (Ferreiro)">Equipamentos (Ferreiro)</option>
                         <option value="Laboratório">Laboratório</option>
                         <option value="Defesas">Defesas</option>
@@ -360,6 +381,12 @@
                         <input type="number" id="newItemMax" value="10" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white text-center focus:outline-none focus:border-amber-500">
                     </div>
                 </div>
+                <div id="epicCheckboxWrapper">
+                    <label class="flex items-center gap-2 cursor-pointer text-xs text-amber-400 font-bold mt-2">
+                        <input type="checkbox" id="newItemIsEpic" class="rounded border-amber-500">
+                        <span>É Equipamento Épico?</span>
+                    </label>
+                </div>
             </div>
             <div class="flex justify-end gap-3 mt-8">
                 <button onclick="closeAddItemModal()" class="px-5 py-2.5 bg-slate-800 text-slate-300 text-sm font-semibold rounded-lg hover:bg-slate-700 transition-colors">Cancelar</button>
@@ -374,42 +401,42 @@
 
         function getCV11Data() {
             return [
-                // --- HERÓIS ---
+                // --- HERÓIS BASE ---
                 { category: 'Heróis & Equipamentos', name: 'Rei Bárbaro', current: 0, max: 50 },
                 { category: 'Heróis & Equipamentos', name: 'Rainha Arqueira', current: 0, max: 50 },
                 { category: 'Heróis & Equipamentos', name: 'Príncipe Servo', current: 0, max: 30 },
                 { category: 'Heróis & Equipamentos', name: 'Grande Guardião', current: 0, max: 20 },
 
                 // --- EQUIPAMENTOS (FERREIRO) ---
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Boneco de Bárbaro', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Frasco de Fúria', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bota Terremoto', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bigode de Vampiro', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Manopla Agigantadora', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bola de Espinhos', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Amuleto Ofídico', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Cavalo de Pau', current: 0, max: 15 },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Boneco de Bárbaro', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Frasco de Fúria', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bota Terremoto', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bigode de Vampiro', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Manopla Agigantadora', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Bola de Espinhos', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Amuleto Ofídico', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rei: Cavalo de Pau', current: 0, max: 15, owned: false, epic: true },
                 
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Arqueira', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Frasco de Invisibilidade', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Gigante', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Congelante', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco Gigante', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Monolítica', current: 0, max: 15 },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco de Arqueira', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Frasco de Invisibilidade', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Gigante', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Congelante', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Espelho Mágico', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Boneco Gigante', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Rainha: Flecha Monolítica', current: 0, max: 15, owned: false, epic: true },
                 
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Boneco de Capanga', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Orbe Sombrio', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Calça de Metal', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Coroa Sombria', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Bastão de Meteoros', current: 0, max: 15 },
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Boneco de Capanga', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Orbe Sombrio', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Calça de Metal', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Coroa Sombria', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Príncipe Servo: Bastão de Meteoros', current: 0, max: 15, owned: false, epic: true },
                 
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tomo Eterno', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema da Vida', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema de Fúria', current: 0, max: 12 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Bola de Fogo', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Boneco de Lavalão', current: 0, max: 15 },
-                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tocha Heroica', current: 0, max: 15 },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tomo Eterno', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema da Vida', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Gema de Fúria', current: 0, max: 12, owned: true, epic: false },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Bola de Fogo', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Boneco de Lavalão', current: 0, max: 15, owned: false, epic: true },
+                { category: 'Equipamentos (Ferreiro)', name: 'Guardião: Tocha Heroica', current: 0, max: 15, owned: false, epic: true },
 
                 // --- TROPAS & FEITIÇOS ---
                 { category: 'Laboratório', name: 'Bárbaro', current: 0, max: 8 },
@@ -496,6 +523,7 @@
             activeDocId: 'default_doc',
             isDevMode: true,
             viewAsPlayer: false,
+            showEquipments: true,
             folders: [
                 { id: 'f_cv11', name: 'Centro de Vila 11' }
             ],
@@ -833,7 +861,7 @@
                 return;
             }
 
-            container.innerHTML = list.map((item, idx) => `
+            container.innerHTML = list.map((item) => `
                 <div class="relative group glass-panel rounded-xl overflow-hidden border border-slate-700/50 shadow-md">
                     <img src="${item.url}" class="w-full h-44 object-cover">
                     <div class="p-2 bg-slate-950/90 flex justify-between items-center text-[10px] text-slate-400">
@@ -869,6 +897,28 @@
             }
         }
 
+        function toggleEquipmentsVisibility() {
+            appData.showEquipments = !appData.showEquipments;
+            saveAllData();
+            updateEquipmentsColumnLayout();
+        }
+
+        function updateEquipmentsColumnLayout() {
+            const eqCol = document.getElementById('equipmentsColumn');
+            const vilCol = document.getElementById('villageMainColumn');
+            const btnText = document.getElementById('toggleEquipmentsText');
+
+            if (appData.showEquipments) {
+                eqCol.classList.remove('hidden');
+                vilCol.className = "lg:col-span-7 space-y-6";
+                btnText.innerText = "Ocultar Equipamentos";
+            } else {
+                eqCol.classList.add('hidden');
+                vilCol.className = "lg:col-span-12 space-y-6";
+                btnText.innerText = "Mostrar Equipamentos";
+            }
+        }
+
         function renderTracker() {
             appData.activeTownHall = document.getElementById('townHallSelect').value;
             document.getElementById('sidebarAccountSelect').value = appData.activeTownHall;
@@ -886,14 +936,17 @@
             }
 
             renderGallery();
+            updateEquipmentsColumnLayout();
 
             const items = appData.trackers[key];
-            const categoriesContainer = document.getElementById('categoriesContainer');
-            categoriesContainer.innerHTML = '';
+            const villageCategoriesContainer = document.getElementById('villageCategoriesContainer');
+            const equipmentsCategoryContainer = document.getElementById('equipmentsCategoryContainer');
+            
+            villageCategoriesContainer.innerHTML = '';
+            equipmentsCategoryContainer.innerHTML = '';
 
-            const categories = [
+            const villageCategories = [
                 'Heróis & Equipamentos',
-                'Equipamentos (Ferreiro)',
                 'Laboratório',
                 'Defesas',
                 'Muros',
@@ -901,31 +954,36 @@
                 'Recursos & Auxiliares'
             ];
 
-            let totalCurrent = 0, totalMax = 0, totalPendingCount = 0;
-            let categoryStats = {};
+            let globalVillageCurrent = 0, globalVillageMax = 0, villagePendingCount = 0;
+            let villageCategoryStats = {};
 
-            categories.forEach(cat => {
+            // 1. RENDERIZAR VILA PRINCIPAL (SEM EQUIPAMENTOS)
+            villageCategories.forEach(cat => {
                 const catItems = items.filter(i => i.category === cat);
                 let catCurrent = 0, catMax = 0;
 
                 catItems.forEach(i => {
                     catCurrent += i.current;
                     catMax += i.max;
-                    if (i.current < i.max) totalPendingCount++;
+                    if (i.current < i.max) villagePendingCount++;
                 });
 
-                totalCurrent += catCurrent;
-                totalMax += catMax;
+                globalVillageCurrent += catCurrent;
+                globalVillageMax += catMax;
                 const catPercent = catMax > 0 ? Math.round((catCurrent / catMax) * 100) : 0;
-                categoryStats[cat] = catPercent;
+                villageCategoryStats[cat] = catPercent;
+                const isCatMaxed = catMax > 0 && catCurrent >= catMax;
 
                 const card = document.createElement('div');
-                card.className = "glass-panel rounded-2xl overflow-hidden shadow-lg border border-slate-700/50 mb-6";
+                card.className = `glass-panel rounded-2xl overflow-hidden shadow-lg border transition-all ${isCatMaxed ? 'border-emerald-500/50 bg-emerald-950/10' : 'border-slate-700/50'}`;
+                
                 card.innerHTML = `
                     <div class="p-4 sm:p-5 bg-slate-800/30 border-b border-slate-700/50 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <h3 class="font-bold text-white text-base sm:text-lg tracking-tight">${cat}</h3>
-                            <span class="text-[10px] sm:text-xs font-bold bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-md border border-amber-500/20 shadow-inner">${catPercent}%</span>
+                            <h3 class="font-bold text-white text-base sm:text-lg tracking-tight">${cat === 'Heróis & Equipamentos' ? 'Heróis (Nível Base)' : cat}</h3>
+                            <span class="text-[10px] sm:text-xs font-bold ${isCatMaxed ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'} px-2.5 py-1 rounded-md border shadow-inner">
+                                ${isCatMaxed ? '<i class="fa-solid fa-check-double mr-1"></i> MAXIMIZADO (100%)' : `${catPercent}%`}
+                            </span>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
@@ -936,31 +994,30 @@
                                     <th class="p-3 sm:p-4 text-center">Nível Atual</th>
                                     <th class="p-3 sm:p-4 text-center">Nível Máx.</th>
                                     <th class="p-3 sm:p-4 text-center">Faltam</th>
-                                    <th class="p-3 sm:p-4 text-right">Ações</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-700/30">
                                 ${catItems.length === 0 ? `
-                                    <tr><td colspan="5" class="p-6 text-center text-sm text-slate-500 font-medium">Nenhum item nesta categoria.</td></tr>
+                                    <tr><td colspan="4" class="p-6 text-center text-sm text-slate-500 font-medium">Nenhum item nesta categoria.</td></tr>
                                 ` : catItems.map((item) => {
                                     const missing = item.max - item.current;
+                                    const isMaxed = item.current >= item.max;
                                     const globalIndex = items.indexOf(item);
                                     return `
-                                        <tr class="hover:bg-slate-800/40 transition-colors group">
-                                            <td class="p-3 sm:p-4 font-semibold text-slate-200 whitespace-nowrap">${item.name}</td>
+                                        <tr class="hover:bg-slate-800/40 transition-colors group ${isMaxed ? 'bg-emerald-500/5' : ''}">
+                                            <td class="p-3 sm:p-4 font-semibold ${isMaxed ? 'text-emerald-400' : 'text-slate-200'} whitespace-nowrap">
+                                                ${item.name}
+                                            </td>
                                             <td class="p-3 sm:p-4 text-center">
-                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-600 rounded-md px-2 py-1.5 text-amber-400 font-bold text-center focus:outline-none focus:border-amber-500 transition-all">
+                                                <input type="number" min="0" max="${item.max}" value="${item.current}" onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border ${isMaxed ? 'border-emerald-500 text-emerald-400 font-black' : 'border-slate-600 text-amber-400 font-bold'} rounded-md px-2 py-1.5 text-center focus:outline-none focus:border-amber-500 transition-all">
                                             </td>
                                             <td class="p-3 sm:p-4 text-center">
                                                 <input type="number" min="1" value="${item.max}" onchange="updateItemLevel(${globalIndex}, 'max', this.value)" class="w-14 sm:w-16 bg-slate-950/50 border border-slate-700 rounded-md px-2 py-1.5 text-slate-400 text-center focus:outline-none focus:border-amber-500 transition-all">
                                             </td>
                                             <td class="p-3 sm:p-4 text-center whitespace-nowrap">
-                                                <span class="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold ${missing <= 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-slate-800 text-slate-400'}">
-                                                    ${missing <= 0 ? '<i class="fa-solid fa-check mr-1"></i> MAX' : missing}
+                                                <span class="px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold ${isMaxed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.2)]' : 'bg-slate-800 text-slate-400'}">
+                                                    ${isMaxed ? '<i class="fa-solid fa-check mr-1"></i> MAX' : missing}
                                                 </span>
-                                            </td>
-                                            <td class="p-3 sm:p-4 text-right">
-                                                <button onclick="removeItem(${globalIndex})" class="text-slate-500 hover:text-red-400 hover:bg-red-400/10 p-2 rounded-md transition-all opacity-50 group-hover:opacity-100"><i class="fa-solid fa-trash"></i></button>
                                             </td>
                                         </tr>
                                     `;
@@ -969,19 +1026,89 @@
                         </table>
                     </div>
                 `;
-                categoriesContainer.appendChild(card);
+                villageCategoriesContainer.appendChild(card);
             });
 
-            const overallPercent = totalMax > 0 ? Math.round((totalCurrent / totalMax) * 100) : 0;
+            // 2. RENDERIZAR COLUNA DE EQUIPAMENTOS (FERREIRO)
+            const equipItems = items.filter(i => i.category === 'Equipamentos (Ferreiro)');
+            let equipCurrent = 0, equipMax = 0;
+
+            equipItems.forEach(i => {
+                if (i.owned !== false) {
+                    equipCurrent += i.current;
+                    equipMax += i.max;
+                }
+            });
+
+            const equipPercent = equipMax > 0 ? Math.round((equipCurrent / equipMax) * 100) : 0;
+            document.getElementById('equipPercentBadge').innerText = `${equipPercent}%`;
+            document.getElementById('equipProgressBar').style.width = `${equipPercent}%`;
+
+            const equipCard = document.createElement('div');
+            equipCard.className = "glass-panel rounded-2xl overflow-hidden shadow-lg border border-amber-500/20";
+            equipCard.innerHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                        <thead class="bg-slate-900/60 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-700/50">
+                            <tr>
+                                <th class="p-3 sm:p-4">Possui?</th>
+                                <th class="p-3 sm:p-4">Equipamento</th>
+                                <th class="p-3 sm:p-4 text-center">Nível</th>
+                                <th class="p-3 sm:p-4 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/30">
+                            ${equipItems.length === 0 ? `
+                                <tr><td colspan="4" class="p-6 text-center text-sm text-slate-500 font-medium">Nenhum equipamento cadastrado.</td></tr>
+                            ` : equipItems.map((item) => {
+                                const isOwned = item.owned !== false;
+                                const isMaxed = item.current >= item.max;
+                                const missing = item.max - item.current;
+                                const globalIndex = items.indexOf(item);
+                                return `
+                                    <tr class="hover:bg-slate-800/40 transition-colors ${!isOwned ? 'opacity-40 bg-slate-950/40' : (isMaxed ? 'bg-emerald-500/5' : '')}">
+                                        <td class="p-3 sm:p-4 text-center">
+                                            <input type="checkbox" ${isOwned ? 'checked' : ''} onchange="toggleItemOwned(${globalIndex})" class="w-4 h-4 rounded border-slate-700 text-amber-500 focus:ring-amber-500 cursor-pointer">
+                                        </td>
+                                        <td class="p-3 sm:p-4 font-semibold whitespace-nowrap ${isMaxed && isOwned ? 'text-emerald-400' : 'text-slate-200'}">
+                                            <div class="flex items-center gap-1.5">
+                                                ${item.name}
+                                                ${item.epic ? '<span class="text-[9px] bg-purple-500/20 text-purple-300 border border-purple-500/40 px-1.5 py-0.2 rounded uppercase font-black">Épico</span>' : ''}
+                                            </div>
+                                        </td>
+                                        <td class="p-3 sm:p-4 text-center">
+                                            <input type="number" min="0" max="${item.max}" value="${item.current}" ${!isOwned ? 'disabled' : ''} onchange="updateItemLevel(${globalIndex}, 'current', this.value)" class="w-12 sm:w-14 bg-slate-950/50 border ${isMaxed && isOwned ? 'border-emerald-500 text-emerald-400 font-black' : 'border-slate-600 text-amber-400 font-bold'} rounded-md px-1.5 py-1 text-center focus:outline-none focus:border-amber-500 transition-all disabled:opacity-30">
+                                            <span class="text-[10px] text-slate-500 font-mono">/ ${item.max}</span>
+                                        </td>
+                                        <td class="p-3 sm:p-4 text-center whitespace-nowrap">
+                                            ${!isOwned ? `
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-500 border border-slate-700">Bloqueado</span>
+                                            ` : `
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isMaxed ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-800 text-slate-400'}">
+                                                    ${isMaxed ? 'MAX' : `- ${missing}`}
+                                                </span>
+                                            `}
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            equipmentsCategoryContainer.appendChild(equipCard);
+
+            // 3. ATUALIZAR MÉTRICAS GLOBAIS DA VILA
+            const overallPercent = globalVillageMax > 0 ? Math.round((globalVillageCurrent / globalVillageMax) * 100) : 0;
             document.getElementById('totalProgressPercent').innerText = `${overallPercent}%`;
             document.getElementById('totalProgressBar').style.width = `${overallPercent}%`;
-            document.getElementById('remainingUpgradesCount').innerText = totalPendingCount;
+            document.getElementById('remainingUpgradesCount').innerText = villagePendingCount;
 
             let minCat = 'Nenhum', minVal = 101;
-            Object.keys(categoryStats).forEach(c => {
-                if (categoryStats[c] < minVal) { minVal = categoryStats[c]; minCat = c; }
+            Object.keys(villageCategoryStats).forEach(c => {
+                if (villageCategoryStats[c] < minVal) { minVal = villageCategoryStats[c]; minCat = c; }
             });
-            document.getElementById('laggingCategory').innerText = minCat;
+            document.getElementById('laggingCategory').innerText = minCat === 'Heróis & Equipamentos' ? 'Heróis Base' : minCat;
 
             saveAllData();
         }
@@ -992,9 +1119,10 @@
             renderTracker();
         }
 
-        function removeItem(index) {
+        function toggleItemOwned(index) {
             const key = getTrackerKey();
-            appData.trackers[key].splice(index, 1);
+            const item = appData.trackers[key][index];
+            item.owned = !(item.owned !== false);
             renderTracker();
         }
 
@@ -1013,15 +1141,23 @@
             const name = document.getElementById('newItemName').value.trim();
             const current = parseInt(document.getElementById('newItemCurrent').value) || 0;
             const max = parseInt(document.getElementById('newItemMax').value) || 1;
+            const isEpic = document.getElementById('newItemIsEpic').checked;
 
             if (!name) return alert("Informe o nome do item!");
 
             const key = getTrackerKey();
             if (!appData.trackers[key]) appData.trackers[key] = [];
 
-            appData.trackers[key].push({ category: cat, name: name, current: current, max: max });
+            const newItem = { category: cat, name: name, current: current, max: max };
+            if (cat === 'Equipamentos (Ferreiro)') {
+                newItem.owned = true;
+                newItem.epic = isEpic;
+            }
+
+            appData.trackers[key].push(newItem);
             closeAddItemModal();
             document.getElementById('newItemName').value = '';
+            document.getElementById('newItemIsEpic').checked = false;
             renderTracker();
         }
 
